@@ -1,0 +1,26 @@
+﻿{
+    "name":  "dpedro-solucoes",
+    "version":  "1.0.0",
+    "description":  "Sistema Integrado D.Pedro Solu??es",
+    "main":  "main.js",
+    "scripts":  {
+                    "test":  "powershell -File Testar-Sistema.ps1",
+                    "server":  "node src/server/app.js",
+                    "dev":  "node src/server/app.js",
+                    "start":  "node src/server/app.js"
+                },
+    "dependencies":  {
+                         "bcryptjs":  "^3.0.2",
+                         "body-parser":  "^1.20.2",
+                         "compression":  "^1.8.1",
+                         "cors":  "^2.8.5",
+                         "express":  "^4.18.2",
+                         "helmet":  "^8.1.0"
+                     },
+    "devDependencies":  {
+                            "electron":  "^22.0.0",
+                            "electron-builder":  "^24.6.4"
+                        },
+    "author":  "D.Pedro Solu??es",
+    "license":  "MIT"
+}

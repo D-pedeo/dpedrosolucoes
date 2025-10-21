@@ -1,0 +1,5769 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Loja de Tecnologia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .navbar {
+            background-color: var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-sale {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .badge-new {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-popular {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-category {
+            color: #777;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            height: 2.8rem;
+            overflow: hidden;
+        }
+        
+        .product-rating {
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .current-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .original-price {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .discount {
+            background-color: #ffeaa7;
+            color: #d35400;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #dde4e6;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .cart-overlay.open {
+            display: block;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-content {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .categories-list li {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .categories-list li:hover, .categories-list li.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #eee;
+            z-index: 1;
+        }
+        
+        .checkout-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+            font-weight: bold;
+            color: #999;
+        }
+        
+        .checkout-step.active {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .image-search-modal .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .api-selector {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .api-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .api-tab:hover {
+            background: #e9ecef;
+        }
+
+        .api-tab.active:hover {
+            background: var(--primary);
+        }
+
+        .alert-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .image-result {
+            transition: all 0.3s;
+        }
+
+        .image-result:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .select-image-btn {
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZK2KZGMHG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6ZK2KZGMHG');
+</script>
+<body>
+ 
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categorias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contato</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group me-2">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar produtos...">
+                        <button class="btn btn-outline-light">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button id="cartButton" class="btn btn-primary position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Soluções em Tecnologia para Empresas</h1>
+            <p class="lead mb-4">Hardware, software, segurança e consultoria especializada</p>
+            <button class="btn btn-light btn-lg">Ver Produtos</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Categorias</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush categories-list">
+                            <li class="list-group-item active" data-category="all">Todas as categorias</li>
+                            <li class="list-group-item" data-category="materialescolar">Material Escolar</li>
+                            <li class="list-group-item" data-category="material_escritorio">Material de Escritório</li>
+                            <li class="list-group-item" data-category="materialeletrico">Material Elétrico</li>
+                            <li class="list-group-item" data-category="software">Software</li>
+                            <li class="list-group-item" data-category="hardware">Hardware</li>
+                            <li class="list-group-item" data-category="security">Segurança</li>
+                            <li class="list-group-item" data-category="network">Rede</li>
+                            <li class="list-group-item" data-category="cloud">Cloud</li>
+                            <li class="list-group-item" data-category="consulting">Consultoria</li>
+                            <li class="list-group-item" data-category="training">Treinamento</li>
+                            <li class="list-group-item" data-category="services">Serviços</li>
+                            <li class="list-group-item" data-category="telefone">Telefone</li>
+                            <li class="list-group-item" data-category="acessorios">Acessórios de Telefone</li>
+                            <li class="list-group-item" data-category="impressora">Impressora</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex flex-wrap">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="featured">Destaques</button>
+                        <button class="filter-btn" data-filter="sale">Promoções</button>
+                        <button class="filter-btn" data-filter="new">Novidades</button>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <label class="me-2">Ordenar por:</label>
+                        <select id="sortSelect" class="form-select form-select-sm">
+                            <option value="popular">Mais populares</option>
+                            <option value="price-asc">Preço: menor primeiro</option>
+                            <option value="price-desc">Preço: maior primeiro</option>
+                            <option value="name">Nome A-Z</option>
+                            <option value="newest">Mais recentes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div id="productsGrid" class="product-grid"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Seu Carrinho</h5>
+            <button id="closeCart" class="btn btn-sm btn-link">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div id="cartItems" class="p-3"></div>
+        
+        <div id="emptyCart" class="p-5 text-center" style="display: none;">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <p>Seu carrinho está vazio</p>
+            <button class="btn btn-primary">Continuar Comprando</button>
+        </div>
+        
+        <div class="p-3 border-top">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span id="cartSubtotal">0 AOA</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+                <span>Frete:</span>
+                <span id="cartShipping">0 AOA</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 fw-bold">
+                <span>Total:</span>
+                <span id="cartTotal">0 AOA</span>
+            </div>
+            <button id="checkoutButton" class="btn btn-primary w-100" disabled>Finalizar Compra</button>
+        </div>
+    </div>
+    
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Finalizar Compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="checkout-steps mb-4">
+                        <div class="checkout-step active" data-step="1">1</div>
+                        <div class="checkout-step" data-step="2">2</div>
+                        <div class="checkout-step" data-step="3">3</div>
+                        <div class="checkout-step" data-step="4">4</div>
+                    </div>
+                    
+                    <div id="step1" class="checkout-step-content">
+                        <h6 class="mb-3">Resumo do Pedido</h6>
+                        <div id="checkoutItems"></div>
+                    </div>
+                    
+                    <div id="step2" class="checkout-step-content" style="display: none;">
+                        <h6 class="mb-3">Informações de Entrega</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nome completo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">E-mail <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="customerEmail" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Telefone <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="customerPhone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Endereço <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerAddress" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerCity" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">NIF</label>
+                                <input type="text" class="form-control" id="customerZip">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" id="customerNotes" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="step3" class="checkout-step-content" style="display: none;">
+                        <h6 class="mb-3">Método de Pagamento</h6>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" checked>
+                                <label class="form-check-label" for="paymentCard">Cartão de Crédito</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentTransfer">
+                                <label class="form-check-label" for="paymentTransfer">Transferência Bancária</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash">
+                                <label class="form-check-label" for="paymentCash">Dinheiro na Entrega</label>
+                            </div>
+                        </div>
+                        
+                        <div id="cardDetails">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Número do Cartão</label>
+                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Validade</label>
+                                    <input type="text" class="form-control" placeholder="MM/AA">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" placeholder="123">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Nome no Cartão</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="step4" class="checkout-step-content" style="display: none;">
+                        <div class="text-center py-4">
+                            <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
+                            <h4>Pedido Realizado com Sucesso!</h4>
+                            <p class="text-muted">Obrigado pela sua compra. Seu número de pedido é: <strong id="orderNumber"></strong></p>
+                            <p>Em breve você receberá um e-mail com os detalhes do seu pedido.</p>
+                            <button class="btn whatsapp-btn mt-3" id="whatsappBtn">
+                                <i class="fab fa-whatsapp"></i> Falar no WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="prevStepButton" class="btn btn-secondary" style="display: none;">Voltar</button>
+                    <button id="nextStepButton" class="btn btn-primary">Próximo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para busca de imagens ATUALIZADO -->
+    <div class="modal fade" id="imageSearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buscar Imagens para Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="api-selector">
+                        <div class="d-flex mb-3">
+                            <div class="api-tab active" data-api="unsplash">
+                                <i class="fab fa-unsplash me-2"></i>Unsplash
+                            </div>
+                            <div class="api-tab" data-api="flaticon">
+                                <i class="fas fa-icons me-2"></i>Flaticon
+                            </div>
+                        </div>
+                        <div class="alert alert-info alert-sm mb-3">
+                            <small><i class="fas fa-info-circle me-1"></i> Use termos em inglês para melhores resultados</small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <input type="text" id="imageSearch" class="form-control" placeholder="Digite o termo para buscar imagens...">
+                        </div>
+                        <div class="col-md-4">
+                            <button id="searchImages" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                    <div id="imageResults" class="row">
+                        <div class="col-12 text-center py-4">
+                            <p>Digite um termo de busca para encontrar imagens</p>
+                            <p class="text-muted">Sugestão: use termos em inglês como "notebook", "pen", "computer"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="selectImage" disabled>Selecionar Imagem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // =============================================
+    // CONFIGURAÇÃO DAS APIS - ATUALIZADA
+    // =============================================
+    const FLATICON_API_KEY = 'FPSX3a39ef5f8a5acae3ad9daf1eabb86635';
+    const FLATICON_BASE_URL = 'https://api.flaticon.com/v3';
+
+    // Configuração para Unsplash (mais confiável)
+    const UNSPLASH_ACCESS_KEY = 'XGGpQnAz9dHPKDtkOYfjjOrFVeIVjhKqEPHdrZI90rc';
+    const UNSPLASH_SECRET_KEY = 'jcJmc644jtPMtU0AXO2MTiFWtuF6OHTiyPG1Og1jFF0';
+    const UNSPLASH_BASE_URL = 'https://api.unsplash.com';
+
+    // =============================================
+    // DADOS DE PRODUTOS COM TERMOS DE BUSCA OTIMIZADOS
+    // =============================================
+    const products = [
+        {
+            id: 1,
+            name: "Kit Caderno Universitário 10 Unidades",
+            category: "materialescolar",
+            price: 8990,
+            originalPrice: 12990,
+            image: "https://img.freepik.com/free-vector/school-supplies-set_74855-4780.jpg",
+            rating: 4.5,
+            reviews: 42,
+            badge: "sale",
+            description: "Kit com 10 cadernos universitários de 200 folhas cada",
+            searchTerms: ["notebook", "school supplies", "education", "stationery", "caderno escolar"]
+        },
+        {
+            id: 2,
+            name: "Caneta Esferográfica Premium - Caixa 50",
+            category: "materialescolar",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/pen-collection_1284-42357.jpg",
+            rating: 4.3,
+            reviews: 28,
+            description: "Caixa com 50 canetas esferográficas de tinta azul",
+            searchTerms: ["pen", "writing", "office supplies", "caneta", "escrita"]
+        },
+        {
+            id: 3,
+            name: "Mochila Escolar Antifurto",
+            category: "materialescolar",
+            price: 12990,
+            originalPrice: 17990,
+            image: "https://img.freepik.com/free-vector/backpack-design_1284-10089.jpg",
+            rating: 4.7,
+            reviews: 35,
+            badge: "popular",
+            description: "Mochila escolar com compartimento antifurto e laptop",
+            searchTerms: ["backpack", "school bag", "mochila", "bag", "student"]
+        },
+        {
+            id: 4,
+            name: "Grampeador de Mesa Profissional",
+            category: "material_escritorio",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/office-supplies_1284-42356.jpg",
+            rating: 4.5,
+            reviews: 36,
+            description: "Grampeador de mesa profissional com capacidade para 100 grampos",
+            searchTerms: ["stapler", "office", "grampeador", "escritorio", "stationery"]
+        },
+        {
+            id: 5,
+            name: "Calculadora Financeira 12 Dígitos",
+            category: "material_escritorio",
+            price: 7890,
+            originalPrice: 9990,
+            image: "https://img.freepik.com/free-vector/calculator-concept-illustration_114360-2686.jpg",
+            rating: 4.6,
+            reviews: 42,
+            badge: "sale",
+            description: "Calculadora financeira com display de 12 dígitos",
+            searchTerms: ["calculator", "finance", "math", "calculadora", "office"]
+        },
+        {
+            id: 6,
+            name: "Fio Elétrico 2,5mm - Rolo 100m",
+            category: "materialeletrico",
+            price: 18990,
+            image: "https://img.freepik.com/free-vector/electrical-cables-set_1284-42355.jpg",
+            rating: 4.5,
+            reviews: 27,
+            description: "Rolo de fio elétrico 2,5mm com 100 metros",
+            searchTerms: ["electrical wire", "cable", "electricity", "fio elétrico", "construction"]
+        },
+        {
+            id: 7,
+            name: "Sistema de Gestão Empresarial",
+            category: "software",
+            price: 150000,
+            originalPrice: 235000,
+            image: "https://img.freepik.com/free-vector/business-analytics-concept-illustration_114360-2685.jpg",
+            rating: 4.8,
+            reviews: 42,
+            badge: "sale",
+            description: "Sistema completo de gestão empresarial com módulos financeiro, estoque, vendas e RH",
+            searchTerms: ["business software", "management", "enterprise", "technology", "system"]
+        },
+        {
+            id: 8,
+            name: "Servidor Enterprise",
+            category: "hardware",
+            price: 1250000,
+            image: "https://img.freepik.com/free-vector/server-room-concept-illustration_114360-2684.jpg",
+            rating: 4.9,
+            reviews: 15,
+            badge: "new",
+            description: "Servidor de alta performance para empresas, com processador Xeon e 32GB RAM",
+            searchTerms: ["server", "data center", "enterprise", "hardware", "technology"]
+        },
+        {
+            id: 9,
+            name: "Pacote de Segurança CFTV",
+            category: "security",
+            price: 250000,
+            image: "https://img.freepik.com/free-vector/security-camera-concept-illustration_114360-2683.jpg",
+            rating: 4.6,
+            reviews: 28,
+            badge: "popular",
+            description: "Kit de Sistema completo de CFTV com 4 câmeras de alta resolução e gravador digital",
+            searchTerms: ["security camera", "surveillance", "CCTV", "security system", "protection"]
+        },
+        {
+            id: 10,
+            name: "Roteador Enterprise",
+            category: "network",
+            price: 225000,
+            image: "https://img.freepik.com/free-vector/wireless-router-concept-illustration_114360-2682.jpg",
+            rating: 4.4,
+            reviews: 22,
+            description: "Roteador de alta performance para redes corporativas com gerenciamento avançado",
+            searchTerms: ["router", "network", "wifi", "internet", "technology"]
+        },
+        {
+            id: 11,
+            name: "Solução em Nuvem",
+            category: "cloud",
+            price: 49900,
+            image: "https://img.freepik.com/free-vector/cloud-computing-concept-illustration_114360-2681.jpg",
+            rating: 4.3,
+            reviews: 26,
+            badge: "popular",
+            description: "Solução completa de cloud computing com armazenamento e backup automatizado",
+            searchTerms: ["cloud computing", "storage", "technology", "data", "server"]
+        },
+        {
+            id: 12,
+            name: "Consultoria em TI",
+            category: "consulting",
+            price: 150000,
+            image: "https://img.freepik.com/free-vector/business-consulting-concept-illustration_114360-2680.jpg",
+            rating: 4.7,
+            reviews: 19,
+            description: "Consultoria especializada em transformação digital e infraestrutura de TI",
+            searchTerms: ["consulting", "business", "technology", "IT", "enterprise"]
+        },
+        {
+            id: 13,
+            name: "Curso de Cybersecurity",
+            category: "training",
+            price: 75000,
+            originalPrice: 99000,
+            image: "https://img.freepik.com/free-vector/cyber-security-concept-illustration_114360-2679.jpg",
+            rating: 4.9,
+            reviews: 31,
+            badge: "sale",
+            description: "Curso completo de cybersecurity com certificação internacional",
+            searchTerms: ["cybersecurity", "security", "training", "education", "technology"]
+        },
+        {
+            id: 14,
+            name: "Serviço de Monitoramento 24/7",
+            category: "services",
+            price: 89900,
+            image: "https://img.freepik.com/free-vector/monitoring-concept-illustration_114360-2678.jpg",
+            rating: 4.9,
+            reviews: 29,
+            badge: "popular",
+            description: "Monitoramento contínuo de infraestrutura de TI com suporte especializado",
+            searchTerms: ["monitoring", "security", "service", "technology", "support"]
+        },
+        {
+            id: 15,
+            name: "Telefone IP Profissional",
+            category: "telefone",
+            price: 45900,
+            image: "https://img.freepik.com/free-vector/phone-concept-illustration_114360-2677.jpg",
+            rating: 4.5,
+            reviews: 23,
+            description: "Telefone IP profissional com display LCD e suporte a múltiplas linhas",
+            searchTerms: ["IP phone", "telephone", "communication", "office", "technology"]
+        },
+        {
+            id: 16,
+            name: "Fone de Ouvido Bluetooth",
+            category: "acessorios",
+            price: 18900,
+            originalPrice: 25900,
+            image: "https://img.freepik.com/free-vector/wireless-headphones-concept-illustration_114360-2676.jpg",
+            rating: 4.6,
+            reviews: 47,
+            badge: "sale",
+            description: "Fone de ouvido Bluetooth com cancelamento de ruído",
+            searchTerms: ["headphones", "bluetooth", "audio", "wireless", "music"]
+        },
+        {
+            id: 17,
+            name: "Impressora HP Deskjet Ink Advantage 4535",
+            category: "impressora",
+            price: 45900,
+            image: "https://img.freepik.com/free-vector/printer-concept-illustration_114360-2675.jpg",
+            rating: 4.3,
+            reviews: 38,
+            description: "Impressora multifuncional com funções print, scan, copy e web",
+            searchTerms: ["printer", "office", "technology", "impressora", "printing"]
+        },<!-- Adicione este código após o produto com ID 17 na seção de produtos -->
+{
+    id: 18,
+    name: "Tablet Samsung Galaxy Tab A8",
+    category: "hardware",
+    price: 89900,
+    originalPrice: 119900,
+    image: "https://img.freepik.com/free-vector/tablet-device-concept-illustration_114360-2674.jpg",
+    rating: 4.4,
+    reviews: 38,
+    badge: "sale",
+    description: "Tablet Samsung Galaxy Tab A8 com tela de 10.5 polegadas e 64GB de armazenamento",
+    searchTerms: ["tablet", "samsung", "galaxy", "mobile", "device"]
+},
+{
+    id: 19,
+    name: "Monitor LED 24'' Full HD",
+    category: "hardware",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/computer-monitor-concept-illustration_114360-2673.jpg",
+    rating: 4.6,
+    reviews: 45,
+    description: "Monitor LED 24 polegadas Full HD com entrada HDMI e VGA",
+    searchTerms: ["monitor", "screen", "display", "computer", "led"]
+},
+{
+    id: 20,
+    name: "Teclado e Mouse Sem Fio Logitech",
+    category: "hardware",
+    price: 18900,
+    originalPrice: 24900,
+    image: "https://img.freepik.com/free-vector/keyboard-concept-illustration_114360-2672.jpg",
+    rating: 4.5,
+    reviews: 52,
+    badge: "sale",
+    description: "Kit teclado e mouse sem fio Logitech com receptor USB unificado",
+    searchTerms: ["keyboard", "mouse", "wireless", "logitech", "computer"]
+},
+{
+    id: 21,
+    name: "HD Externo 1TB Seagate",
+    category: "hardware",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/external-hard-drive-concept-illustration_114360-2671.jpg",
+    rating: 4.7,
+    reviews: 29,
+    description: "HD Externo Seagate 1TB USB 3.0 para backup e armazenamento",
+    searchTerms: ["hard drive", "storage", "external", "seagate", "backup"]
+},
+{
+    id: 22,
+    name: "Webcam Full HD 1080p",
+    category: "hardware",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/webcam-concept-illustration_114360-2670.jpg",
+    rating: 4.3,
+    reviews: 41,
+    description: "Webcam Full HD 1080p com microfone integrado para reuniões online",
+    searchTerms: ["webcam", "camera", "video", "conference", "meeting"]
+},
+{
+    id: 23,
+    name: "Pacote Microsoft Office 365",
+    category: "software",
+    price: 29900,
+    originalPrice: 39900,
+    image: "https://img.freepik.com/free-vector/microsoft-office-concept-illustration_114360-2669.jpg",
+    rating: 4.8,
+    reviews: 67,
+    badge: "sale",
+    description: "Licença anual do Microsoft Office 365 para 1 usuário com 1TB de armazenamento",
+    searchTerms: ["microsoft", "office", "software", "productivity", "365"]
+},
+{
+    id: 24,
+    name: "Antivirus Norton Security Deluxe",
+    category: "software",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/antivirus-software-concept-illustration_114360-2668.jpg",
+    rating: 4.4,
+    reviews: 33,
+    description: "Antivírus Norton Security Deluxe para 3 dispositivos - 1 ano",
+    searchTerms: ["antivirus", "security", "norton", "protection", "software"]
+},
+{
+    id: 25,
+    name: "Curso de Programação Python",
+    category: "training",
+    price: 45900,
+    originalPrice: 59900,
+    image: "https://img.freepik.com/free-vector/programming-concept-illustration_114360-2667.jpg",
+    rating: 4.9,
+    reviews: 28,
+    badge: "sale",
+    description: "Curso completo de programação Python do básico ao avançado",
+    searchTerms: ["python", "programming", "course", "training", "coding"]
+},
+{
+    id: 26,
+    name: "Certificação em Gestão de Projetos",
+    category: "training",
+    price: 89900,
+    image: "https://img.freepik.com/free-vector/project-management-concept-illustration_114360-2666.jpg",
+    rating: 4.7,
+    reviews: 19,
+    description: "Preparatório para certificação PMP em Gestão de Projetos",
+    searchTerms: ["project management", "certification", "pmp", "training", "business"]
+},
+{
+    id: 27,
+    name: "Switch Gigabit 24 Portas",
+    category: "network",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/network-switch-concept-illustration_114360-2665.jpg",
+    rating: 4.5,
+    reviews: 24,
+    description: "Switch Gigabit 24 portas para redes empresariais",
+    searchTerms: ["switch", "network", "gigabit", "ethernet", "business"]
+},
+{
+    id: 28,
+    name: "Access Point WiFi 6",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/wifi-router-concept-illustration_114360-2664.jpg",
+    rating: 4.6,
+    reviews: 31,
+    description: "Access Point WiFi 6 para alta performance em redes sem fio",
+    searchTerms: ["access point", "wifi", "wireless", "network", "router"]
+},
+{
+    id: 29,
+    name: "Firewall Empresarial",
+    category: "security",
+    price: 125000,
+    image: "https://img.freepik.com/free-vector/firewall-concept-illustration_114360-2663.jpg",
+    rating: 4.8,
+    reviews: 17,
+    description: "Firewall empresarial com gestão unificada de ameaças",
+    searchTerms: ["firewall", "security", "network", "protection", "enterprise"]
+},
+{
+    id: 30,
+    name: "Sistema de Backup em Nuvem 1TB",
+    category: "cloud",
+    price: 29900,
+    image: "https://img.freepik.com/free-vector/cloud-backup-concept-illustration_114360-2662.jpg",
+    rating: 4.5,
+    reviews: 42,
+    description: "Solução de backup automatizado em nuvem com 1TB de armazenamento",
+    searchTerms: ["cloud backup", "storage", "data protection", "cloud", "automated"]
+},{
+    id: 31,
+    name: "Lápis Grafite HB - Caixa com 12 unidades",
+    category: "materialescolar",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/pencil-collection_1284-42354.jpg",
+    rating: 4.4,
+    reviews: 56,
+    description: "Caixa com 12 lápis grafite HB de alta qualidade"
+},
+{
+    id: 32,
+    name: "Borracha Branca Macia - Pacote 10 unidades",
+    category: "materialescolar",
+    price: 890,
+    image: "https://img.freepik.com/free-vector/eraser-collection_1284-42353.jpg",
+    rating: 4.2,
+    reviews: 43,
+    description: "Pacote com 10 borrachas brancas macias"
+},
+{
+    id: 33,
+    name: "Apontador com Depósito Duplo",
+    category: "materialescolar",
+    price: 690,
+    image: "https://img.freepik.com/free-vector/pencil-sharpener-concept_1284-42352.jpg",
+    rating: 4.1,
+    reviews: 38,
+    description: "Apontador com depósito duplo e lâmina de aço"
+},
+{
+    id: 34,
+    name: "Tesoura Escolar com Ponta Arredondada",
+    category: "materialescolar",
+    price: 1590,
+    image: "https://img.freepik.com/free-vector/scissors-collection_1284-42351.jpg",
+    rating: 4.3,
+    reviews: 29,
+    description: "Tesoura escolar segura com ponta arredondada"
+},
+{
+    id: 35,
+    name: "Cola Branca 90g - Pacote 6 unidades",
+    category: "materialescolar",
+    price: 2290,
+    image: "https://img.freepik.com/free-vector/glue-bottle-concept_1284-42350.jpg",
+    rating: 4.0,
+    reviews: 47,
+    description: "Pacote com 6 tubos de cola branca 90g cada"
+},
+{
+    id: 36,
+    name: "Régua 30cm Acrílica Transparente",
+    category: "materialescolar",
+    price: 790,
+    originalPrice: 990,
+    image: "https://img.freepik.com/free-vector/ruler-collection_1284-42349.jpg",
+    rating: 4.2,
+    reviews: 34,
+    badge: "sale",
+    description: "Régua acrílica transparente de 30cm"
+},
+{
+    id: 37,
+    name: "Estojo Escolar com Zíper",
+    category: "materialescolar",
+    price: 3490,
+    image: "https://img.freepik.com/free-vector/pencil-case-concept_1284-42348.jpg",
+    rating: 4.5,
+    reviews: 62,
+    description: "Estojo escolar com zíper e múltiplos compartimentos"
+},
+{
+    id: 38,
+    name: "Canetas Hidrográficas - Kit 12 cores",
+    category: "materialescolar",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/marker-pen-collection_1284-42347.jpg",
+    rating: 4.6,
+    reviews: 58,
+    description: "Kit com 12 canetas hidrográficas coloridas"
+},
+{
+    id: 39,
+    name: "Lápis de Cor 24 cores",
+    category: "materialescolar",
+    price: 5890,
+    originalPrice: 6990,
+    image: "https://img.freepik.com/free-vector/color-pencil-collection_1284-42346.jpg",
+    rating: 4.7,
+    reviews: 71,
+    badge: "sale",
+    description: "Caixa de lápis de cor com 24 cores vibrantes"
+},
+{
+    id: 40,
+    name: "Giz de Cera 12 cores",
+    category: "materialescolar",
+    price: 2890,
+    image: "https://img.freepik.com/free-vector/crayon-collection_1284-42345.jpg",
+    rating: 4.3,
+    reviews: 39,
+    description: "Caixa de giz de cera com 12 cores"
+},
+{
+    id: 41,
+    name: "Tinta Guache 6 cores",
+    category: "materialescolar",
+    price: 4290,
+    image: "https://img.freepik.com/free-vector/paint-tube-collection_1284-42344.jpg",
+    rating: 4.4,
+    reviews: 27,
+    description: "Kit tinta guache com 6 cores básicas"
+},
+{
+    id: 42,
+    name: "Pincéis para Pintura - Kit 5 peças",
+    category: "materialescolar",
+    price: 3290,
+    image: "https://img.freepik.com/free-vector/paint-brush-collection_1284-42343.jpg",
+    rating: 4.2,
+    reviews: 33,
+    description: "Kit com 5 pincéis de diferentes tamanhos"
+},
+{
+    id: 43,
+    name: "Caderno de Desenho A4 100 folhas",
+    category: "materialescolar",
+    price: 3890,
+    image: "https://img.freepik.com/free-vector/sketchbook-concept_1284-42342.jpg",
+    rating: 4.5,
+    reviews: 44,
+    description: "Caderno de desenho A4 com 100 folhas"
+},
+{
+    id: 44,
+    name: "Compasso de Precisão Escolar",
+    category: "materialescolar",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/compass-concept_1284-42341.jpg",
+    rating: 4.1,
+    reviews: 25,
+    description: "Compasso de precisão para uso escolar"
+},
+{
+    id: 45,
+    name: "Transferidor 180° Acrílico",
+    category: "materialescolar",
+    price: 690,
+    image: "https://img.freepik.com/free-vector/protractor-concept_1284-42340.jpg",
+    rating: 4.0,
+    reviews: 31,
+    description: "Transferidor acrílico de 180 graus"
+},
+{
+    id: 46,
+    name: "Esquadro 45° e 60° - Kit 2 peças",
+    category: "materialescolar",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/set-square-concept_1284-42339.jpg",
+    rating: 4.3,
+    reviews: 28,
+    description: "Kit com esquadro de 45 e 60 graus"
+},
+{
+    id: 47,
+    name: "Marca-texto Amarelo - Pacote 4 unidades",
+    category: "materialescolar",
+    price: 1590,
+    image: "https://img.freepik.com/free-vector/highlighter-collection_1284-42338.jpg",
+    rating: 4.6,
+    reviews: 67,
+    description: "Pacote com 4 marca-textos amarelos"
+},
+{
+    id: 48,
+    name: "Corretivo em Fita 6mm",
+    category: "materialescolar",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/correction-tape-concept_1284-42337.jpg",
+    rating: 4.4,
+    reviews: 52,
+    description: "Corretivo em fita de 6mm"
+},
+{
+    id: 49,
+    name: "Agenda Escolar 2024 Capa Dura",
+    category: "materialescolar",
+    price: 4890,
+    originalPrice: 5890,
+    image: "https://img.freepik.com/free-vector/planner-concept_1284-42336.jpg",
+    rating: 4.7,
+    reviews: 48,
+    badge: "sale",
+    description: "Agenda escolar 2024 com capa dura"
+},
+{
+    id: 50,
+    name: "Mochila Térmica para Lanche",
+    category: "materialescolar",
+    price: 7890,
+    image: "https://img.freepik.com/free-vector/lunch-bag-concept_1284-42335.jpg",
+    rating: 4.5,
+    reviews: 36,
+    description: "Mochila térmica para lanche escolar"
+},
+{
+    id: 51,
+    name: "Estante para Livros Portátil",
+    category: "materialescolar",
+    price: 6590,
+    image: "https://img.freepik.com/free-vector/book-stand-concept_1284-42334.jpg",
+    rating: 4.2,
+    reviews: 23,
+    description: "Estante portátil para livros e cadernos"
+},
+{
+    id: 52,
+    name: "Planner de Estudos Semanal",
+    category: "materialescolar",
+    price: 2890,
+    image: "https://img.freepik.com/free-vector/study-planner-concept_1284-42333.jpg",
+    rating: 4.6,
+    reviews: 41,
+    description: "Planner de estudos com organização semanal"
+},
+{
+    id: 53,
+    name: "Kit Geometria Completo",
+    category: "materialescolar",
+    price: 8590,
+    image: "https://img.freepik.com/free-vector/geometry-set-concept_1284-42332.jpg",
+    rating: 4.4,
+    reviews: 29,
+    description: "Kit completo de geometria com 8 peças"
+},
+{
+    id: 54,
+    name: "Pasta Catálogo com Elástico A4",
+    category: "materialescolar",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/portfolio-concept_1284-42331.jpg",
+    rating: 4.3,
+    reviews: 45,
+    description: "Pasta catálogo A4 com fechamento por elástico"
+},
+{
+    id: 55,
+    name: "Cartolina Colorida - Pacote 10 unidades",
+    category: "materialescolar",
+    price: 3290,
+    image: "https://img.freepik.com/free-vector/colored-paper-concept_1284-42330.jpg",
+    rating: 4.1,
+    reviews: 37,
+    description: "Pacote com 10 cartolinas coloridas"
+},
+{
+    id: 56,
+    name: "Clips para Papel Metálicos - Caixa 100 unidades",
+    category: "material_escritorio",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/paper-clip-collection_1284-42329.jpg",
+    rating: 4.3,
+    reviews: 89,
+    description: "Caixa com 100 clips metálicos para papel"
+},
+{
+    id: 57,
+    name: "Pasta Suspensa A4 - Pacote 10 unidades",
+    category: "material_escritorio",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/hanging-folder-concept_1284-42328.jpg",
+    rating: 4.5,
+    reviews: 67,
+    description: "Pacote com 10 pastas suspensas A4"
+},
+{
+    id: 58,
+    name: "Bloco de Notas Adesivas - Kit 5 unidades",
+    category: "material_escritorio",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/sticky-note-concept_1284-42327.jpg",
+    rating: 4.7,
+    reviews: 124,
+    description: "Kit com 5 blocos de notas adesivas coloridas"
+},
+{
+    id: 59,
+    name: "Perfurador de Papel 2 furos",
+    category: "material_escritorio",
+    price: 3290,
+    image: "https://img.freepik.com/free-vector/paper-puncher-concept_1284-42326.jpg",
+    rating: 4.4,
+    reviews: 56,
+    description: "Perfurador de papel para 2 furos"
+},
+{
+    id: 60,
+    name: "Envelopes Carta Brancos - Pacote 50 unidades",
+    category: "material_escritorio",
+    price: 2890,
+    image: "https://img.freepik.com/free-vector/envelope-collection_1284-42325.jpg",
+    rating: 4.2,
+    reviews: 78,
+    description: "Pacote com 50 envelopes carta brancos"
+},
+{
+    id: 61,
+    name: "Carimbo Datador Automático",
+    category: "material_escritorio",
+    price: 5890,
+    image: "https://img.freepik.com/free-vector/rubber-stamp-concept_1284-42324.jpg",
+    rating: 4.6,
+    reviews: 42,
+    description: "Carimbo datador automático com tinta"
+},
+{
+    id: 62,
+    name: "Organizador de Mesa Acrílico",
+    category: "material_escritorio",
+    price: 7890,
+    originalPrice: 8990,
+    image: "https://img.freepik.com/free-vector/desk-organizer-concept_1284-42323.jpg",
+    rating: 4.8,
+    reviews: 91,
+    badge: "sale",
+    description: "Organizador de mesa acrílico com 5 compartimentos"
+},
+{
+    id: 63,
+    name: "Suporte para Celular Ajustável",
+    category: "material_escritorio",
+    price: 2490,
+    image: "https://img.freepik.com/free-vector/phone-stand-concept_1284-42322.jpg",
+    rating: 4.5,
+    reviews: 156,
+    description: "Suporte para celular ajustável em ângulo"
+},
+{
+    id: 64,
+    name: "Porta-canetas de Madeira",
+    category: "material_escritorio",
+    price: 4290,
+    image: "https://img.freepik.com/free-vector/pen-holder-concept_1284-42321.jpg",
+    rating: 4.3,
+    reviews: 63,
+    description: "Porta-canetas de madeira com 6 divisórias"
+},
+{
+    id: 65,
+    name: "Grampos para Grampeador - Caixa 5000 unidades",
+    category: "material_escritorio",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/staples-concept_1284-42320.jpg",
+    rating: 4.4,
+    reviews: 112,
+    description: "Caixa com 5000 grampos para grampeador"
+},
+{
+    id: 66,
+    name: "Pasta Elástico A4 - Pacote 5 unidades",
+    category: "material_escritorio",
+    price: 2290,
+    image: "https://img.freepik.com/free-vector/document-folder-concept_1284-42319.jpg",
+    rating: 4.2,
+    reviews: 87,
+    description: "Pacote com 5 pastas A4 com elástico"
+},
+{
+    id: 67,
+    name: "Bloco de Papel A4 500 folhas",
+    category: "material_escritorio",
+    price: 12990,
+    image: "https://img.freepik.com/free-vector/paper-pack-concept_1284-42318.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Bloco de papel A4 com 500 folhas"
+},
+{
+    id: 68,
+    name: "Calculadora de Mesa 12 dígitos",
+    category: "material_escritorio",
+    price: 6890,
+    image: "https://img.freepik.com/free-vector/desk-calculator-concept_1284-42317.jpg",
+    rating: 4.5,
+    reviews: 76,
+    description: "Calculadora de mesa com display 12 dígitos"
+},
+{
+    id: 69,
+    name: "Abridor de Cartas em Aço",
+    category: "material_escritorio",
+    price: 1490,
+    image: "https://img.freepik.com/free-vector/letter-opener-concept_1284-42316.jpg",
+    rating: 4.1,
+    reviews: 45,
+    description: "Abridor de cartas em aço inoxidável"
+},
+{
+    id: 70,
+    name: "Organizador de Cabos para Mesa",
+    category: "material_escritorio",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/cable-organizer-concept_1284-42315.jpg",
+    rating: 4.7,
+    reviews: 98,
+    description: "Organizador de cabos para manter a mesa arrumada"
+},
+{
+    id: 71,
+    name: "Suporte para Tablete Ajustável",
+    category: "material_escritorio",
+    price: 3590,
+    image: "https://img.freepik.com/free-vector/tablet-stand-concept_1284-42314.jpg",
+    rating: 4.4,
+    reviews: 67,
+    description: "Suporte para tablete com ângulo ajustável"
+},
+{
+    id: 72,
+    name: "Carimbo Personalizável",
+    category: "material_escritorio",
+    price: 4290,
+    image: "https://img.freepik.com/free-vector/custom-stamp-concept_1284-42313.jpg",
+    rating: 4.3,
+    reviews: 53,
+    description: "Carimbo personalizável com texto variável"
+},
+{
+    id: 73,
+    name: "Pasta Executiva em Couro Sintético",
+    category: "material_escritorio",
+    price: 15990,
+    originalPrice: 18990,
+    image: "https://img.freepik.com/free-vector/executive-folder-concept_1284-42312.jpg",
+    rating: 4.8,
+    reviews: 42,
+    badge: "sale",
+    description: "Pasta executiva em couro sintético A4"
+},
+{
+    id: 74,
+    name: "Agenda Executiva 2024",
+    category: "material_escritorio",
+    price: 7890,
+    image: "https://img.freepik.com/free-vector/executive-planner-concept_1284-42311.jpg",
+    rating: 4.6,
+    reviews: 78,
+    description: "Agenda executiva 2024 capa couro"
+},
+{
+    id: 75,
+    name: "Porta-documentos com Alça",
+    category: "material_escritorio",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/document-case-concept_1284-42310.jpg",
+    rating: 4.4,
+    reviews: 61,
+    description: "Porta-documentos com alça para transporte"
+},
+{
+    id: 76,
+    name: "Kit Escritório Básico",
+    category: "material_escritorio",
+    price: 12990,
+    image: "https://img.freepik.com/free-vector/office-kit-concept_1284-42309.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Kit básico para escritório com 15 itens"
+},
+{
+    id: 77,
+    name: "Organizador de Gaveta Divisórias",
+    category: "material_escritorio",
+    price: 3290,
+    image: "https://img.freepik.com/free-vector/drawer-organizer-concept_1284-42308.jpg",
+    rating: 4.5,
+    reviews: 72,
+    description: "Organizador com divisórias para gaveta"
+},{
+    id: 78,
+    name: "Fio Elétrico 1,5mm - Rolo 100m",
+    category: "materialeletrico",
+    price: 12990,
+    image: "https://img.freepik.com/free-vector/electrical-wire-concept_1284-42307.jpg",
+    rating: 4.4,
+    reviews: 56,
+    description: "Rolo de fio elétrico 1,5mm com 100 metros"
+},
+{
+    id: 79,
+    name: "Disjuntor Bipolar 25A",
+    category: "materialeletrico",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/circuit-breaker-concept_1284-42306.jpg",
+    rating: 4.6,
+    reviews: 42,
+    description: "Disjuntor bipolar 25 amperes"
+},
+{
+    id: 80,
+    name: "Tomada 2P+T 10A Branca",
+    category: "materialeletrico",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/power-socket-concept_1284-42305.jpg",
+    rating: 4.3,
+    reviews: 89,
+    description: "Tomada 2 polos + terra 10A cor branca"
+},
+{
+    id: 81,
+    name: "Interruptor Simples 10A Branco",
+    category: "materialeletrico",
+    price: 890,
+    image: "https://img.freepik.com/free-vector/light-switch-concept_1284-42304.jpg",
+    rating: 4.5,
+    reviews: 76,
+    description: "Interruptor simples 10A cor branca"
+},
+{
+    id: 82,
+    name: "Caixa de Luz 4x2 Embutir",
+    category: "materialeletrico",
+    price: 690,
+    image: "https://img.freepik.com/free-vector/electrical-box-concept_1284-42303.jpg",
+    rating: 4.2,
+    reviews: 63,
+    description: "Caixa de luz 4x2 para embutir"
+},
+{
+    id: 83,
+    name: "Lâmpada LED 9W Bivolt",
+    category: "materialeletrico",
+    price: 1590,
+    originalPrice: 1990,
+    image: "https://img.freepik.com/free-vector/led-bulb-concept_1284-42302.jpg",
+    rating: 4.7,
+    reviews: 134,
+    badge: "sale",
+    description: "Lâmpada LED 9W bivolt luz branca"
+},
+{
+    id: 84,
+    name: "Fita Isolante Preta - Rolo 10m",
+    category: "materialeletrico",
+    price: 790,
+    image: "https://img.freepik.com/free-vector/electrical-tape-concept_1284-42301.jpg",
+    rating: 4.4,
+    reviews: 98,
+    description: "Fita isolante preta rolo 10 metros"
+},
+{
+    id: 85,
+    name: "Plug Macho 2P 10A",
+    category: "materialeletrico",
+    price: 590,
+    image: "https://img.freepik.com/free-vector/electrical-plug-concept_1284-42300.jpg",
+    rating: 4.3,
+    reviews: 87,
+    description: "Plug macho 2 polos 10A"
+},
+{
+    id: 86,
+    name: "Cabo Flexível 2,5mm - Rolo 50m",
+    category: "materialeletrico",
+    price: 18990,
+    image: "https://img.freepik.com/free-vector/flexible-cable-concept_1284-42299.jpg",
+    rating: 4.5,
+    reviews: 45,
+    description: "Cabo flexível 2,5mm rolo 50 metros"
+},
+{
+    id: 87,
+    name: "DPS para Quadro de Luz",
+    category: "materialeletrico",
+    price: 7890,
+    image: "https://img.freepik.com/free-vector/surge-protector-concept_1284-42298.jpg",
+    rating: 4.6,
+    reviews: 32,
+    description: "Dispositivo protetor contra surtos"
+},
+{
+    id: 88,
+    name: "Fusível Cartucho 10A",
+    category: "materialeletrico",
+    price: 390,
+    image: "https://img.freepik.com/free-vector/fuse-concept_1284-42297.jpg",
+    rating: 4.2,
+    reviews: 56,
+    description: "Fusível cartucho 10 amperes"
+},
+{
+    id: 89,
+    name: "Terminal Elétrico - Kit 100 peças",
+    category: "materialeletrico",
+    price: 1890,
+    image: "https://img.freepik.com/free-vector/electrical-terminal-concept_1284-42296.jpg",
+    rating: 4.4,
+    reviews: 71,
+    description: "Kit com 100 terminais elétricos variados"
+},
+{
+    id: 90,
+    name: "Conduíte Corrugado 20mm - Rolo 50m",
+    category: "materialeletrico",
+    price: 12990,
+    image: "https://img.freepik.com/free-vector/conduit-pipe-concept_1284-42295.jpg",
+    rating: 4.3,
+    reviews: 38,
+    description: "Conduíte corrugado 20mm rolo 50 metros"
+},
+{
+    id: 91,
+    name: "Alicate Amperímetro Digital",
+    category: "materialeletrico",
+    price: 18990,
+    image: "https://img.freepik.com/free-vector/digital-clamp-meter-concept_1284-42294.jpg",
+    rating: 4.8,
+    reviews: 27,
+    description: "Alicate amperímetro digital profissional"
+},
+{
+    id: 92,
+    name: "Teste de Tensão Digital",
+    category: "materialeletrico",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/voltage-tester-concept_1284-42293.jpg",
+    rating: 4.5,
+    reviews: 63,
+    description: "Teste de tensão digital com display"
+},
+{
+    id: 93,
+    name: "Chave de Fenda Isolada 6mm",
+    category: "materialeletrico",
+    price: 1290,
+    image: "https://img.freepik.com/free-vector/screwdriver-concept_1284-42292.jpg",
+    rating: 4.4,
+    reviews: 89,
+    description: "Chave de fenda isolada 6mm"
+},
+{
+    id: 94,
+    name: "Alicate Corte Diagonal 6",
+    category: "materialeletrico",
+    price: 2890,
+    image: "https://img.freepik.com/free-vector/wire-cutter-concept_1284-42291.jpg",
+    rating: 4.6,
+    reviews: 76,
+    description: "Alicate de corte diagonal número 6"
+},
+{
+    id: 95,
+    name: "Fita Veda Rosca - Rolo 50m",
+    category: "materialeletrico",
+    price: 890,
+    image: "https://img.freepik.com/free-vector/thread-seal-tape-concept_1284-42290.jpg",
+    rating: 4.3,
+    reviews: 54,
+    description: "Fita veda rosca rolo 50 metros"
+},
+{
+    id: 96,
+    name: "Luminária LED Embutir 15W",
+    category: "materialeletrico",
+    price: 4590,
+    image: "https://img.freepik.com/free-vector/recessed-light-concept_1284-42289.jpg",
+    rating: 4.7,
+    reviews: 48,
+    description: "Luminária LED para embutir 15W"
+},
+{
+    id: 97,
+    name: "Sensor de Presença 180°",
+    category: "materialeletrico",
+    price: 7890,
+    image: "https://img.freepik.com/free-vector/motion-sensor-concept_1284-42288.jpg",
+    rating: 4.5,
+    reviews: 36,
+    description: "Sensor de presença 180 graus"
+},
+{
+    id: 98,
+    name: "Dimmer para Lâmpada LED",
+    category: "materialeletrico",
+    price: 3290,
+    image: "https://img.freepik.com/free-vector/dimmer-switch-concept_1284-42287.jpg",
+    rating: 4.4,
+    reviews: 42,
+    description: "Dimmer para controle de intensidade LED"
+},
+{
+    id: 99,
+    name: "Transformador 110V/220V 100VA",
+    category: "materialeletrico",
+    price: 12990,
+    image: "https://img.freepik.com/free-vector/transformer-concept_1284-42286.jpg",
+    rating: 4.6,
+    reviews: 29,
+    description: "Transformador 110V/220V 100VA"
+},
+{
+    id: 100,
+    name: "Kit Ferramentas Elétricas Básico",
+    category: "materialeletrico",
+    price: 18990,
+    image: "https://img.freepik.com/free-vector/tool-kit-concept_1284-42285.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Kit básico de ferramentas para elétrica"
+},{
+    id: 148,
+    name: "Kit CFTV 8 Câmeras 4K com DVR",
+    category: "security",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cctv-camera-concept_1284-42237.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Kit CFTV 8 câmeras 4K com DVR 2TB"
+},
+{
+    id: 149,
+    name: "Câmera IP Wi-Fi 4K Exterior",
+    category: "security",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/ip-camera-concept_1284-42236.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Câmera IP Wi-Fi 4K para exterior"
+},
+{
+    id: 150,
+    name: "DVR 8 Canais com 2TB HD",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/dvr-recorder-concept_1284-42235.jpg",
+    rating: 4.5,
+    reviews: 89,
+    description: "DVR 8 canais com HD 2TB incluído"
+},
+{
+    id: 151,
+    name: "Kit Alarme Sem Fio 8 Zonas",
+    category: "security",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/alarm-system-concept_1284-42234.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Kit alarme sem fio 8 zonas com central"
+},
+{
+    id: 152,
+    name: "Sensor de Movimento PIR",
+    category: "security",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/motion-sensor-concept_1284-42233.jpg",
+    rating: 4.4,
+    reviews: 145,
+    description: "Sensor movimento PIR para alarme"
+},
+{
+    id: 153,
+    name: "Controle de Acesso Biométrico",
+    category: "security",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/biometric-scanner-concept_1284-42232.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Controle acesso biométrico digital"
+},
+{
+    id: 154,
+    name: "Fechadura Eletrônica Digital",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/electronic-lock-concept_1284-42231.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Fechadura eletrônica digital com senha"
+},
+{
+    id: 155,
+    name: "Cofre Digital 50L Resistente ao Fogo",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/digital-safe-concept_1284-42230.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Cofre digital 50L resistente fogo 60min"
+},
+{
+    id: 156,
+    name: "Sistema de Interfone Vídeo 7\"",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/video-intercom-concept_1284-42229.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Sistema interfone vídeo tela 7 polegadas"
+},
+{
+    id: 157,
+    name: "Barreira de Infravermelho 100m",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/infrared-barrier-concept_1284-42228.jpg",
+    rating: 4.5,
+    reviews: 67,
+    description: "Barreira infravermelho alcance 100 metros"
+},
+{
+    id: 158,
+    name: "Sensor Magnético para Porta/Janela",
+    category: "security",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/magnetic-sensor-concept_1284-42227.jpg",
+    rating: 4.3,
+    reviews: 278,
+    description: "Sensor magnético para porta e janela"
+},
+{
+    id: 159,
+    name: "Sirene Externa 110dB",
+    category: "security",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/siren-alarm-concept_1284-42226.jpg",
+    rating: 4.4,
+    reviews: 156,
+    description: "Sirene externa 110dB para alarme"
+},
+{
+    id: 160,
+    name: "Central de Alarme 16 Zonas",
+    category: "security",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/alarm-control-panel-concept_1284-42225.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Central alarme 16 zonas com bateria"
+},
+{
+    id: 161,
+    name: "Teclado para Central de Alarme",
+    category: "security",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/security-keypad-concept_1284-42224.jpg",
+    rating: 4.5,
+    reviews: 134,
+    description: "Teclado LCD para central de alarme"
+},
+{
+    id: 162,
+    name: "Kit CFTV Veicular 4 Câmeras",
+    category: "security",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/vehicle-camera-concept_1284-42223.jpg",
+    rating: 4.6,
+    reviews: 56,
+    description: "Kit CFTV veicular 4 câmeras DVR"
+},
+{
+    id: 163,
+    name: "DVR Móvel 4G com GPS",
+    category: "security",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/mobile-dvr-concept_1284-42222.jpg",
+    rating: 4.5,
+    reviews: 78,
+    description: "DVR móvel 4G com GPS integrado"
+},
+{
+    id: 164,
+    name: "Câmera Térmica para Detecção",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/thermal-camera-concept_1284-42221.jpg",
+    rating: 4.8,
+    reviews: 34,
+    description: "Câmera térmica para detecção noturna"
+},
+{
+    id: 165,
+    name: "Sistema de Cercamento Elétrico",
+    category: "security",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/electric-fence-concept_1284-42220.jpg",
+    rating: 4.7,
+    reviews: 23,
+    description: "Sistema cercamento elétrico completo"
+},
+{
+    id: 166,
+    name: "Detector de Metais Portátil",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/metal-detector-concept_1284-42219.jpg",
+    rating: 4.4,
+    reviews: 89,
+    description: "Detector metais portátil profissional"
+},
+{
+    id: 167,
+    name: "Scanner de Código de Barras",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/barcode-scanner-concept_1284-42218.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Scanner código barras para controle"
+},
+{
+    id: 168,
+    name: "Kit Segurança Residencial Completo",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/home-security-concept_1284-42217.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Kit segurança residencial completo"
+},{
+    id: 169,
+    name: "Roteador Wi-Fi 6 AX6000 Tri-Band",
+    category: "network",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/wifi6-router-concept_1284-42216.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Roteador Wi-Fi 6 Tri-Band AX6000"
+},
+{
+    id: 170,
+    name: "Switch Gerenciável 24 Portas Gigabit",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/network-switch-concept_1284-42215.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Switch gerenciável 24 portas 10/100/1000"
+},
+{
+    id: 171,
+    name: "Access Point Enterprise Wi-Fi 6",
+    category: "network",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/access-point-concept_1284-42214.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Access Point Enterprise Wi-Fi 6"
+},
+{
+    id: 172,
+    name: "Modem Cable DOCSIS 3.1",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cable-modem-concept_1284-42213.jpg",
+    rating: 4.5,
+    reviews: 278,
+    description: "Modem Cable DOCSIS 3.1 2.5Gbps"
+},
+{
+    id: 173,
+    name: "Firewall UTM Empresarial",
+    category: "network",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/network-firewall-concept_1284-42212.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Firewall UTM para redes empresariais"
+},
+{
+    id: 174,
+    name: "Servidor Rack 2U Dell PowerEdge",
+    category: "network",
+    price: 1899900,
+    image: "https://img.freepik.com/free-vector/server-rack-concept_1284-42211.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Servidor rack 2U Dell PowerEdge"
+},
+{
+    id: 175,
+    name: "Patch Panel 24 Portas Cat6",
+    category: "network",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/patch-panel-concept_1284-42210.jpg",
+    rating: 4.4,
+    reviews: 134,
+    description: "Patch panel 24 portas categoria 6"
+},
+{
+    id: 176,
+    name: "Cabos de Rede Cat8 10Gbps",
+    category: "network",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/ethernet-cable-concept_1284-42209.jpg",
+    rating: 4.6,
+    reviews: 456,
+    description: "Cabos rede Cat8 10Gbps 3 metros"
+},
+{
+    id: 177,
+    name: "Conector RJ45 Cat6a",
+    category: "network",
+    price: 2900,
+    image: "https://img.freepik.com/free-vector/rj45-connector-concept_1284-42208.jpg",
+    rating: 4.3,
+    reviews: 289,
+    description: "Conectores RJ45 categoria 6a"
+},
+{
+    id: 178,
+    name: "Testador de Rede Ethernet",
+    category: "network",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/network-tester-concept_1284-42207.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Testador de rede Ethernet profissional"
+},
+{
+    id: 179,
+    name: "Rack de Parede 9U",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/server-rack-concept_1284-42206.jpg",
+    rating: 4.4,
+    reviews: 78,
+    description: "Rack de parede 9U com portas trancadas"
+},
+{
+    id: 180,
+    name: "UPS Online 3000VA",
+    category: "network",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/ups-system-concept_1284-42205.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "UPS Online 3000VA para servidores"
+},
+{
+    id: 181,
+    name: "Switch PoE+ 8 Portas",
+    category: "network",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/poe-switch-concept_1284-42204.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Switch PoE+ 8 portas 150W"
+},
+{
+    id: 182,
+    name: "Antena Wi-Fi Externa 15dBi",
+    category: "network",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/wifi-antenna-concept_1284-42203.jpg",
+    rating: 4.4,
+    reviews: 189,
+    description: "Antena Wi-Fi externa 15dBi"
+},
+{
+    id: 183,
+    name: "Bridge Wireless Point-to-Point",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/wireless-bridge-concept_1284-42202.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Bridge wireless point-to-point 5GHz"
+},
+{
+    id: 184,
+    name: "Sistema VoIP IP PBX",
+    category: "network",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/voip-system-concept_1284-42201.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Sistema VoIP IP PBX 50 extensões"
+},
+{
+    id: 185,
+    name: "Media Converter Fiber to Ethernet",
+    category: "network",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/media-converter-concept_1284-42200.jpg",
+    rating: 4.5,
+    reviews: 89,
+    description: "Media converter fibra para Ethernet"
+},
+{
+    id: 186,
+    name: "Cabo de Fibra Óptica Single Mode",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/fiber-optic-cable-concept_1284-42199.jpg",
+    rating: 4.6,
+    reviews: 56,
+    description: "Cabo fibra óptica single mode 50m"
+},
+{
+    id: 187,
+    name: "Patch Cord Cat6a 2m",
+    category: "network",
+    price: 3900,
+    image: "https://img.freepik.com/free-vector/patch-cord-concept_1284-42198.jpg",
+    rating: 4.4,
+    reviews: 278,
+    description: "Patch cord categoria 6a 2 metros"
+},
+{
+    id: 188,
+    name: "Organizador de Cabos para Rack",
+    category: "network",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/cable-organizer-concept_1284-42197.jpg",
+    rating: 4.3,
+    reviews: 167,
+    description: "Organizador de cabos para rack 1U"
+},
+{
+    id: 189,
+    name: "KVM Switch 16 Portas",
+    category: "network",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/kvm-switch-concept_1284-42196.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "KVM switch 16 portas HD"
+},
+{
+    id: 190,
+    name: "Sistema de Monitoramento de Rede",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/network-monitoring-concept_1284-42195.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Software monitoramento de rede"
+},{
+    id: 191,
+    name: "Servidor Cloud VPS 4GB RAM",
+    category: "cloud",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/cloud-server-concept_1284-42194.jpg",
+    rating: 4.6,
+    reviews: 456,
+    description: "Servidor cloud VPS 4GB RAM 2vCPU"
+},
+{
+    id: 192,
+    name: "Armazenamento Cloud 1TB",
+    category: "cloud",
+    price: 9900,
+    image: "https://img.freepik.com/free-vector/cloud-storage-concept_1284-42193.jpg",
+    rating: 4.7,
+    reviews: 789,
+    description: "Armazenamento cloud 1TB backup"
+},
+{
+    id: 193,
+    name: "Backup Automático Cloud",
+    category: "cloud",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/cloud-backup-concept_1284-42192.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Serviço backup automático cloud"
+},
+{
+    id: 194,
+    name: "Email Corporativo Cloud 50GB",
+    category: "cloud",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/email-cloud-concept_1284-42191.jpg",
+    rating: 4.5,
+    reviews: 567,
+    description: "Email corporativo cloud 50GB caixa"
+},
+{
+    id: 195,
+    name: "VPN Cloud Empresarial",
+    category: "cloud",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/cloud-vpn-concept_1284-42190.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "VPN cloud empresarial 50 usuários"
+},
+{
+    id: 196,
+    name: "CDN Global Aceleração de Site",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cdn-concept_1284-42189.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "CDN global para aceleração de sites"
+},
+{
+    id: 197,
+    name: "Banco de Dados Cloud MySQL",
+    category: "cloud",
+    price: 15900,
+    image: "https://img.freepik.com/free-vector/cloud-database-concept_1284-42188.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Banco dados cloud MySQL 100GB"
+},
+{
+    id: 198,
+    name: "Servidor Dedicado Cloud 32GB",
+    category: "cloud",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/dedicated-server-concept_1284-42187.jpg",
+    rating: 4.9,
+    reviews: 134,
+    description: "Servidor dedicado cloud 32GB RAM"
+},
+{
+    id: 199,
+    name: "Backup em Nuvem Ilimitado",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/unlimited-backup-concept_1284-42186.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Backup ilimitado em nuvem"
+},
+{
+    id: 200,
+    name: "Disaster Recovery as a Service",
+    category: "cloud",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/disaster-recovery-concept_1284-42185.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Serviço disaster recovery cloud"
+},
+{
+    id: 201,
+    name: "Cloud GPU para Machine Learning",
+    category: "cloud",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/cloud-gpu-concept_1284-42184.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Cloud GPU para machine learning"
+},
+{
+    id: 202,
+    name: "Container as a Service Kubernetes",
+    category: "cloud",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/container-service-concept_1284-42183.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Container service Kubernetes"
+},
+{
+    id: 203,
+    name: "Backup para Office 365",
+    category: "cloud",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/office365-backup-concept_1284-42182.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Backup cloud para Office 365"
+},
+{
+    id: 204,
+    name: "Cloud Storage Archive 10TB",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/archive-storage-concept_1284-42181.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Cloud storage archive 10TB"
+},
+{
+    id: 205,
+    name: "Load Balancer Cloud",
+    category: "cloud",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/load-balancer-concept_1284-42180.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Load balancer cloud empresarial"
+},
+{
+    id: 206,
+    name: "Monitoramento Cloud 24/7",
+    category: "cloud",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/cloud-monitoring-concept_1284-42179.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Monitoramento cloud 24 horas"
+},
+{
+    id: 207,
+    name: "Cloud Desktop VDI 50 Usuários",
+    category: "cloud",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cloud-desktop-concept_1284-42178.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Cloud desktop VDI 50 usuários"
+},
+{
+    id: 208,
+    name: "Backup Automático para Servidores",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/server-backup-concept_1284-42177.jpg",
+    rating: 4.6,
+    reviews: 156,
+    description: "Backup automático servidores cloud"
+},
+{
+    id: 209,
+    name: "Cloud Security Suite",
+    category: "cloud",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/cloud-security-concept_1284-42176.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Suite segurança cloud completa"
+},
+{
+    id: 210,
+    name: "Solução Cloud Híbrida",
+    category: "cloud",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/hybrid-cloud-concept_1284-42175.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Solução cloud híbrida empresarial"
+},{
+    id: 211,
+    name: "Consultoria em Transformação Digital",
+    category: "consulting",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/digital-transformation-concept_1284-42174.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Consultoria transformação digital 40h"
+},
+{
+    id: 212,
+    name: "Auditoria de Segurança da Informação",
+    category: "consulting",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/security-audit-concept_1284-42173.jpg",
+    rating: 4.9,
+    reviews: 89,
+    description: "Auditoria segurança informação completa"
+},
+{
+    id: 213,
+    name: "Consultoria em Cloud Migration",
+    category: "consulting",
+    price: 159900,
+    image: "https://img.freepik.com/free-vector/cloud-migration-concept_1284-42172.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Consultoria migração para cloud"
+},
+{
+    id: 214,
+    name: "Otimização de Infraestrutura de TI",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/it-infrastructure-concept_1284-42171.jpg",
+    rating: 4.6,
+    reviews: 167,
+    description: "Otimização infraestrutura TI 30h"
+},
+{
+    id: 215,
+    name: "Consultoria em Cibersegurança",
+    category: "consulting",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cybersecurity-consulting-concept_1284-42170.jpg",
+    rating: 4.8,
+    reviews: 78,
+    description: "Consultoria cibersegurança empresarial"
+},
+{
+    id: 216,
+    name: "Plano de Continuidade de Negócios",
+    category: "consulting",
+    price: 139900,
+    image: "https://img.freepik.com/free-vector/business-continuity-concept_1284-42169.jpg",
+    rating: 4.7,
+    reviews: 56,
+    description: "Plano continuidade negócios 35h"
+},
+{
+    id: 217,
+    name: "Consultoria em LGPD",
+    category: "consulting",
+    price: 89900,
+    image: "https://img.freepik.com/free-vector/gdpr-compliance-concept_1284-42168.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Consultoria adequação LGPD 25h"
+},
+{
+    id: 218,
+    name: "Otimização de Processos de TI",
+    category: "consulting",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/process-optimization-concept_1284-42167.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Otimização processos TI 20h"
+},
+{
+    id: 219,
+    name: "Consultoria em DevOps",
+    category: "consulting",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/devops-concept_1284-42166.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Consultoria implementação DevOps"
+},
+{
+    id: 220,
+    name: "Auditoria de Redes Corporativas",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/network-audit-concept_1284-42165.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Auditoria redes corporativas 25h"
+},
+{
+    id: 221,
+    name: "Consultoria em Virtualização",
+    category: "consulting",
+    price: 109900,
+    image: "https://img.freepik.com/free-vector/virtualization-consulting-concept_1284-42164.jpg",
+    rating: 4.7,
+    reviews: 45,
+    description: "Consultoria virtualização servidores"
+},
+{
+    id: 222,
+    name: "Plano de Recuperação de Desastres",
+    category: "consulting",
+    price: 119900,
+    image: "https://img.freepik.com/free-vector/disaster-recovery-plan-concept_1284-42163.jpg",
+    rating: 4.8,
+    reviews: 56,
+    description: "Plano recuperação desastres 30h"
+},
+{
+    id: 223,
+    name: "Consultoria em Backup e Storage",
+    category: "consulting",
+    price: 89900,
+    image: "https://img.freepik.com/free-vector/backup-consulting-concept_1284-42162.jpg",
+    rating: 4.6,
+    reviews: 78,
+    description: "Consultoria backup storage 20h"
+},
+{
+    id: 224,
+    name: "Otimização de Data Center",
+    category: "consulting",
+    price: 159900,
+    image: "https://img.freepik.com/free-vector/data-center-optimization-concept_1284-42161.jpg",
+    rating: 4.8,
+    reviews: 34,
+    description: "Otimização data center 40h"
+},
+{
+    id: 225,
+    name: "Consultoria em Mobile Security",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/mobile-security-concept_1284-42160.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Consultoria segurança mobile 25h"
+},
+{
+    id: 226,
+    name: "Auditoria de Performance de Sistemas",
+    category: "consulting",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/performance-audit-concept_1284-42159.jpg",
+    rating: 4.6,
+    reviews: 89,
+    description: "Auditoria performance sistemas 20h"
+},
+{
+    id: 227,
+    name: "Consultoria em ITIL",
+    category: "consulting",
+    price: 119900,
+    image: "https://img.freepik.com/free-vector/itil-consulting-concept_1284-42158.jpg",
+    rating: 4.8,
+    reviews: 56,
+    description: "Consultoria implementação ITIL"
+},
+{
+    id: 228,
+    name: "Plano de Segurança da Informação",
+    category: "consulting",
+    price: 139900,
+    image: "https://img.freepik.com/free-vector/security-plan-concept_1284-42157.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Plano segurança informação 35h"
+},{
+    id: 229,
+    name: "Curso de Cybersecurity Fundamentos",
+    category: "training",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cybersecurity-training-concept_1284-42156.jpg",
+    rating: 4.8,
+    reviews: 456,
+    description: "Curso cybersecurity 40 horas online"
+},
+{
+    id: 230,
+    name: "Treinamento em Cloud Computing AWS",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/aws-training-concept_1284-42155.jpg",
+    rating: 4.7,
+    reviews: 289,
+    description: "Treinamento AWS 60 horas certificação"
+},
+{
+    id: 231,
+    name: "Curso de Programação Python",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/python-programming-concept_1284-42154.jpg",
+    rating: 4.9,
+    reviews: 567,
+    description: "Curso programação Python 50 horas"
+},
+{
+    id: 232,
+    name: "Treinamento em DevOps e CI/CD",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/devops-training-concept_1284-42153.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Treinamento DevOps 45 horas"
+},
+{
+    id: 233,
+    name: "Curso de Data Science com R",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/data-science-course-concept_1284-42152.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Curso data science R 70 horas"
+},
+{
+    id: 234,
+    name: "Treinamento em Machine Learning",
+    category: "training",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/machine-learning-course-concept_1284-42151.jpg",
+    rating: 4.9,
+    reviews: 156,
+    description: "Treinamento machine learning 80 horas"
+},
+{
+    id: 235,
+    name: "Curso de Gestão de Projetos PMP",
+    category: "training",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/pmp-training-concept_1284-42150.jpg",
+    rating: 4.8,
+    reviews: 278,
+    description: "Curso preparatório PMP 35 horas"
+},
+{
+    id: 236,
+    name: "Treinamento em Docker e Kubernetes",
+    category: "training",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/docker-training-concept_1284-42149.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Treinamento Docker Kubernetes 40h"
+},
+{
+    id: 237,
+    name: "Curso de Ethical Hacking",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/ethical-hacking-course-concept_1284-42148.jpg",
+    rating: 4.9,
+    reviews: 189,
+    description: "Curso ethical hacking 60 horas"
+},
+{
+    id: 238,
+    name: "Treinamento em Azure Fundamentals",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/azure-training-concept_1284-42147.jpg",
+    rating: 4.7,
+    reviews: 234,
+    description: "Treinamento Azure 50 horas"
+},
+{
+    id: 239,
+    name: "Curso de Desenvolvimento Web Full Stack",
+    category: "training",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/fullstack-development-concept_1284-42146.jpg",
+    rating: 4.8,
+    reviews: 456,
+    description: "Curso desenvolvimento web 90 horas"
+},
+{
+    id: 240,
+    name: "Treinamento em ITIL 4 Foundation",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/itil-training-concept_1284-42145.jpg",
+    rating: 4.7,
+    reviews: 167,
+    description: "Treinamento ITIL 4 30 horas"
+},
+{
+    id: 241,
+    name: "Curso de Business Intelligence",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/bi-training-concept_1284-42144.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Curso business intelligence 55 horas"
+},
+{
+    id: 242,
+    name: "Treinamento em SQL Avançado",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/sql-training-concept_1284-42143.jpg",
+    rating: 4.8,
+    reviews: 278,
+    description: "Treinamento SQL avançado 35 horas"
+},
+{
+    id: 243,
+    name: "Curso de JavaScript Moderno",
+    category: "training",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/javascript-course-concept_1284-42142.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Curso JavaScript moderno 40 horas"
+},
+{
+    id: 244,
+    name: "Treinamento em React.js",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/react-training-concept_1284-42141.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Treinamento React.js 45 horas"
+},
+{
+    id: 245,
+    name: "Curso de Node.js Backend",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/nodejs-course-concept_1284-42140.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Curso Node.js backend 50 horas"
+},
+{
+    id: 246,
+    name: "Treinamento em Vue.js",
+    category: "training",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/vuejs-training-concept_1284-42139.jpg",
+    rating: 4.6,
+    reviews: 156,
+    description: "Treinamento Vue.js 35 horas"
+},
+{
+    id: 247,
+    name: "Curso de TypeScript",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/typescript-course-concept_1284-42138.jpg",
+    rating: 4.7,
+    reviews: 278,
+    description: "Curso TypeScript 30 horas"
+},
+{
+    id: 248,
+    name: "Treinamento em Angular",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/angular-training-concept_1284-42137.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Treinamento Angular 55 horas"
+},{
+    id: 148,
+    name: "Kit CFTV 8 Câmeras 4K com DVR",
+    category: "security",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cctv-camera-concept_1284-42237.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Kit CFTV 8 câmeras 4K com DVR 2TB"
+},
+{
+    id: 149,
+    name: "Câmera IP Wi-Fi 4K Exterior",
+    category: "security",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/ip-camera-concept_1284-42236.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Câmera IP Wi-Fi 4K para exterior"
+},
+{
+    id: 150,
+    name: "DVR 8 Canais com 2TB HD",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/dvr-recorder-concept_1284-42235.jpg",
+    rating: 4.5,
+    reviews: 89,
+    description: "DVR 8 canais com HD 2TB incluído"
+},
+{
+    id: 151,
+    name: "Kit Alarme Sem Fio 8 Zonas",
+    category: "security",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/alarm-system-concept_1284-42234.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Kit alarme sem fio 8 zonas com central"
+},
+{
+    id: 152,
+    name: "Sensor de Movimento PIR",
+    category: "security",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/motion-sensor-concept_1284-42233.jpg",
+    rating: 4.4,
+    reviews: 145,
+    description: "Sensor movimento PIR para alarme"
+},
+{
+    id: 153,
+    name: "Controle de Acesso Biométrico",
+    category: "security",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/biometric-scanner-concept_1284-42232.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Controle acesso biométrico digital"
+},
+{
+    id: 154,
+    name: "Fechadura Eletrônica Digital",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/electronic-lock-concept_1284-42231.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Fechadura eletrônica digital com senha"
+},
+{
+    id: 155,
+    name: "Cofre Digital 50L Resistente ao Fogo",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/digital-safe-concept_1284-42230.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Cofre digital 50L resistente fogo 60min"
+},
+{
+    id: 156,
+    name: "Sistema de Interfone Vídeo 7\"",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/video-intercom-concept_1284-42229.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Sistema interfone vídeo tela 7 polegadas"
+},
+{
+    id: 157,
+    name: "Barreira de Infravermelho 100m",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/infrared-barrier-concept_1284-42228.jpg",
+    rating: 4.5,
+    reviews: 67,
+    description: "Barreira infravermelho alcance 100 metros"
+},
+{
+    id: 158,
+    name: "Sensor Magnético para Porta/Janela",
+    category: "security",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/magnetic-sensor-concept_1284-42227.jpg",
+    rating: 4.3,
+    reviews: 278,
+    description: "Sensor magnético para porta e janela"
+},
+{
+    id: 159,
+    name: "Sirene Externa 110dB",
+    category: "security",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/siren-alarm-concept_1284-42226.jpg",
+    rating: 4.4,
+    reviews: 156,
+    description: "Sirene externa 110dB para alarme"
+},
+{
+    id: 160,
+    name: "Central de Alarme 16 Zonas",
+    category: "security",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/alarm-control-panel-concept_1284-42225.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Central alarme 16 zonas com bateria"
+},
+{
+    id: 161,
+    name: "Teclado para Central de Alarme",
+    category: "security",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/security-keypad-concept_1284-42224.jpg",
+    rating: 4.5,
+    reviews: 134,
+    description: "Teclado LCD para central de alarme"
+},
+{
+    id: 162,
+    name: "Kit CFTV Veicular 4 Câmeras",
+    category: "security",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/vehicle-camera-concept_1284-42223.jpg",
+    rating: 4.6,
+    reviews: 56,
+    description: "Kit CFTV veicular 4 câmeras DVR"
+},
+{
+    id: 163,
+    name: "DVR Móvel 4G com GPS",
+    category: "security",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/mobile-dvr-concept_1284-42222.jpg",
+    rating: 4.5,
+    reviews: 78,
+    description: "DVR móvel 4G com GPS integrado"
+},
+{
+    id: 164,
+    name: "Câmera Térmica para Detecção",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/thermal-camera-concept_1284-42221.jpg",
+    rating: 4.8,
+    reviews: 34,
+    description: "Câmera térmica para detecção noturna"
+},
+{
+    id: 165,
+    name: "Sistema de Cercamento Elétrico",
+    category: "security",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/electric-fence-concept_1284-42220.jpg",
+    rating: 4.7,
+    reviews: 23,
+    description: "Sistema cercamento elétrico completo"
+},
+{
+    id: 166,
+    name: "Detector de Metais Portátil",
+    category: "security",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/metal-detector-concept_1284-42219.jpg",
+    rating: 4.4,
+    reviews: 89,
+    description: "Detector metais portátil profissional"
+},
+{
+    id: 167,
+    name: "Scanner de Código de Barras",
+    category: "security",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/barcode-scanner-concept_1284-42218.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Scanner código barras para controle"
+},
+{
+    id: 168,
+    name: "Kit Segurança Residencial Completo",
+    category: "security",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/home-security-concept_1284-42217.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Kit segurança residencial completo"
+},{
+    id: 169,
+    name: "Roteador Wi-Fi 6 AX6000 Tri-Band",
+    category: "network",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/wifi6-router-concept_1284-42216.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Roteador Wi-Fi 6 Tri-Band AX6000"
+},
+{
+    id: 170,
+    name: "Switch Gerenciável 24 Portas Gigabit",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/network-switch-concept_1284-42215.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Switch gerenciável 24 portas 10/100/1000"
+},
+{
+    id: 171,
+    name: "Access Point Enterprise Wi-Fi 6",
+    category: "network",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/access-point-concept_1284-42214.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Access Point Enterprise Wi-Fi 6"
+},
+{
+    id: 172,
+    name: "Modem Cable DOCSIS 3.1",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cable-modem-concept_1284-42213.jpg",
+    rating: 4.5,
+    reviews: 278,
+    description: "Modem Cable DOCSIS 3.1 2.5Gbps"
+},
+{
+    id: 173,
+    name: "Firewall UTM Empresarial",
+    category: "network",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/network-firewall-concept_1284-42212.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Firewall UTM para redes empresariais"
+},
+{
+    id: 174,
+    name: "Servidor Rack 2U Dell PowerEdge",
+    category: "network",
+    price: 1899900,
+    image: "https://img.freepik.com/free-vector/server-rack-concept_1284-42211.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Servidor rack 2U Dell PowerEdge"
+},
+{
+    id: 175,
+    name: "Patch Panel 24 Portas Cat6",
+    category: "network",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/patch-panel-concept_1284-42210.jpg",
+    rating: 4.4,
+    reviews: 134,
+    description: "Patch panel 24 portas categoria 6"
+},
+{
+    id: 176,
+    name: "Cabos de Rede Cat8 10Gbps",
+    category: "network",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/ethernet-cable-concept_1284-42209.jpg",
+    rating: 4.6,
+    reviews: 456,
+    description: "Cabos rede Cat8 10Gbps 3 metros"
+},
+{
+    id: 177,
+    name: "Conector RJ45 Cat6a",
+    category: "network",
+    price: 2900,
+    image: "https://img.freepik.com/free-vector/rj45-connector-concept_1284-42208.jpg",
+    rating: 4.3,
+    reviews: 289,
+    description: "Conectores RJ45 categoria 6a"
+},
+{
+    id: 178,
+    name: "Testador de Rede Ethernet",
+    category: "network",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/network-tester-concept_1284-42207.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Testador de rede Ethernet profissional"
+},
+{
+    id: 179,
+    name: "Rack de Parede 9U",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/server-rack-concept_1284-42206.jpg",
+    rating: 4.4,
+    reviews: 78,
+    description: "Rack de parede 9U com portas trancadas"
+},
+{
+    id: 180,
+    name: "UPS Online 3000VA",
+    category: "network",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/ups-system-concept_1284-42205.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "UPS Online 3000VA para servidores"
+},
+{
+    id: 181,
+    name: "Switch PoE+ 8 Portas",
+    category: "network",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/poe-switch-concept_1284-42204.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Switch PoE+ 8 portas 150W"
+},
+{
+    id: 182,
+    name: "Antena Wi-Fi Externa 15dBi",
+    category: "network",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/wifi-antenna-concept_1284-42203.jpg",
+    rating: 4.4,
+    reviews: 189,
+    description: "Antena Wi-Fi externa 15dBi"
+},
+{
+    id: 183,
+    name: "Bridge Wireless Point-to-Point",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/wireless-bridge-concept_1284-42202.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Bridge wireless point-to-point 5GHz"
+},
+{
+    id: 184,
+    name: "Sistema VoIP IP PBX",
+    category: "network",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/voip-system-concept_1284-42201.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Sistema VoIP IP PBX 50 extensões"
+},
+{
+    id: 185,
+    name: "Media Converter Fiber to Ethernet",
+    category: "network",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/media-converter-concept_1284-42200.jpg",
+    rating: 4.5,
+    reviews: 89,
+    description: "Media converter fibra para Ethernet"
+},
+{
+    id: 186,
+    name: "Cabo de Fibra Óptica Single Mode",
+    category: "network",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/fiber-optic-cable-concept_1284-42199.jpg",
+    rating: 4.6,
+    reviews: 56,
+    description: "Cabo fibra óptica single mode 50m"
+},
+{
+    id: 187,
+    name: "Patch Cord Cat6a 2m",
+    category: "network",
+    price: 3900,
+    image: "https://img.freepik.com/free-vector/patch-cord-concept_1284-42198.jpg",
+    rating: 4.4,
+    reviews: 278,
+    description: "Patch cord categoria 6a 2 metros"
+},
+{
+    id: 188,
+    name: "Organizador de Cabos para Rack",
+    category: "network",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/cable-organizer-concept_1284-42197.jpg",
+    rating: 4.3,
+    reviews: 167,
+    description: "Organizador de cabos para rack 1U"
+},
+{
+    id: 189,
+    name: "KVM Switch 16 Portas",
+    category: "network",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/kvm-switch-concept_1284-42196.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "KVM switch 16 portas HD"
+},
+{
+    id: 190,
+    name: "Sistema de Monitoramento de Rede",
+    category: "network",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/network-monitoring-concept_1284-42195.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Software monitoramento de rede"
+},{
+    id: 191,
+    name: "Servidor Cloud VPS 4GB RAM",
+    category: "cloud",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/cloud-server-concept_1284-42194.jpg",
+    rating: 4.6,
+    reviews: 456,
+    description: "Servidor cloud VPS 4GB RAM 2vCPU"
+},
+{
+    id: 192,
+    name: "Armazenamento Cloud 1TB",
+    category: "cloud",
+    price: 9900,
+    image: "https://img.freepik.com/free-vector/cloud-storage-concept_1284-42193.jpg",
+    rating: 4.7,
+    reviews: 789,
+    description: "Armazenamento cloud 1TB backup"
+},
+{
+    id: 193,
+    name: "Backup Automático Cloud",
+    category: "cloud",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/cloud-backup-concept_1284-42192.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Serviço backup automático cloud"
+},
+{
+    id: 194,
+    name: "Email Corporativo Cloud 50GB",
+    category: "cloud",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/email-cloud-concept_1284-42191.jpg",
+    rating: 4.5,
+    reviews: 567,
+    description: "Email corporativo cloud 50GB caixa"
+},
+{
+    id: 195,
+    name: "VPN Cloud Empresarial",
+    category: "cloud",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/cloud-vpn-concept_1284-42190.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "VPN cloud empresarial 50 usuários"
+},
+{
+    id: 196,
+    name: "CDN Global Aceleração de Site",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cdn-concept_1284-42189.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "CDN global para aceleração de sites"
+},
+{
+    id: 197,
+    name: "Banco de Dados Cloud MySQL",
+    category: "cloud",
+    price: 15900,
+    image: "https://img.freepik.com/free-vector/cloud-database-concept_1284-42188.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Banco dados cloud MySQL 100GB"
+},
+{
+    id: 198,
+    name: "Servidor Dedicado Cloud 32GB",
+    category: "cloud",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/dedicated-server-concept_1284-42187.jpg",
+    rating: 4.9,
+    reviews: 134,
+    description: "Servidor dedicado cloud 32GB RAM"
+},
+{
+    id: 199,
+    name: "Backup em Nuvem Ilimitado",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/unlimited-backup-concept_1284-42186.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Backup ilimitado em nuvem"
+},
+{
+    id: 200,
+    name: "Disaster Recovery as a Service",
+    category: "cloud",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/disaster-recovery-concept_1284-42185.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Serviço disaster recovery cloud"
+},
+{
+    id: 201,
+    name: "Cloud GPU para Machine Learning",
+    category: "cloud",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/cloud-gpu-concept_1284-42184.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Cloud GPU para machine learning"
+},
+{
+    id: 202,
+    name: "Container as a Service Kubernetes",
+    category: "cloud",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/container-service-concept_1284-42183.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Container service Kubernetes"
+},
+{
+    id: 203,
+    name: "Backup para Office 365",
+    category: "cloud",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/office365-backup-concept_1284-42182.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Backup cloud para Office 365"
+},
+{
+    id: 204,
+    name: "Cloud Storage Archive 10TB",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/archive-storage-concept_1284-42181.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Cloud storage archive 10TB"
+},
+{
+    id: 205,
+    name: "Load Balancer Cloud",
+    category: "cloud",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/load-balancer-concept_1284-42180.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Load balancer cloud empresarial"
+},
+{
+    id: 206,
+    name: "Monitoramento Cloud 24/7",
+    category: "cloud",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/cloud-monitoring-concept_1284-42179.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Monitoramento cloud 24 horas"
+},
+{
+    id: 207,
+    name: "Cloud Desktop VDI 50 Usuários",
+    category: "cloud",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cloud-desktop-concept_1284-42178.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Cloud desktop VDI 50 usuários"
+},
+{
+    id: 208,
+    name: "Backup Automático para Servidores",
+    category: "cloud",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/server-backup-concept_1284-42177.jpg",
+    rating: 4.6,
+    reviews: 156,
+    description: "Backup automático servidores cloud"
+},
+{
+    id: 209,
+    name: "Cloud Security Suite",
+    category: "cloud",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/cloud-security-concept_1284-42176.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Suite segurança cloud completa"
+},
+{
+    id: 210,
+    name: "Solução Cloud Híbrida",
+    category: "cloud",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/hybrid-cloud-concept_1284-42175.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Solução cloud híbrida empresarial"
+},{
+    id: 211,
+    name: "Consultoria em Transformação Digital",
+    category: "consulting",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/digital-transformation-concept_1284-42174.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Consultoria transformação digital 40h"
+},
+{
+    id: 212,
+    name: "Auditoria de Segurança da Informação",
+    category: "consulting",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/security-audit-concept_1284-42173.jpg",
+    rating: 4.9,
+    reviews: 89,
+    description: "Auditoria segurança informação completa"
+},
+{
+    id: 213,
+    name: "Consultoria em Cloud Migration",
+    category: "consulting",
+    price: 159900,
+    image: "https://img.freepik.com/free-vector/cloud-migration-concept_1284-42172.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Consultoria migração para cloud"
+},
+{
+    id: 214,
+    name: "Otimização de Infraestrutura de TI",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/it-infrastructure-concept_1284-42171.jpg",
+    rating: 4.6,
+    reviews: 167,
+    description: "Otimização infraestrutura TI 30h"
+},
+{
+    id: 215,
+    name: "Consultoria em Cibersegurança",
+    category: "consulting",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/cybersecurity-consulting-concept_1284-42170.jpg",
+    rating: 4.8,
+    reviews: 78,
+    description: "Consultoria cibersegurança empresarial"
+},
+{
+    id: 216,
+    name: "Plano de Continuidade de Negócios",
+    category: "consulting",
+    price: 139900,
+    image: "https://img.freepik.com/free-vector/business-continuity-concept_1284-42169.jpg",
+    rating: 4.7,
+    reviews: 56,
+    description: "Plano continuidade negócios 35h"
+},
+{
+    id: 217,
+    name: "Consultoria em LGPD",
+    category: "consulting",
+    price: 89900,
+    image: "https://img.freepik.com/free-vector/gdpr-compliance-concept_1284-42168.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Consultoria adequação LGPD 25h"
+},
+{
+    id: 218,
+    name: "Otimização de Processos de TI",
+    category: "consulting",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/process-optimization-concept_1284-42167.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Otimização processos TI 20h"
+},
+{
+    id: 219,
+    name: "Consultoria em DevOps",
+    category: "consulting",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/devops-concept_1284-42166.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Consultoria implementação DevOps"
+},
+{
+    id: 220,
+    name: "Auditoria de Redes Corporativas",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/network-audit-concept_1284-42165.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Auditoria redes corporativas 25h"
+},
+{
+    id: 221,
+    name: "Consultoria em Virtualização",
+    category: "consulting",
+    price: 109900,
+    image: "https://img.freepik.com/free-vector/virtualization-consulting-concept_1284-42164.jpg",
+    rating: 4.7,
+    reviews: 45,
+    description: "Consultoria virtualização servidores"
+},
+{
+    id: 222,
+    name: "Plano de Recuperação de Desastres",
+    category: "consulting",
+    price: 119900,
+    image: "https://img.freepik.com/free-vector/disaster-recovery-plan-concept_1284-42163.jpg",
+    rating: 4.8,
+    reviews: 56,
+    description: "Plano recuperação desastres 30h"
+},
+{
+    id: 223,
+    name: "Consultoria em Backup e Storage",
+    category: "consulting",
+    price: 89900,
+    image: "https://img.freepik.com/free-vector/backup-consulting-concept_1284-42162.jpg",
+    rating: 4.6,
+    reviews: 78,
+    description: "Consultoria backup storage 20h"
+},
+{
+    id: 224,
+    name: "Otimização de Data Center",
+    category: "consulting",
+    price: 159900,
+    image: "https://img.freepik.com/free-vector/data-center-optimization-concept_1284-42161.jpg",
+    rating: 4.8,
+    reviews: 34,
+    description: "Otimização data center 40h"
+},
+{
+    id: 225,
+    name: "Consultoria em Mobile Security",
+    category: "consulting",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/mobile-security-concept_1284-42160.jpg",
+    rating: 4.7,
+    reviews: 67,
+    description: "Consultoria segurança mobile 25h"
+},
+{
+    id: 226,
+    name: "Auditoria de Performance de Sistemas",
+    category: "consulting",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/performance-audit-concept_1284-42159.jpg",
+    rating: 4.6,
+    reviews: 89,
+    description: "Auditoria performance sistemas 20h"
+},
+{
+    id: 227,
+    name: "Consultoria em ITIL",
+    category: "consulting",
+    price: 119900,
+    image: "https://img.freepik.com/free-vector/itil-consulting-concept_1284-42158.jpg",
+    rating: 4.8,
+    reviews: 56,
+    description: "Consultoria implementação ITIL"
+},
+{
+    id: 228,
+    name: "Plano de Segurança da Informação",
+    category: "consulting",
+    price: 139900,
+    image: "https://img.freepik.com/free-vector/security-plan-concept_1284-42157.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Plano segurança informação 35h"
+},{
+    id: 229,
+    name: "Curso de Cybersecurity Fundamentos",
+    category: "training",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cybersecurity-training-concept_1284-42156.jpg",
+    rating: 4.8,
+    reviews: 456,
+    description: "Curso cybersecurity 40 horas online"
+},
+{
+    id: 230,
+    name: "Treinamento em Cloud Computing AWS",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/aws-training-concept_1284-42155.jpg",
+    rating: 4.7,
+    reviews: 289,
+    description: "Treinamento AWS 60 horas certificação"
+},
+{
+    id: 231,
+    name: "Curso de Programação Python",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/python-programming-concept_1284-42154.jpg",
+    rating: 4.9,
+    reviews: 567,
+    description: "Curso programação Python 50 horas"
+},
+{
+    id: 232,
+    name: "Treinamento em DevOps e CI/CD",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/devops-training-concept_1284-42153.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Treinamento DevOps 45 horas"
+},
+{
+    id: 233,
+    name: "Curso de Data Science com R",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/data-science-course-concept_1284-42152.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Curso data science R 70 horas"
+},
+{
+    id: 234,
+    name: "Treinamento em Machine Learning",
+    category: "training",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/machine-learning-course-concept_1284-42151.jpg",
+    rating: 4.9,
+    reviews: 156,
+    description: "Treinamento machine learning 80 horas"
+},
+{
+    id: 235,
+    name: "Curso de Gestão de Projetos PMP",
+    category: "training",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/pmp-training-concept_1284-42150.jpg",
+    rating: 4.8,
+    reviews: 278,
+    description: "Curso preparatório PMP 35 horas"
+},
+{
+    id: 236,
+    name: "Treinamento em Docker e Kubernetes",
+    category: "training",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/docker-training-concept_1284-42149.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Treinamento Docker Kubernetes 40h"
+},
+{
+    id: 237,
+    name: "Curso de Ethical Hacking",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/ethical-hacking-course-concept_1284-42148.jpg",
+    rating: 4.9,
+    reviews: 189,
+    description: "Curso ethical hacking 60 horas"
+},
+{
+    id: 238,
+    name: "Treinamento em Azure Fundamentals",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/azure-training-concept_1284-42147.jpg",
+    rating: 4.7,
+    reviews: 234,
+    description: "Treinamento Azure 50 horas"
+},
+{
+    id: 239,
+    name: "Curso de Desenvolvimento Web Full Stack",
+    category: "training",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/fullstack-development-concept_1284-42146.jpg",
+    rating: 4.8,
+    reviews: 456,
+    description: "Curso desenvolvimento web 90 horas"
+},
+{
+    id: 240,
+    name: "Treinamento em ITIL 4 Foundation",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/itil-training-concept_1284-42145.jpg",
+    rating: 4.7,
+    reviews: 167,
+    description: "Treinamento ITIL 4 30 horas"
+},
+{
+    id: 241,
+    name: "Curso de Business Intelligence",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/bi-training-concept_1284-42144.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Curso business intelligence 55 horas"
+},
+{
+    id: 242,
+    name: "Treinamento em SQL Avançado",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/sql-training-concept_1284-42143.jpg",
+    rating: 4.8,
+    reviews: 278,
+    description: "Treinamento SQL avançado 35 horas"
+},
+{
+    id: 243,
+    name: "Curso de JavaScript Moderno",
+    category: "training",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/javascript-course-concept_1284-42142.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Curso JavaScript moderno 40 horas"
+},
+{
+    id: 244,
+    name: "Treinamento em React.js",
+    category: "training",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/react-training-concept_1284-42141.jpg",
+    rating: 4.8,
+    reviews: 234,
+    description: "Treinamento React.js 45 horas"
+},
+{
+    id: 245,
+    name: "Curso de Node.js Backend",
+    category: "training",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/nodejs-course-concept_1284-42140.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Curso Node.js backend 50 horas"
+},
+{
+    id: 246,
+    name: "Treinamento em Vue.js",
+    category: "training",
+    price: 48900,
+    image: "https://img.freepik.com/free-vector/vuejs-training-concept_1284-42139.jpg",
+    rating: 4.6,
+    reviews: 156,
+    description: "Treinamento Vue.js 35 horas"
+},
+{
+    id: 247,
+    name: "Curso de TypeScript",
+    category: "training",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/typescript-course-concept_1284-42138.jpg",
+    rating: 4.7,
+    reviews: 278,
+    description: "Curso TypeScript 30 horas"
+},
+{
+    id: 248,
+    name: "Treinamento em Angular",
+    category: "training",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/angular-training-concept_1284-42137.jpg",
+    rating: 4.8,
+    reviews: 189,
+    description: "Treinamento Angular 55 horas"
+},{
+    id: 249,
+    name: "Suporte Técnico Remoto 24/7",
+    category: "services",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/remote-support-concept_1284-42136.jpg",
+    rating: 4.7,
+    reviews: 456,
+    description: "Suporte técnico remoto 24 horas 7 dias"
+},
+{
+    id: 250,
+    name: "Manutenção Preventiva de Computadores",
+    category: "services",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/computer-maintenance-concept_1284-42135.jpg",
+    rating: 4.6,
+    reviews: 289,
+    description: "Manutenção preventiva computadores"
+},
+{
+    id: 251,
+    name: "Instalação de Redes Corporativas",
+    category: "services",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/network-installation-concept_1284-42134.jpg",
+    rating: 4.8,
+    reviews: 167,
+    description: "Instalação redes corporativas completa"
+},
+{
+    id: 252,
+    name: "Configuração de Servidores",
+    category: "services",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/server-configuration-concept_1284-42133.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Configuração servidores Windows/Linux"
+},
+{
+    id: 253,
+    name: "Backup e Recuperação de Dados",
+    category: "services",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/data-recovery-concept_1284-42132.jpg",
+    rating: 4.9,
+    reviews: 278,
+    description: "Serviço backup recuperação dados"
+},
+{
+    id: 254,
+    name: "Instalação de Câmeras de Segurança",
+    category: "services",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/camera-installation-concept_1284-42131.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Instalação câmeras segurança CFTV"
+},
+{
+    id: 255,
+    name: "Configuração de Firewall",
+    category: "services",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/firewall-configuration-concept_1284-42130.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Configuração firewall empresarial"
+},
+{
+    id: 256,
+    name: "Migração para Cloud",
+    category: "services",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/cloud-migration-service-concept_1284-42129.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Serviço migração para cloud"
+},
+{
+    id: 257,
+    name: "Monitoramento de Rede 24/7",
+    category: "services",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/network-monitoring-service-concept_1284-42128.jpg",
+    rating: 4.8,
+    reviews: 134,
+    description: "Monitoramento rede 24 horas"
+},
+{
+    id: 258,
+    name: "Instalação de Sistema de Alarme",
+    category: "services",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/alarm-installation-concept_1284-42127.jpg",
+    rating: 4.6,
+    reviews: 167,
+    description: "Instalação sistema alarme residencial"
+},
+{
+    id: 259,
+    name: "Configuração de VPN Site-to-Site",
+    category: "services",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/vpn-configuration-concept_1284-42126.jpg",
+    rating: 4.7,
+    reviews: 78,
+    description: "Configuração VPN site-to-site"
+},
+{
+    id: 260,
+    name: "Manutenção de Impressoras",
+    category: "services",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/printer-maintenance-concept_1284-42125.jpg",
+    rating: 4.5,
+    reviews: 234,
+    description: "Manutenção preventiva impressoras"
+},
+{
+    id: 261,
+    name: "Instalação de Access Points",
+    category: "services",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/access-point-installation-concept_1284-42124.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Instalação access points Wi-Fi"
+},
+{
+    id: 262,
+    name: "Configuração de Email Corporativo",
+    category: "services",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/email-configuration-concept_1284-42123.jpg",
+    rating: 4.7,
+    reviews: 278,
+    description: "Configuração email corporativo"
+},
+{
+    id: 263,
+    name: "Recuperação de Dados de HD",
+    category: "services",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/hard-drive-recovery-concept_1284-42122.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Recuperação dados HD danificado"
+},
+{
+    id: 264,
+    name: "Instalação de Sistema VoIP",
+    category: "services",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/voip-installation-concept_1284-42121.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Instalação sistema VoIP empresarial"
+},
+{
+    id: 265,
+    name: "Configuração de Backup Automático",
+    category: "services",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/backup-configuration-concept_1284-42120.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Configuração backup automático"
+},
+{
+    id: 266,
+    name: "Manutenção de Nobreaks e UPS",
+    category: "services",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/ups-maintenance-concept_1284-42119.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Manutenção nobreaks e UPS"
+},
+{
+    id: 267,
+    name: "Instalação de Data Center",
+    category: "services",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/data-center-installation-concept_1284-42118.jpg",
+    rating: 4.9,
+    reviews: 45,
+    description: "Instalação data center completo"
+},
+{
+    id: 268,
+    name: "Configuração de Monitoramento",
+    category: "services",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/monitoring-configuration-concept_1284-42117.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Configuração sistema monitoramento"
+},
+{
+    id: 269,
+    name: "Serviço de Help Desk Outsourcing",
+    category: "services",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/help-desk-service-concept_1284-42116.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Help desk outsourcing mensal"
+},
+{
+    id: 270,
+    name: "Manutenção de Sistema de Câmeras",
+    category: "services",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/camera-maintenance-concept_1284-42115.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Manutenção sistema câmeras CFTV"
+},{
+    id: 271,
+    name: "Telefone IP Yealink T54S",
+    category: "telefone",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/ip-phone-concept_1284-42114.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Telefone IP Yealink T54S HD"
+},
+{
+    id: 272,
+    name: "Telefone IP Cisco 7841",
+    category: "telefone",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/cisco-phone-concept_1284-42113.jpg",
+    rating: 4.8,
+    reviews: 134,
+    description: "Telefone IP Cisco 7841 empresarial"
+},
+{
+    id: 273,
+    name: "Telefone Sem Fio Panasonic KX-TGD810",
+    category: "telefone",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/cordless-phone-concept_1284-42112.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Telefone sem fio Panasonic 8 handsets"
+},
+{
+    id: 274,
+    name: "Telefone IP Grandstream GXP2170",
+    category: "telefone",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/grandstream-phone-concept_1284-42111.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Telefone IP Grandstream 12 linhas"
+},
+{
+    id: 275,
+    name: "Telefone Analógico Intelbras TAI-50",
+    category: "telefone",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/analog-phone-concept_1284-42110.jpg",
+    rating: 4.5,
+    reviews: 345,
+    description: "Telefone analógico Intelbras"
+},
+{
+    id: 276,
+    name: "Telefone IP Snom D785",
+    category: "telefone",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/snom-phone-concept_1284-42109.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Telefone IP Snom D785 executive"
+},
+{
+    id: 277,
+    name: "Telefone Sem Fio Motorola MD-800",
+    category: "telefone",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/motorola-phone-concept_1284-42108.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Telefone sem fio Motorola 2 handsets"
+},
+{
+    id: 278,
+    name: "Telefone IP Avaya J139",
+    category: "telefone",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/avaya-phone-concept_1284-42107.jpg",
+    rating: 4.7,
+    reviews: 167,
+    description: "Telefone IP Avaya J139 empresarial"
+},
+{
+    id: 279,
+    name: "Telefone IP Polycom VVX 411",
+    category: "telefone",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/polycom-phone-concept_1284-42106.jpg",
+    rating: 4.8,
+    reviews: 134,
+    description: "Telefone IP Polycom 12 linhas"
+},
+{
+    id: 280,
+    name: "Telefone Sem Fio Philips D299",
+    category: "telefone",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/philips-phone-concept_1284-42105.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Telefone sem fio Philips 2 handsets"
+},
+{
+    id: 281,
+    name: "Telefone IP Yealink T46S",
+    category: "telefone",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/yealink-phone-concept_1284-42104.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Telefone IP Yealink T46S colorido"
+},
+{
+    id: 282,
+    name: "Telefone IP Cisco 8861",
+    category: "telefone",
+    price: 119900,
+    image: "https://img.freepik.com/free-vector/cisco-8861-concept_1284-42103.jpg",
+    rating: 4.8,
+    reviews: 78,
+    description: "Telefone IP Cisco 8861 video"
+},
+{
+    id: 283,
+    name: "Telefone Sem Fio Intelbras TSI-2000",
+    category: "telefone",
+    price: 35900,
+    image: "https://img.freepik.com/free-vector/intelbras-phone-concept_1284-42102.jpg",
+    rating: 4.6,
+    reviews: 234,
+    description: "Telefone sem fio Intelbras 4 handsets"
+},
+{
+    id: 284,
+    name: "Telefone IP Grandstream GXP2160",
+    category: "telefone",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/grandstream-gxp-concept_1284-42101.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Telefone IP Grandstream 16 linhas"
+},
+{
+    id: 285,
+    name: "Telefone IP Snom D715",
+    category: "telefone",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/snom-d715-concept_1284-42100.jpg",
+    rating: 4.8,
+    reviews: 89,
+    description: "Telefone IP Snom D715 executivo"
+},
+{
+    id: 286,
+    name: "Telefone Sem Fio Panasonic KX-TG6511",
+    category: "telefone",
+    price: 42900,
+    image: "https://img.freepik.com/free-vector/panasonic-cordless-concept_1284-42099.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Telefone sem fio Panasonic 1 handset"
+},
+{
+    id: 287,
+    name: "Telefone IP Avaya 9608",
+    category: "telefone",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/avaya-9608-concept_1284-42098.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Telefone IP Avaya 9608 básico"
+},
+{
+    id: 288,
+    name: "Telefone IP Polycom VVX 601",
+    category: "telefone",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/polycom-vvx-concept_1284-42097.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Telefone IP Polycom 24 linhas"
+},
+{
+    id: 289,
+    name: "Telefone Sem Fio Motorola MD-700",
+    category: "telefone",
+    price: 32900,
+    image: "https://img.freepik.com/free-vector/motorola-md700-concept_1284-42096.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Telefone sem fio Motorola 1 handset"
+},
+{
+    id: 290,
+    name: "Telefone IP Yealink T53",
+    category: "telefone",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/yealink-t53-concept_1284-42095.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Telefone IP Yealink T53 entry-level"
+},{
+    id: 291,
+    name: "Fone de Ouvido para Call Center",
+    category: "acessorios",
+    price: 18900,
+    image: "https://img.freepik.com/free-vector/call-center-headset-concept_1284-42094.jpg",
+    rating: 4.6,
+    reviews: 456,
+    description: "Fone ouvido call center com microfone"
+},
+{
+    id: 292,
+    name: "Base Carregadora para Telefone Sem Fio",
+    category: "acessorios",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/phone-charger-base-concept_1284-42093.jpg",
+    rating: 4.5,
+    reviews: 289,
+    description: "Base carregadora telefone sem fio"
+},
+{
+    id: 293,
+    name: "Bateria para Telefone Sem Fio",
+    category: "acessorios",
+    price: 4900,
+    image: "https://img.freepik.com/free-vector/phone-battery-concept_1284-42092.jpg",
+    rating: 4.4,
+    reviews: 567,
+    description: "Bateria recarregável telefone sem fio"
+},
+{
+    id: 294,
+    name: "Cabos de Rede para VoIP",
+    category: "acessorios",
+    price: 3900,
+    image: "https://img.freepik.com/free-vector/voip-cable-concept_1284-42091.jpg",
+    rating: 4.3,
+    reviews: 234,
+    description: "Cabos rede Cat5e para VoIP 2m"
+},
+{
+    id: 295,
+    name: "Adaptador Power over Ethernet",
+    category: "acessorios",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/poe-adapter-concept_1284-42090.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Adaptador PoE para telefones IP"
+},
+{
+    id: 296,
+    name: "Suporte de Parede para Telefone",
+    category: "acessorios",
+    price: 6900,
+    image: "https://img.freepik.com/free-vector/phone-wall-mount-concept_1284-42089.jpg",
+    rating: 4.4,
+    reviews: 167,
+    description: "Suporte parede para telefone IP"
+},
+{
+    id: 297,
+    name: "Fone Bluetooth para Telefone",
+    category: "acessorios",
+    price: 28900,
+    image: "https://img.freepik.com/free-vector/bluetooth-headset-concept_1284-42088.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Fone Bluetooth DECT 6.0"
+},
+{
+    id: 298,
+    name: "Carregador para Telefone IP",
+    category: "acessorios",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/ip-phone-charger-concept_1284-42087.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Carregador original telefone IP"
+},
+{
+    id: 299,
+    name: "Protetor de Linha Telefônica",
+    category: "acessorios",
+    price: 5900,
+    image: "https://img.freepik.com/free-vector/phone-line-protector-concept_1284-42086.jpg",
+    rating: 4.3,
+    reviews: 134,
+    description: "Protetor linha telefônica contra surtos"
+},
+{
+    id: 300,
+    name: "Cabo Telefônico RJ11 10m",
+    category: "acessorios",
+    price: 2900,
+    image: "https://img.freepik.com/free-vector/phone-cable-concept_1284-42085.jpg",
+    rating: 4.4,
+    reviews: 456,
+    description: "Cabo telefônico RJ11 10 metros"
+},
+{
+    id: 301,
+    name: "Adaptador USB para Telefone IP",
+    category: "acessorios",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/usb-phone-adapter-concept_1284-42084.jpg",
+    rating: 4.5,
+    reviews: 189,
+    description: "Adaptador USB para headset"
+},
+{
+    id: 302,
+    name: "Suporte de Mesa para Telefone",
+    category: "acessorios",
+    price: 4900,
+    image: "https://img.freepik.com/free-vector/phone-desk-stand-concept_1284-42083.jpg",
+    rating: 4.3,
+    reviews: 234,
+    description: "Suporte mesa organizador telefone"
+},
+{
+    id: 303,
+    name: "Filtro de Linha DSL",
+    category: "acessorios",
+    price: 3900,
+    image: "https://img.freepik.com/free-vector/dsl-filter-concept_1284-42082.jpg",
+    rating: 4.4,
+    reviews: 167,
+    description: "Filtro linha DSL para internet"
+},
+{
+    id: 304,
+    name: "Antena para Telefone Sem Fio",
+    category: "acessorios",
+    price: 6900,
+    image: "https://img.freepik.com/free-vector/cordless-phone-antenna-concept_1284-42081.jpg",
+    rating: 4.3,
+    reviews: 134,
+    description: "Antena reforço telefone sem fio"
+},
+{
+    id: 305,
+    name: "Capas Protetoras para Telefone",
+    category: "acessorios",
+    price: 2900,
+    image: "https://img.freepik.com/free-vector/phone-protector-concept_1284-42080.jpg",
+    rating: 4.2,
+    reviews: 278,
+    description: "Capas protetoras telefone IP"
+},
+{
+    id: 306,
+    name: "Hub USB para Telefone IP",
+    category: "acessorios",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/usb-hub-concept_1284-42079.jpg",
+    rating: 4.5,
+    reviews: 156,
+    description: "Hub USB expansão telefone IP"
+},
+{
+    id: 307,
+    name: "Cabo de Alimentação Universal",
+    category: "acessorios",
+    price: 3900,
+    image: "https://img.freepik.com/free-vector/power-cable-concept_1284-42078.jpg",
+    rating: 4.4,
+    reviews: 345,
+    description: "Cabo alimentação universal telefone"
+},
+{
+    id: 308,
+    name: "Adaptador P2 para P10",
+    category: "acessorios",
+    price: 1900,
+    image: "https://img.freepik.com/free-vector/phone-adapter-concept_1284-42077.jpg",
+    rating: 4.3,
+    reviews: 189,
+    description: "Adaptador conector telefônico"
+},
+{
+    id: 309,
+    name: "Organizador de Cabos Telefônicos",
+    category: "acessorios",
+    price: 4900,
+    image: "https://img.freepik.com/free-vector/cable-organizer-concept_1284-42076.jpg",
+    rating: 4.4,
+    reviews: 234,
+    description: "Organizador cabos telefônicos"
+},
+{
+    id: 310,
+    name: "Microfone Externo para Telefone",
+    category: "acessorios",
+    price: 12900,
+    image: "https://img.freepik.com/free-vector/external-microphone-concept_1284-42075.jpg",
+    rating: 4.5,
+    reviews: 167,
+    description: "Microfone externo conferência"
+},
+{
+    id: 311,
+    name: "Suporte Articulado para Telefone",
+    category: "acessorios",
+    price: 8900,
+    image: "https://img.freepik.com/free-vector/articulated-phone-stand-concept_1284-42074.jpg",
+    rating: 4.4,
+    reviews: 189,
+    description: "Suporte articulado ajustável"
+},
+{
+    id: 312,
+    name: "Kit Limpeza para Telefones",
+    category: "acessorios",
+    price: 2900,
+    image: "https://img.freepik.com/free-vector/phone-cleaning-kit-concept_1284-42073.jpg",
+    rating: 4.3,
+    reviews: 278,
+    description: "Kit limpeza telefones e acessórios"
+},{
+    id: 313,
+    name: "Impressora Multifuncional Laser Colorida",
+    category: "impressora",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/laser-printer-concept_1284-42072.jpg",
+    rating: 4.7,
+    reviews: 456,
+    description: "Impressora laser colorida A4 print/copy/scan"
+},
+{
+    id: 314,
+    name: "Impressora Jato de Tinta Colorida",
+    category: "impressora",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/inkjet-printer-concept_1284-42071.jpg",
+    rating: 4.6,
+    reviews: 289,
+    description: "Impressora jato tinta colorida A4"
+},
+{
+    id: 315,
+    name: "Impressora Laser Monocromática",
+    category: "impressora",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/monochrome-printer-concept_1284-42070.jpg",
+    rating: 4.8,
+    reviews: 567,
+    description: "Impressora laser monocromática A4"
+},
+{
+    id: 316,
+    name: "Impressora Matricial 9 Agulhas",
+    category: "impressora",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/dot-matrix-printer-concept_1284-42069.jpg",
+    rating: 4.5,
+    reviews: 134,
+    description: "Impressora matricial 9 agulhas"
+},
+{
+    id: 317,
+    name: "Impressora Térmica para Cupons",
+    category: "impressora",
+    price: 45900,
+    image: "https://img.freepik.com/free-vector/thermal-printer-concept_1284-42068.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Impressora térmica 80mm cupons"
+},
+{
+    id: 318,
+    name: "Impressora de Etiquetas Industrial",
+    category: "impressora",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/label-printer-concept_1284-42067.jpg",
+    rating: 4.7,
+    reviews: 89,
+    description: "Impressora etiquetas industrial"
+},
+{
+    id: 319,
+    name: "Impressora Plotter A0",
+    category: "impressora",
+    price: 489900,
+    image: "https://img.freepik.com/free-vector/plotter-printer-concept_1284-42066.jpg",
+    rating: 4.8,
+    reviews: 67,
+    description: "Impressora plotter A0 para arquitetura"
+},
+{
+    id: 320,
+    name: "Impressora 3D FDM",
+    category: "impressora",
+    price: 389900,
+    image: "https://img.freepik.com/free-vector/3d-printer-concept_1284-42065.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Impressora 3D FDM área 220x220mm"
+},
+{
+    id: 321,
+    name: "Impressora Multifuncional A3",
+    category: "impressora",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/a3-printer-concept_1284-42064.jpg",
+    rating: 4.8,
+    reviews: 134,
+    description: "Impressora multifuncional A3 colorida"
+},
+{
+    id: 322,
+    name: "Impressora de Cartão PVC",
+    category: "impressora",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/pvc-card-printer-concept_1284-42063.jpg",
+    rating: 4.6,
+    reviews: 78,
+    description: "Impressora cartão PVC para crachás"
+},
+{
+    id: 323,
+    name: "Impressora Portátil Bluetooth",
+    category: "impressora",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/portable-printer-concept_1284-42062.jpg",
+    rating: 4.5,
+    reviews: 234,
+    description: "Impressora portátil Bluetooth"
+},
+{
+    id: 324,
+    name: "Impressora de Recibos 58mm",
+    category: "impressora",
+    price: 38900,
+    image: "https://img.freepik.com/free-vector/receipt-printer-concept_1284-42061.jpg",
+    rating: 4.6,
+    reviews: 189,
+    description: "Impressora recibos 58mm USB"
+},
+{
+    id: 325,
+    name: "Impressora Laser Workgroup",
+    category: "impressora",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/workgroup-printer-concept_1284-42060.jpg",
+    rating: 4.7,
+    reviews: 156,
+    description: "Impressora laser workgroup rede"
+},
+{
+    id: 326,
+    name: "Impressora Fotográfica A4",
+    category: "impressora",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/photo-printer-concept_1284-42059.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Impressora fotográfica A4 6 cores"
+},
+{
+    id: 327,
+    name: "Impressora de Grande Formato",
+    category: "impressora",
+    price: 589900,
+    image: "https://img.freepik.com/free-vector/large-format-printer-concept_1284-42058.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Impressora grande formato 1.5m"
+},
+{
+    id: 328,
+    name: "Impressora Térmica para Nota Fiscal",
+    category: "impressora",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/fiscal-printer-concept_1284-42057.jpg",
+    rating: 4.7,
+    reviews: 134,
+    description: "Impressora térmica nota fiscal"
+},
+{
+    id: 329,
+    name: "Impressora de Código de Barras",
+    category: "impressora",
+    price: 98900,
+    image: "https://img.freepik.com/free-vector/barcode-printer-concept_1284-42056.jpg",
+    rating: 4.6,
+    reviews: 89,
+    description: "Impressora código barras industrial"
+},
+{
+    id: 330,
+    name: "Impressora Laser Compacta",
+    category: "impressora",
+    price: 68900,
+    image: "https://img.freepik.com/free-vector/compact-printer-concept_1284-42055.jpg",
+    rating: 4.5,
+    reviews: 234,
+    description: "Impressora laser compacta A4"
+},
+{
+    id: 331,
+    name: "Impressora Multifuncional com Wi-Fi",
+    category: "impressora",
+    price: 129900,
+    image: "https://img.freepik.com/free-vector/wifi-printer-concept_1284-42054.jpg",
+    rating: 4.7,
+    reviews: 345,
+    description: "Impressora multifuncional Wi-Fi"
+},
+{
+    id: 332,
+    name: "Impressora de Alta Velocidade",
+    category: "impressora",
+    price: 289900,
+    image: "https://img.freepik.com/free-vector/high-speed-printer-concept_1284-42053.jpg",
+    rating: 4.8,
+    reviews: 156,
+    description: "Impressora alta velocidade 60ppm"
+},
+{
+    id: 333,
+    name: "Impressora para Escritório Pequeno",
+    category: "impressora",
+    price: 78900,
+    image: "https://img.freepik.com/free-vector/small-office-printer-concept_1284-42052.jpg",
+    rating: 4.6,
+    reviews: 278,
+    description: "Impressora ideal pequeno escritório"
+},
+{
+    id: 334,
+    name: "Impressora com Duplex Automático",
+    category: "impressora",
+    price: 139900,
+    image: "https://img.freepik.com/free-vector/duplex-printer-concept_1284-42051.jpg",
+    rating: 4.7,
+    reviews: 189,
+    description: "Impressora duplex automático"
+},
+{
+    id: 335,
+    name: "Impressora de Sublimação",
+    category: "impressora",
+    price: 189900,
+    image: "https://img.freepik.com/free-vector/sublimation-printer-concept_1284-42050.jpg",
+    rating: 4.6,
+    reviews: 134,
+    description: "Impressora sublimação para tecidos"
+},
+{
+    id: 336,
+    name: "Impressora para Home Office",
+    category: "impressora",
+    price: 58900,
+    image: "https://img.freepik.com/free-vector/home-office-printer-concept_1284-42049.jpg",
+    rating: 4.5,
+    reviews: 456,
+    description: "Impressora compacta home office"
+},
+{
+    id: 337,
+    name: "Impressora Industrial de Produção",
+    category: "impressora",
+    price: 789900,
+    image: "https://img.freepik.com/free-vector/industrial-printer-concept_1284-42048.jpg",
+    rating: 4.8,
+    reviews: 45,
+    description: "Impressora industrial alta produção"
+}
+    ];
+
+    // =============================================
+    // VARIÁVEIS GLOBAIS
+    // =============================================
+    let flaticonAccessToken = '';
+    let selectedImage = null;
+    let currentEditingProductId = null;
+    let currentApi = 'unsplash'; // Agora Unsplash é o padrão
+    let cart = [];
+    let currentStep = 1;
+
+    // =============================================
+    // FUNÇÕES DA API FLATICON
+    // =============================================
+
+    // Obter token de acesso da API Flaticon
+    async function getFlaticonAccessToken() {
+        try {
+            const response = await fetch(`${FLATICON_BASE_URL}/app/authentication`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    apikey: FLATICON_API_KEY
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha na autenticação com a API Flaticon');
+            }
+
+            const data = await response.json();
+            flaticonAccessToken = data.data.token;
+            return data.data.token;
+        } catch (error) {
+            console.error('Erro ao obter token Flaticon:', error);
+            showNotification('Erro ao conectar com a API Flaticon', 'error');
+            return null;
+        }
+    }
+
+    // Buscar ícones no Flaticon
+    async function searchFlaticonIcons(query) {
+        if (!flaticonAccessToken) {
+            await getFlaticonAccessToken();
+        }
+
+        try {
+            const response = await fetch(
+                `${FLATICON_BASE_URL}/search/icons?q=${encodeURIComponent(query)}&limit=20`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${flaticonAccessToken}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Falha na busca de ícones');
+            }
+
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Erro ao buscar ícones:', error);
+            showNotification('Erro ao buscar imagens no Flaticon', 'error');
+            return [];
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES DA API UNSPLASH (RECOMENDADO)
+    // =============================================
+
+    // Buscar fotos no Unsplash
+    async function searchUnsplashPhotos(query) {
+        try {
+            console.log('Buscando no Unsplash por:', query);
+            
+            const response = await fetch(
+                `${UNSPLASH_BASE_URL}/search/photos?query=${encodeURIComponent(query)}&per_page=20&client_id=${UNSPLASH_ACCESS_KEY}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Erro Unsplash: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            return data.results.map(photo => ({
+                id: photo.id,
+                url: photo.urls.regular,
+                thumbnail: photo.urls.small,
+                title: photo.description || `Foto de ${query}`,
+                author: photo.user.name,
+                source: 'unsplash'
+            }));
+            
+        } catch (error) {
+            console.error('Erro ao buscar no Unsplash:', error);
+            // Fallback para imagens placeholder
+            return getFallbackImages(query);
+        }
+    }
+
+    // Fallback para quando a API falhar
+    function getFallbackImages(query) {
+        const fallbackImages = {
+            'notebook': [
+                'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400',
+                'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400'
+            ],
+            'pen': [
+                'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400',
+                'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400'
+            ],
+            'backpack': [
+                'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                'https://images.unsplash.com/photo-1577733966974-fb41e8eed7b4?w=400'
+            ],
+            'stapler': [
+                'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400',
+                'https://images.unsplash.com/photo-1545235617-9465e2b416ee?w=400'
+            ],
+            'calculator': [
+                'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?w=400',
+                'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400'
+            ],
+            'wire': [
+                'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'software': [
+                'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
+                'https://images.unsplash.com/photo-1547658719-da2b51169166?w=400'
+            ],
+            'server': [
+                'https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=400',
+                'https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=400'
+            ],
+            'security': [
+                'https://images.unsplash.com/photo-1557597774-9d273605dfa0?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'router': [
+                'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400',
+                'https://images.unsplash.com/photo-1597764690524-34dfc00f72b6?w=400'
+            ],
+            'cloud': [
+                'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400',
+                'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400'
+            ],
+            'consulting': [
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400'
+            ],
+            'cybersecurity': [
+                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'monitoring': [
+                'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400',
+                'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400'
+            ],
+            'phone': [
+                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400',
+                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400'
+            ],
+            'headphones': [
+                'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
+                'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400'
+            ],
+            'printer': [
+                'https://images.unsplash.com/photo-1558442073-90e216cdd94a?w=400',
+                'https://images.unsplash.com/photo-1558442073-90e216cdd94a?w=400'
+            ]
+        };
+
+        const key = Object.keys(fallbackImages).find(k => query.toLowerCase().includes(k)) || 'technology';
+        return fallbackImages[key] ? fallbackImages[key].map((url, index) => ({
+            id: `fallback-${index}`,
+            url: url,
+            thumbnail: url,
+            title: `Imagem de ${query}`,
+            author: 'Unsplash',
+            source: 'unsplash'
+        })) : [];
+    }
+
+    // =============================================
+    // FUNÇÕES DE BUSCA DE IMAGENS - VERSÃO OTIMIZADA
+    // =============================================
+
+    // Função para sugerir termo de busca baseado no produto
+    function getSearchTermForProduct(productId) {
+        const product = products.find(p => p.id === productId);
+        if (!product) return 'technology';
+        
+        // Usar termos de busca específicos se disponíveis
+        if (product.searchTerms && product.searchTerms.length > 0) {
+            return product.searchTerms[0];
+        }
+        
+        // Extrair palavras-chave do nome do produto
+        const name = product.name.toLowerCase();
+        const words = name.split(' ');
+        
+        // Remover palavras muito comuns
+        const commonWords = ['de', 'para', 'com', 'sem', 'em', 'por', 'kit', 'caixa', 'pack', 'unidades'];
+        const keywords = words.filter(word => 
+            word.length > 2 && !commonWords.includes(word)
+        );
+        
+        return keywords.length > 0 ? keywords[0] : 'technology';
+    }
+
+    // Buscar e exibir imagens - versão principal usando Unsplash
+    async function searchAndDisplayImages() {
+        const searchInput = document.getElementById('imageSearch');
+        let searchTerm = searchInput.value.trim();
+        
+        // Se não houver termo de busca, usar sugestão baseada no produto
+        if (!searchTerm && currentEditingProductId) {
+            searchTerm = getSearchTermForProduct(currentEditingProductId);
+            searchInput.value = searchTerm;
+        }
+        
+        if (!searchTerm) {
+            showNotification('Digite um termo para buscar', 'warning');
+            return;
+        }
+
+        const resultsContainer = document.getElementById('imageResults');
+        const searchButton = document.getElementById('searchImages');
+        
+        // Mostrar loading
+        searchButton.innerHTML = '<span class="loading-spinner"></span> Buscando...';
+        searchButton.disabled = true;
+        
+        resultsContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto;"></div>
+                <p class="mt-2">Buscando imagens para "${searchTerm}"...</p>
+            </div>
+        `;
+
+        try {
+            let images = [];
+            
+            if (currentApi === 'unsplash') {
+                images = await searchUnsplashPhotos(searchTerm);
+            } else {
+                const icons = await searchFlaticonIcons(searchTerm);
+                images = icons.map(icon => ({
+                    id: icon.id,
+                    url: icon.images['512'],
+                    thumbnail: icon.images['128'],
+                    title: icon.description || 'Sem descrição',
+                    author: 'Flaticon',
+                    source: 'flaticon'
+                }));
+            }
+            
+            if (images.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                        <p>Nenhuma imagem encontrada para "${searchTerm}"</p>
+                        <p class="text-muted">Tente usar termos em inglês como "notebook", "pen", "computer"</p>
+                        <div class="mt-3">
+                            <button class="btn btn-sm btn-outline-primary me-2" onclick="tryAlternativeSearch('${searchTerm}')">
+                                Busca Alternativa
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="showSearchTips()">
+                                Dicas de Busca
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Exibir resultados
+            displayImageResults(images);
+            
+            // Mostrar sugestão se poucas imagens foram encontradas
+            if (images.length < 5) {
+                showNotification(`Apenas ${images.length} imagens encontradas. Tente termos em inglês para mais resultados.`, 'info');
+            }
+
+        } catch (error) {
+            console.error('Erro ao buscar imagens:', error);
+            resultsContainer.innerHTML = `
+                <div class="col-12 text-center py-4">
+                    <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
+                    <p>Erro de conexão com o serviço de imagens</p>
+                    <p class="text-muted">Verifique sua conexão com a internet</p>
+                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="searchAndDisplayImages()">
+                        Tentar Novamente
+                    </button>
+                </div>
+            `;
+        } finally {
+            // Restaurar botão
+            searchButton.innerHTML = '<i class="fas fa-search"></i> Buscar';
+            searchButton.disabled = false;
+        }
+    }
+
+    // Exibir resultados de imagens
+    function displayImageResults(images) {
+        const resultsContainer = document.getElementById('imageResults');
+        
+        resultsContainer.innerHTML = images.map(image => `
+            <div class="col-md-3 col-6 mb-3">
+                <div class="image-result card h-100" data-image-url="${image.url}" data-image-id="${image.id}">
+                    <img src="${image.thumbnail}" class="card-img-top" alt="${image.title}" 
+                         style="height: 150px; object-fit: cover; cursor: pointer;"
+                         onerror="this.src='https://via.placeholder.com/150/cccccc/666666?text=Imagem'">
+                    <div class="card-body p-2">
+                        <p class="card-text small text-muted mb-1">${image.title.substring(0, 40)}${image.title.length > 40 ? '...' : ''}</p>
+                        <small class="text-muted">Por: ${image.author}</small>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 p-2">
+                        <button class="btn btn-sm btn-outline-primary w-100 select-image-btn" 
+                                onclick="selectImage('${image.url}', this)">
+                            <i class="fas fa-check me-1"></i> Selecionar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Selecionar imagem
+    function selectImage(imageUrl, button) {
+        // Remover seleção anterior
+        document.querySelectorAll('.select-image-btn').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Selecionar';
+        });
+        
+        // Selecionar atual
+        button.classList.remove('btn-outline-primary');
+        button.classList.add('btn-primary');
+        button.innerHTML = '<i class="fas fa-check me-1"></i> Selecionado';
+        
+        selectedImage = imageUrl;
+        document.getElementById('selectImage').disabled = false;
+        
+        showNotification('Imagem selecionada! Clique em "Selecionar Imagem" para confirmar.', 'success');
+    }
+
+    // =============================================
+    // FUNÇÕES AUXILIARES MELHORADAS
+    // =============================================
+
+    // Função para tentar busca alternativa
+    function tryAlternativeSearch(originalTerm) {
+        const alternatives = {
+            'caderno': 'notebook',
+            'caneta': 'pen',
+            'mochila': 'backpack',
+            'grampeador': 'stapler',
+            'calculadora': 'calculator',
+            'fio': 'wire',
+            'software': 'software program',
+            'servidor': 'server rack',
+            'camera': 'security camera',
+            'roteador': 'wifi router',
+            'nuvem': 'cloud computing',
+            'consultoria': 'business consulting',
+            'segurança': 'cybersecurity',
+            'telefone': 'office phone',
+            'fone': 'wireless headphones',
+            'impressora': 'office printer',
+            'escolar': 'school',
+            'escritorio': 'office',
+            'elétrico': 'electrical',
+            'empresarial': 'business'
+        };
+        
+        // Tentar encontrar alternativa direta
+        let alternative = alternatives[originalTerm.toLowerCase()];
+        
+        // Se não encontrar, usar tradução comum
+        if (!alternative) {
+            const translationMap = {
+                'material': 'supplies',
+                'kit': 'set',
+                'premium': 'professional',
+                'profissional': 'professional',
+                'antifurto': 'security',
+                'financeira': 'financial',
+                'gestão': 'management',
+                'enterprise': 'business',
+                'monitoramento': 'monitoring',
+                'bluetooth': 'wireless'
+            };
+            
+            alternative = originalTerm.split(' ').map(word => 
+                translationMap[word.toLowerCase()] || word
+            ).join(' ');
+        }
+        
+        document.getElementById('imageSearch').value = alternative;
+        searchAndDisplayImages();
+    }
+
+    // Mostrar dicas de busca
+    function showSearchTips() {
+        const tips = `
+            <div class="alert alert-info">
+                <h6><i class="fas fa-lightbulb me-2"></i>Dicas para Melhor Busca:</h6>
+                <ul class="mb-0">
+                    <li>Use termos em <strong>inglês</strong> para mais resultados</li>
+                    <li>Seja específico: "notebook" em vez de "material escolar"</li>
+                    <li>Use palavras simples: "pen", "computer", "phone"</li>
+                    <li>Evite termos muito genéricos como "produto" ou "item"</li>
+                </ul>
+            </div>
+        `;
+        
+        document.getElementById('imageResults').innerHTML = tips;
+    }
+
+    // Aplicar imagem selecionada ao produto
+    function applySelectedImageToProduct() {
+        if (!selectedImage || !currentEditingProductId) {
+            showNotification('Nenhuma imagem selecionada', 'warning');
+            return;
+        }
+
+        // Encontrar e atualizar o produto
+        const productIndex = products.findIndex(p => p.id === currentEditingProductId);
+        if (productIndex !== -1) {
+            products[productIndex].image = selectedImage;
+            
+            // Atualizar a exibição
+            renderProducts(products);
+            showNotification('✅ Imagem do produto atualizada com sucesso!');
+            
+            // Fechar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('imageSearchModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            // Resetar seleção
+            selectedImage = null;
+            document.getElementById('selectImage').disabled = true;
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES DA LOJA (MANTIDAS ORIGINAIS)
+    // =============================================
+
+    // Formatar preço em AOA
+    function formatPrice(price) {
+        return new Intl.NumberFormat('pt-AO', { style: 'currency', currency: 'AOA' }).format(price);
+    }
+
+    // Renderizar produtos
+    function renderProducts(productsToRender) {
+        const productsGrid = document.getElementById('productsGrid');
+        productsGrid.innerHTML = '';
+
+        if (productsToRender.length === 0) {
+            productsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Tente ajustar os filtros ou termos de busca</p>
+                </div>
+            `;
+            return;
+        }
+
+        productsToRender.forEach(product => {
+            const discount = product.originalPrice 
+                ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+                : 0;
+
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x200?text=Imagem+Não+Disponível'">
+                    ${product.badge ? `<span class="product-badge badge-${product.badge}">${product.badge === 'sale' ? 'PROMO' : product.badge === 'new' ? 'NOVO' : 'POPULAR'}</span>` : ''}
+                    <button class="btn btn-sm btn-light position-absolute bottom-0 start-0 m-2" onclick="openImageSearchModal(${product.id})" title="Alterar imagem">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                <div class="product-content">
+                    <div class="product-category">${product.category}</div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-rating">
+                        ${Array.from({length: 5}, (_, i) => 
+                            `<i class="fas fa-star${i < Math.floor(product.rating) ? '' : '-half-alt'}"></i>`
+                        ).join('')}
+                        <span>(${product.reviews})</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">${formatPrice(product.price)}</span>
+                        ${product.originalPrice ? `<span class="original-price">${formatPrice(product.originalPrice)}</span>` : ''}
+                        ${discount > 0 ? `<span class="discount">-${discount}%</span>` : ''}
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-secondary" onclick="viewProduct(${product.id})">
+                            <i class="fas fa-eye"></i> Detalhes
+                        </button>
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">
+                            <i class="fas fa-cart-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            `;
+            productsGrid.appendChild(productCard);
+        });
+    }
+
+    // Abrir modal de busca de imagens
+    function openImageSearchModal(productId) {
+        currentEditingProductId = productId;
+        const modal = new bootstrap.Modal(document.getElementById('imageSearchModal'));
+        modal.show();
+        
+        // Preencher automaticamente e buscar
+        setTimeout(() => {
+            const suggestedTerm = getSearchTermForProduct(productId);
+            document.getElementById('imageSearch').value = suggestedTerm;
+            searchAndDisplayImages();
+        }, 500);
+    }
+
+    // Adicionar ao carrinho
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        const existingItem = cart.find(item => item.id === productId);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                ...product,
+                quantity: 1
+            });
+        }
+
+        updateCart();
+        showNotification(`${product.name} adicionado ao carrinho!`);
+    }
+
+    // Visualizar produto
+    function viewProduct(productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            alert(`Visualizando produto: ${product.name}\n\n${product.description}\n\nPreço: ${formatPrice(product.price)}`);
+        }
+    }
+
+    // Atualizar carrinho
+    function updateCart() {
+        const cartItems = document.getElementById('cartItems');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartShipping = document.getElementById('cartShipping');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutButton = document.getElementById('checkoutButton');
+        const emptyCart = document.getElementById('emptyCart');
+
+        // Atualizar badge
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartBadge.textContent = totalItems;
+
+        // Mostrar/ocultar carrinho vazio
+        if (cart.length === 0) {
+            emptyCart.style.display = 'block';
+            checkoutButton.disabled = true;
+        } else {
+            emptyCart.style.display = 'none';
+            checkoutButton.disabled = false;
+        }
+
+        // Calcular totais
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 100000 ? 0 : 5000; // Frete grátis para compras acima de 100.000 AOA
+        const total = subtotal + shipping;
+
+        cartSubtotal.textContent = formatPrice(subtotal);
+        cartShipping.textContent = formatPrice(shipping);
+        cartTotal.textContent = formatPrice(total);
+
+        // Renderizar itens do carrinho
+        cartItems.innerHTML = '';
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <div class="cart-item-image">
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="cart-item-content">
+                    <h4 class="cart-item-title">${item.name}</h4>
+                    <div class="cart-item-price">${formatPrice(item.price)}</div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <span class="quantity-value">${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <button class="remove-item" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+    }
+
+    // Atualizar quantidade
+    function updateQuantity(productId, newQuantity) {
+        if (newQuantity < 1) {
+            removeFromCart(productId);
+            return;
+        }
+
+        const item = cart.find(item => item.id === productId);
+        if (item) {
+            item.quantity = newQuantity;
+            updateCart();
+        }
+    }
+
+    // Remover do carrinho
+    function removeFromCart(productId) {
+        cart = cart.filter(item => item.id !== productId);
+        updateCart();
+        showNotification('Produto removido do carrinho');
+    }
+
+    // Mostrar notificação
+    function showNotification(message, type = 'success') {
+        // Criar elemento de notificação
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = type === 'error' ? '#e74c3c' : type === 'warning' ? '#f39c12' : type === 'info' ? '#3498db' : '#27ae60';
+        notification.style.color = 'white';
+        notification.style.padding = '1rem 1.5rem';
+        notification.style.borderRadius = '5px';
+        notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+        notification.style.zIndex = '1000';
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s';
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Mostrar notificação
+        setTimeout(() => {
+            notification.style.opacity = '1';
+        }, 10);
+
+        // Esconder e remover após 3 segundos
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Filtros e busca
+    function setupFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const categoryItems = document.querySelectorAll('.categories-list li');
+        const sortSelect = document.getElementById('sortSelect');
+
+        // Função para filtrar produtos
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeCategory = document.querySelector('.categories-list li.active').dataset.category;
+
+            let filteredProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.description.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+                
+                let matchesFilter = true;
+                if (activeFilter === 'featured') {
+                    matchesFilter = product.rating >= 4.5;
+                } else if (activeFilter === 'sale') {
+                    matchesFilter = product.originalPrice !== undefined;
+                } else if (activeFilter === 'new') {
+                    matchesFilter = product.badge === 'new';
+                }
+                
+                return matchesSearch && matchesCategory && matchesFilter;
+            });
+
+            // Ordenar produtos
+            const sortValue = sortSelect.value;
+            switch(sortValue) {
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+                default: // popular
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+            }
+
+            renderProducts(filteredProducts);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterProducts();
+            });
+        });
+        
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                categoryItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                filterProducts();
+            });
+        });
+        
+        sortSelect.addEventListener('change', filterProducts);
+
+        // Filtro inicial
+        filterProducts();
+    }
+
+    // Função para enviar pedido via WhatsApp
+    function sendOrderViaWhatsApp() {
+        // Dados do cliente
+        const nome = document.getElementById("customerName").value.trim();
+        const email = document.getElementById("customerEmail").value.trim();
+        const tel = document.getElementById("customerPhone").value.trim();
+        const endereco = document.getElementById("customerAddress").value.trim();
+        const cidade = document.getElementById("customerCity").value.trim();
+        const cep = document.getElementById("customerZip").value.trim();
+        const observacoes = document.getElementById("customerNotes").value.trim();
+
+        // Resumo dos produtos
+        let texto = `*NOVO PEDIDO - D.PEDRO SOLUÇÕES*%0A%0A`;
+        texto += `*DADOS DO CLIENTE*%0A`;
+        texto += `Nome: ${nome}%0A`;
+        texto += `E-mail: ${email}%0A`;
+        texto += `Telefone: ${tel}%0A`;
+        texto += `Endereço: ${endereco}%0A`;
+        texto += `Cidade: ${cidade}%0A`;
+        texto += `NIF: ${cep}%0A`;
+        if (observacoes) {
+            texto += `Observações: ${observacoes}%0A`;
+        }
+        
+        texto += `%0A*ITENS DO PEDIDO*%0A`;
+        cart.forEach(item => {
+            texto += `- ${item.name} (${item.quantity}x) - ${formatPrice(item.price)}%0A`;
+        });
+        
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 100000 ? 0 : 5000;
+        const total = subtotal + shipping;
+        
+        texto += `%0A*RESUMO DO PEDIDO*%0A`;
+        texto += `Subtotal: ${formatPrice(subtotal)}%0A`;
+        texto += `Frete: ${formatPrice(shipping)}%0A`;
+        texto += `*TOTAL: ${formatPrice(total)}*%0A%0A`;
+        
+        // Método de pagamento
+        let pagamento = "Cartão de Crédito";
+        if (document.getElementById("paymentTransfer").checked) pagamento = "Transferência Bancária";
+        if (document.getElementById("paymentCash").checked) pagamento = "Dinheiro na Entrega";
+        texto += `*Método de Pagamento:* ${pagamento}`;
+
+        // Número do WhatsApp
+        const whatsappNumber = "244946299834";
+        const url = `https://wa.me/${whatsappNumber}?text=${texto}`;
+
+        // Abrir WhatsApp
+        window.open(url, "_blank");
+    }
+
+    // Checkout
+    function setupCheckout() {
+        const checkoutButton = document.getElementById('checkoutButton');
+        const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+        const nextStepButton = document.getElementById('nextStepButton');
+        const prevStepButton = document.getElementById('prevStepButton');
+        const checkoutSteps = document.querySelectorAll('.checkout-step');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        checkoutButton.addEventListener('click', () => {
+            // Preencher itens do checkout
+            const checkoutItems = document.getElementById('checkoutItems');
+            checkoutItems.innerHTML = '';
+            
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-content">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <div class="cart-item-price">${formatPrice(item.price)} x ${item.quantity}</div>
+                    </div>
+                `;
+                checkoutItems.appendChild(itemElement);
+            });
+
+            // Reiniciar para a primeira etapa
+            currentStep = 1;
+            updateCheckoutSteps();
+            checkoutModal.show();
+        });
+
+        nextStepButton.addEventListener('click', () => {
+            if (currentStep === 2) {
+                // Validar dados do cliente antes de avançar
+                const nome = document.getElementById("customerName").value.trim();
+                const email = document.getElementById("customerEmail").value.trim();
+                const tel = document.getElementById("customerPhone").value.trim();
+                const endereco = document.getElementById("customerAddress").value.trim();
+                const cidade = document.getElementById("customerCity").value.trim();
+                
+                if (!nome || !email || !tel || !endereco || !cidade) {
+                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    return;
+                }
+            }
+            
+            if (currentStep < 4) {
+                currentStep++;
+                updateCheckoutSteps();
+            } else {
+                // Finalizar compra
+                checkoutModal.hide();
+                cart = [];
+                updateCart();
+                showNotification('Compra finalizada com sucesso!');
+            }
+        });
+
+        prevStepButton.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateCheckoutSteps();
+            }
+        });
+
+        // Configurar botão do WhatsApp
+        whatsappBtn.addEventListener('click', sendOrderViaWhatsApp);
+
+        function updateCheckoutSteps() {
+            // Atualizar etapas visíveis
+            document.querySelectorAll('.checkout-step-content').forEach((content, index) => {
+                content.style.display = index + 1 === currentStep ? 'block' : 'none';
+            });
+
+            // Atualizar indicadores de etapa
+            checkoutSteps.forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // Atualizar botões
+            prevStepButton.style.display = currentStep > 1 ? 'block' : 'none';
+            
+            if (currentStep === 4) {
+                nextStepButton.style.display = 'none';
+                // Gerar número de pedido aleatório na etapa 4
+                document.getElementById('orderNumber').textContent = Math.floor(10000 + Math.random() * 90000);
+            } else {
+                nextStepButton.style.display = 'block';
+                nextStepButton.textContent = currentStep === 3 ? 'Finalizar Compra' : 'Próximo';
+            }
+        }
+    }
+
+    // =============================================
+    // INICIALIZAÇÃO ATUALIZADA
+    // =============================================
+
+    // Configurar funcionalidades das APIs de imagem
+    function setupImageSearchFeatures() {
+        // Alternar entre APIs
+        document.querySelectorAll('.api-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.api-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentApi = this.dataset.api;
+                
+                // Limpar resultados
+                document.getElementById('imageResults').innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <p>Digite um termo de busca para encontrar imagens no ${currentApi === 'unsplash' ? 'Unsplash' : 'Flaticon'}</p>
+                        ${currentEditingProductId ? 
+                            `<p class="text-muted">Sugestão: "${getSearchTermForProduct(currentEditingProductId)}"</p>` : 
+                            ''
+                        }
+                    </div>
+                `;
+                document.getElementById('selectImage').disabled = true;
+                selectedImage = null;
+            });
+        });
+
+        // Buscar imagens ao clicar no botão
+        document.getElementById('searchImages').addEventListener('click', searchAndDisplayImages);
+        
+        // Buscar imagens ao pressionar Enter
+        document.getElementById('imageSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAndDisplayImages();
+            }
+        });
+        
+        // Selecionar imagem
+        document.getElementById('selectImage').addEventListener('click', applySelectedImageToProduct);
+        
+        // Preencher automaticamente quando abrir o modal
+        document.getElementById('imageSearchModal').addEventListener('show.bs.modal', function() {
+            if (currentEditingProductId) {
+                const suggestedTerm = getSearchTermForProduct(currentEditingProductId);
+                document.getElementById('imageSearch').value = suggestedTerm;
+                // Buscar automaticamente
+                setTimeout(() => searchAndDisplayImages(), 500);
+            }
+        });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+        // Renderizar produtos iniciais
+        renderProducts(products);
+        
+        // Configurar filtros
+        setupFilters();
+        
+        // Configurar checkout
+        setupCheckout();
+        
+        // Configurar funcionalidades de busca de imagens
+        setupImageSearchFeatures();
+        
+        // Configurar carrinho
+        const cartButton = document.getElementById('cartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const closeCart = document.getElementById('closeCart');
+
+        cartButton.addEventListener('click', () => {
+            cartSidebar.classList.add('open');
+            cartOverlay.classList.add('open');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('open');
+        });
+
+        cartOverlay.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('open');
+        });
+
+        // Inicializar carrinho
+        updateCart();
+
+        // Obter token Flaticon na inicialização
+        getFlaticonAccessToken();
+    });
+    </script>
+</body>
+</html>

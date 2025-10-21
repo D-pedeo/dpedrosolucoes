@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Sistema Integrado</title>
+    
+    <!-- Bootstrap 5.3.0 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome 6.4.0 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --success-color: #4cc9f0;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --bg-color: #f5f7fb;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --card-color: #1e1e1e;
+            --text-color: #e0e0e0;
+            --border-color: #333333;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar {
+            background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            height: 100vh;
+            position: fixed;
+            width: 250px;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+        .sidebar.collapsed .sidebar-text {
+            display: none;
+        }
+
+        .sidebar-header {
+            padding: 20px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-menu {
+            padding: 15px 0;
+        }
+
+        .sidebar-menu a {
+            color: rgba(255, 255, 255, 0.8);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            color: white;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid white;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            transition: all 0.3s;
+        }
+
+        .main-content.expanded {
+            margin-left: 70px;
+        }
+
+        .navbar-custom {
+            background-color: var(--card-color);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 20px;
+        }
+
+        .card-custom {
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .card-custom:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-header-custom {
+            background: linear-gradient(120deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            padding: 15px 20px;
+        }
+
+        .metric-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+        }
+
+        .progress-custom {
+            height: 10px;
+            border-radius: 5px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background-color: var(--card-color);
+        }
+
+        .chat-message {
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background-color: var(--primary-color);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .ai-message {
+            background-color: var(--border-color);
+            color: var(--text-color);
+            border-bottom-left-radius: 5px;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .table-custom {
+            background-color: var(--card-color);
+            color: var(--text-color);
+        }
+
+        .table-custom th {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar .sidebar-text {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header d-flex justify-content-between align-items-center">
+            <h4 class="sidebar-text">D.Pedro Soluções</h4>
+            <button class="btn btn-sm btn-outline-light" id="toggleSidebar">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <div class="sidebar-menu">
+            <a href="#" class="active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span class="sidebar-text">Dashboard</span>
+            </a>
+            <a href="#" data-section="projects">
+                <i class="fas fa-project-diagram"></i>
+                <span class="sidebar-text">Projetos</span>
+            </a>
+            <a href="#" data-section="ai-tokens">
+                <i class="fas fa-robot"></i>
+                <span class="sidebar-text">Tokens IA</span>
+            </a>
+            <a href="#" data-section="ecommerce">
+                <i class="fas fa-store"></i>
+                <span class="sidebar-text">Loja Virtual</span>
+            </a>
+            <a href="#" data-section="communication">
+                <i class="fas fa-comments"></i>
+                <span class="sidebar-text">Comunicação</span>
+            </a>
+            <a href="#" data-section="seo">
+                <i class="fas fa-search"></i>
+                <span class="sidebar-text">Otimização SEO</span>
+            </a>
+            <a href="#" data-section="analytics">
+                <i class="fas fa-chart-bar"></i>
+                <span class="sidebar-text">Análises</span>
+            </a>
+            <a href="#" data-section="settings">
+                <i class="fas fa-cogs"></i>
+                <span class="sidebar-text">Configurações</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-custom rounded mb-4">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center">
+                    <h4 class="mb-0" id="pageTitle">Dashboard</h4>
+                </div>
+                
+                <div class="d-flex align-items-center">
+                    <div class="me-3 position-relative">
+                        <button class="btn btn-light position-relative" id="notificationBtn">
+                            <i class="fas fa-bell"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                    
+                    <div class="theme-toggle me-3" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-2"></i>Admin
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Perfil</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Configurações</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Sair</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="card card-custom metric-card">
+                        <div class="card-body">
+                            <i class="fas fa-users fa-2x mb-3 text-primary"></i>
+                            <div class="metric-value">1,248</div>
+                            <div class="metric-label">Total de Clientes</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom metric-card">
+                        <div class="card-body">
+                            <i class="fas fa-shopping-cart fa-2x mb-3 text-success"></i>
+                            <div class="metric-value">568</div>
+                            <div class="metric-label">Vendas do Mês</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom metric-card">
+                        <div class="card-body">
+                            <i class="fas fa-project-diagram fa-2x mb-3 text-warning"></i>
+                            <div class="metric-value">42</div>
+                            <div class="metric-label">Projetos Ativos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom metric-card">
+                        <div class="card-body">
+                            <i class="fas fa-chart-line fa-2x mb-3 text-info"></i>
+                            <div class="metric-value">R$ 89.5K</div>
+                            <div class="metric-label">Receita Mensal</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-8">
+                    <div class="card card-custom">
+                        <div class="card-header card-header-custom">
+                            <h5 class="mb-0">Desempenho de Vendas</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="salesChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card card-custom">
+                        <div class="card-header card-header-custom">
+                            <h5 class="mb-0">Distribuição de Projetos</h5>
+                        </div>
+                        <div class="card-body">
+                            <canvas id="projectsChart" height="250"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card card-custom">
+                        <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Projetos Recentes</h5>
+                            <button class="btn btn-sm btn-light">Ver Todos</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Projeto</th>
+                                            <th>Progresso</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Site E-commerce</td>
+                                            <td>
+                                                <div class="progress progress-custom">
+                                                    <div class="progress-bar bg-success" style="width: 85%"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-success">Em Andamento</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>App Mobile</td>
+                                            <td>
+                                                <div class="progress progress-custom">
+                                                    <div class="progress-bar bg-warning" style="width: 60%"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-warning">Pendente</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Sistema ERP</td>
+                                            <td>
+                                                <div class="progress progress-custom">
+                                                    <div class="progress-bar bg-info" style="width: 45%"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-info">Planejamento</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Portal Corporativo</td>
+                                            <td>
+                                                <div class="progress progress-custom">
+                                                    <div class="progress-bar bg-danger" style="width: 30%"></div>
+                                                </div>
+                                            </td>
+                                            <td><span class="badge bg-danger">Atrasado</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card card-custom">
+                        <div class="card-header card-header-custom">
+                            <h5 class="mb-0">Assistente Virtual</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chat-container" id="chatContainer">
+                                <div class="chat-message ai-message">
+                                    Olá! Sou seu assistente virtual. Como posso ajudá-lo hoje?
+                                </div>
+                            </div>
+                            <div class="input-group mt-3">
+                                <input type="text" class="form-control" id="chatInput" placeholder="Digite sua mensagem...">
+                                <button class="btn btn-primary" id="sendMessage">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects" class="content-section d-none">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4>Gestão de Projetos</h4>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProjectModal">
+                    <i class="fas fa-plus me-2"></i>Novo Projeto
+                </button>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card card-custom">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-custom table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome do Projeto</th>
+                                            <th>Cliente</th>
+                                            <th>Data Início</th>
+                                            <th>Data Término</th>
+                                            <th>Progresso</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="projectsTableBody">
+                                        <!-- Projetos serão carregados aqui -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Outras seções seriam implementadas de forma similar -->
+        <section id="ai-tokens" class="content-section d-none">
+            <h4>Tokens de IA</h4>
+            <p>Gestão de tokens para serviços de inteligência artificial.</p>
+        </section>
+
+        <section id="ecommerce" class="content-section d-none">
+            <h4>Loja Virtual</h4>
+            <p>Configuração e gestão da loja virtual.</p>
+        </section>
+
+        <section id="communication" class="content-section d-none">
+            <h4>Sistema de Comunicação</h4>
+            <p>Ferramentas de comunicação integradas.</p>
+        </section>
+
+        <section id="seo" class="content-section d-none">
+            <h4>Otimização SEO</h4>
+            <p>Ferramentas para otimização de mecanismos de busca.</p>
+        </section>
+
+        <section id="analytics" class="content-section d-none">
+            <h4>Análises e Relatórios</h4>
+            <p>Relatórios detalhados e análises de dados.</p>
+        </section>
+
+        <section id="settings" class="content-section d-none">
+            <h4>Configurações do Sistema</h4>
+            <p>Configurações gerais do sistema.</p>
+        </section>
+    </div>
+
+    <!-- Modal para Adicionar Projeto -->
+    <div class="modal fade" id="addProjectModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Novo Projeto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="projectForm">
+                        <div class="mb-3">
+                            <label for="projectName" class="form-label">Nome do Projeto</label>
+                            <input type="text" class="form-control" id="projectName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectClient" class="form-label">Cliente</label>
+                            <input type="text" class="form-control" id="projectClient" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectStart" class="form-label">Data de Início</label>
+                            <input type="date" class="form-control" id="projectStart" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectEnd" class="form-label">Data de Término</label>
+                            <input type="date" class="form-control" id="projectEnd" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectProgress" class="form-label">Progresso (%)</label>
+                            <input type="number" class="form-control" id="projectProgress" min="0" max="100" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="projectStatus" class="form-label">Status</label>
+                            <select class="form-select" id="projectStatus" required>
+                                <option value="Planejamento">Planejamento</option>
+                                <option value="Em Andamento">Em Andamento</option>
+                                <option value="Pendente">Pendente</option>
+                                <option value="Concluído">Concluído</option>
+                                <option value="Atrasado">Atrasado</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveProject">Salvar Projeto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- SQL.js (simulado com localStorage) -->
+    <script>
+        // Simulação de banco de dados usando localStorage
+        class Database {
+            constructor() {
+                this.dbName = 'D.PedroDB';
+                this.init();
+            }
+            
+            init() {
+                if (!localStorage.getItem(this.dbName)) {
+                    // Inicializar com dados padrão
+                    const defaultData = {
+                        projects: [
+                            {
+                                id: 1,
+                                name: 'Site E-commerce',
+                                client: 'Loja ABC',
+                                startDate: '2023-05-15',
+                                endDate: '2023-09-30',
+                                progress: 85,
+                                status: 'Em Andamento'
+                            },
+                            {
+                                id: 2,
+                                name: 'App Mobile',
+                                client: 'Tech Solutions',
+                                startDate: '2023-07-10',
+                                endDate: '2023-11-15',
+                                progress: 60,
+                                status: 'Pendente'
+                            },
+                            {
+                                id: 3,
+                                name: 'Sistema ERP',
+                                client: 'Indústria XYZ',
+                                startDate: '2023-08-01',
+                                endDate: '2024-01-20',
+                                progress: 45,
+                                status: 'Planejamento'
+                            }
+                        ],
+                        notifications: [
+                            { id: 1, message: 'Novo cliente cadastrado', read: false },
+                            { id: 2, message: 'Projeto atrasado: Portal Corporativo', read: false },
+                            { id: 3, message: 'Backup realizado com sucesso', read: false }
+                        ]
+                    };
+                    
+                    localStorage.setItem(this.dbName, JSON.stringify(defaultData));
+                }
+            }
+            
+            getData(table) {
+                const db = JSON.parse(localStorage.getItem(this.dbName));
+                return db[table] || [];
+            }
+            
+            insert(table, data) {
+                const db = JSON.parse(localStorage.getItem(this.dbName));
+                if (!db[table]) db[table] = [];
+                
+                // Gerar ID único
+                data.id = db[table].length > 0 ? Math.max(...db[table].map(item => item.id)) + 1 : 1;
+                db[table].push(data);
+                
+                localStorage.setItem(this.dbName, JSON.stringify(db));
+                return data.id;
+            }
+            
+            update(table, id, data) {
+                const db = JSON.parse(localStorage.getItem(this.dbName));
+                if (!db[table]) return false;
+                
+                const index = db[table].findIndex(item => item.id === id);
+                if (index === -1) return false;
+                
+                db[table][index] = { ...db[table][index], ...data };
+                localStorage.setItem(this.dbName, JSON.stringify(db));
+                return true;
+            }
+            
+            delete(table, id) {
+                const db = JSON.parse(localStorage.getItem(this.dbName));
+                if (!db[table]) return false;
+                
+                const index = db[table].findIndex(item => item.id === id);
+                if (index === -1) return false;
+                
+                db[table].splice(index, 1);
+                localStorage.setItem(this.dbName, JSON.stringify(db));
+                return true;
+            }
+        }
+
+        // Inicializar o sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            const db = new Database();
+            
+            // Elementos da interface
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const themeToggle = document.getElementById('themeToggle');
+            const pageTitle = document.getElementById('pageTitle');
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a');
+            const contentSections = document.querySelectorAll('.content-section');
+            const chatContainer = document.getElementById('chatContainer');
+            const chatInput = document.getElementById('chatInput');
+            const sendMessage = document.getElementById('sendMessage');
+            const projectsTableBody = document.getElementById('projectsTableBody');
+            const saveProject = document.getElementById('saveProject');
+            
+            // Alternar sidebar
+            toggleSidebar.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                mainContent.classList.toggle('expanded');
+            });
+            
+            // Alternar tema
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.body.getAttribute('data-theme');
+                if (currentTheme === 'dark') {
+                    document.body.removeAttribute('data-theme');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                } else {
+                    document.body.setAttribute('data-theme', 'dark');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                }
+            });
+            
+            // Navegação entre seções
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remover classe ativa de todos os links
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Adicionar classe ativa ao link clicado
+                    this.classList.add('active');
+                    
+                    // Obter a seção a ser exibida
+                    const sectionId = this.getAttribute('data-section');
+                    
+                    // Atualizar título da página
+                    pageTitle.textContent = this.querySelector('.sidebar-text').textContent;
+                    
+                    // Esconder todas as seções
+                    contentSections.forEach(section => {
+                        section.classList.add('d-none');
+                    });
+                    
+                    // Mostrar a seção selecionada
+                    document.getElementById(sectionId).classList.remove('d-none');
+                });
+            });
+            
+            // Chat com assistente virtual
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('chat-message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+                messageDiv.textContent = message;
+                
+                chatContainer.appendChild(messageDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            }
+            
+            sendMessage.addEventListener('click', function() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    chatInput.value = '';
+                    
+                    // Simular resposta do assistente
+                    setTimeout(() => {
+                        const responses = [
+                            "Entendi sua solicitação. Posso ajudá-lo com isso.",
+                            "Vou verificar isso para você.",
+                            "Há várias opções disponíveis para essa funcionalidade.",
+                            "Posso fornecer mais detalhes sobre esse tópico.",
+                            "Essa é uma ótima pergunta! Deixe-me pesquisar sobre isso."
+                        ];
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse);
+                    }, 1000);
+                }
+            });
+            
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage.click();
+                }
+            });
+            
+            // Carregar projetos
+            function loadProjects() {
+                const projects = db.getData('projects');
+                projectsTableBody.innerHTML = '';
+                
+                projects.forEach(project => {
+                    const row = document.createElement('tr');
+                    
+                    // Determinar a classe do badge baseado no status
+                    let badgeClass = 'bg-secondary';
+                    if (project.status === 'Em Andamento') badgeClass = 'bg-success';
+                    else if (project.status === 'Pendente') badgeClass = 'bg-warning';
+                    else if (project.status === 'Concluído') badgeClass = 'bg-primary';
+                    else if (project.status === 'Atrasado') badgeClass = 'bg-danger';
+                    
+                    row.innerHTML = `
+                        <td>${project.name}</td>
+                        <td>${project.client}</td>
+                        <td>${formatDate(project.startDate)}</td>
+                        <td>${formatDate(project.endDate)}</td>
+                        <td>
+                            <div class="progress progress-custom">
+                                <div class="progress-bar" style="width: ${project.progress}%"></div>
+                            </div>
+                        </td>
+                        <td><span class="badge ${badgeClass}">${project.status}</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-primary me-1 edit-project" data-id="${project.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-project" data-id="${project.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    `;
+                    
+                    projectsTableBody.appendChild(row);
+                });
+                
+                // Adicionar event listeners para os botões de editar e excluir
+                document.querySelectorAll('.edit-project').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const projectId = parseInt(this.getAttribute('data-id'));
+                        editProject(projectId);
+                    });
+                });
+                
+                document.querySelectorAll('.delete-project').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const projectId = parseInt(this.getAttribute('data-id'));
+                        deleteProject(projectId);
+                    });
+                });
+            }
+            
+            function formatDate(dateString) {
+                const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+                return new Date(dateString).toLocaleDateString('pt-BR', options);
+            }
+            
+            function editProject(id) {
+                // Implementar edição de projeto
+                alert(`Editar projeto com ID: ${id}`);
+            }
+            
+            function deleteProject(id) {
+                if (confirm('Tem certeza que deseja excluir este projeto?')) {
+                    if (db.delete('projects', id)) {
+                        loadProjects();
+                    }
+                }
+            }
+            
+            // Salvar novo projeto
+            saveProject.addEventListener('click', function() {
+                const projectName = document.getElementById('projectName').value;
+                const projectClient = document.getElementById('projectClient').value;
+                const projectStart = document.getElementById('projectStart').value;
+                const projectEnd = document.getElementById('projectEnd').value;
+                const projectProgress = parseInt(document.getElementById('projectProgress').value);
+                const projectStatus = document.getElementById('projectStatus').value;
+                
+                if (projectName && projectClient && projectStart && projectEnd) {
+                    const newProject = {
+                        name: projectName,
+                        client: projectClient,
+                        startDate: projectStart,
+                        endDate: projectEnd,
+                        progress: projectProgress,
+                        status: projectStatus
+                    };
+                    
+                    db.insert('projects', newProject);
+                    loadProjects();
+                    
+                    // Fechar modal e limpar formulário
+                    document.getElementById('projectForm').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('addProjectModal')).hide();
+                }
+            });
+            
+            // Inicializar gráficos
+            function initCharts() {
+                // Gráfico de vendas
+                const salesCtx = document.getElementById('salesChart').getContext('2d');
+                const salesChart = new Chart(salesCtx, {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        datasets: [{
+                            label: 'Vendas (R$)',
+                            data: [65000, 59000, 80000, 81000, 56000, 75000, 89000, 92000, 78000, 85000, 95000, 110000],
+                            borderColor: '#4361ee',
+                            backgroundColor: 'rgba(67, 97, 238, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.3,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: 'rgba(0, 0, 0, 0.05)'
+                                }
+                            },
+                            x: {
+                                grid: {
+                                    display: false
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Gráfico de projetos
+                const projectsCtx = document.getElementById('projectsChart').getContext('2d');
+                const projectsChart = new Chart(projectsCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Concluídos', 'Em Andamento', 'Pendentes', 'Atrasados'],
+                        datasets: [{
+                            data: [12, 18, 8, 4],
+                            backgroundColor: [
+                                '#4cc9f0',
+                                '#4361ee',
+                                '#f72585',
+                                '#ff9e00'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Inicializar o sistema
+            loadProjects();
+            initCharts();
+        });
+    </script>
+</body>
+</html>

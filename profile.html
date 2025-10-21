@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== VARIÁVEIS E ESTILOS GLOBAIS ===== */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #2980b9;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-back {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-back:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* ===== CONTAINER DO PERFIL ===== */
+        .profile-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        /* ===== HEADER DO PERFIL ===== */
+        .profile-header {
+            position: relative;
+        }
+
+        .profile-cover {
+            position: relative;
+            height: 300px;
+            overflow: hidden;
+        }
+
+        .profile-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-edit-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .cover-edit-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: flex-end;
+            padding: 0 2rem 2rem;
+            margin-top: -80px;
+            position: relative;
+        }
+
+        .profile-avatar {
+            position: relative;
+            margin-right: 2rem;
+        }
+
+        .profile-avatar img {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 5px solid white;
+            object-fit: cover;
+            box-shadow: var(--box-shadow);
+        }
+
+        .avatar-edit-btn {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .avatar-edit-btn:hover {
+            background: #2980b9;
+            transform: scale(1.1);
+        }
+
+        .profile-details {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .profile-bio {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* ===== BOTÕES ===== */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .btn-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        /* ===== TABS DO PERFIL ===== */
+        .profile-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 1rem 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            border-bottom: 3px solid transparent;
+            font-weight: 500;
+        }
+
+        .tab-btn.active {
+            color: var(--secondary-color);
+            border-bottom-color: var(--secondary-color);
+            background: white;
+        }
+
+        .tab-btn:hover {
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        /* ===== CONTEÚDO DAS TABS ===== */
+        .profile-content {
+            padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== GRID DE POSTS ===== */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: all var(--transition-speed);
+            position: relative;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .post-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .post-info {
+            padding: 1rem;
+        }
+
+        .post-stats {
+            display: flex;
+            gap: 1rem;
+            color: #666;
+        }
+
+        .post-stats span {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* ===== SEÇÃO SOBRE ===== */
+        .about-section {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .about-section h3 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .info-item strong {
+            color: var(--primary-color);
+            min-width: 120px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* ===== FORMULÁRIOS DE EDIÇÃO ===== */
+        .edit-form {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .avatar-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #ddd;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .avatar-upload-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .avatar-upload input[type="file"] {
+            display: none;
+        }
+
+        /* ===== EDIÇÃO DE CAPA ===== */
+        .cover-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .cover-preview {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--border-radius);
+            border: 3px solid #ddd;
+            overflow: hidden;
+            margin-bottom: 1rem;
+            position: relative;
+        }
+
+        .cover-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cover-upload-btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .cover-upload-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .cover-upload input[type="file"] {
+            display: none;
+        }
+
+        /* ===== MENSAGENS DE ALERTA ===== */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-success {
+            background-color: rgba(39, 174, 96, 0.15);
+            color: var(--success-color);
+            border: 1px solid rgba(39, 174, 96, 0.2);
+        }
+
+        .alert-error {
+            background-color: rgba(231, 76, 60, 0.15);
+            color: var(--danger-color);
+            border: 1px solid rgba(231, 76, 60, 0.2);
+        }
+
+        /* ===== RESPONSIVIDADE ===== */
+        @media (max-width: 768px) {
+            .profile-info {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .profile-avatar {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .profile-actions {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .profile-tabs {
+                flex-wrap: wrap;
+            }
+            
+            .tab-btn {
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user"></i> Meu Perfil</h1>
+            <a href="DPS.html" class="btn-back"><i class="fas fa-arrow-left"></i> Voltar</a>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-cover">
+                    <img id="profileCover" src="" alt="Capa do perfil">
+                    <button class="cover-edit-btn" onclick="editCover()"><i class="fas fa-camera"></i></button>
+                </div>
+                
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <img id="profileAvatar" src="" alt="Avatar">
+                        <button class="avatar-edit-btn" onclick="editAvatar()"><i class="fas fa-camera"></i></button>
+                    </div>
+                    
+                    <div class="profile-details">
+                        <h1 class="profile-name" id="profileName">Carregando...</h1>
+                        <p class="profile-bio" id="profileBio">Carregando informações...</p>
+                        
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <span class="stat-number" id="statPosts">0</span>
+                                <span class="stat-label">Publicações</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="statFollowers">0</span>
+                                <span class="stat-label">Seguidores</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-number" id="statFollowing">0</span>
+                                <span class="stat-label">Seguindo</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-actions">
+                        <button class="btn btn-primary" onclick="editProfile()"><i class="fas fa-edit"></i> Editar Perfil</button>
+                        <button class="btn btn-secondary" onclick="showSettings()"><i class="fas fa-cog"></i> Configurações</button>
+                        <button class="btn btn-danger" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-tabs">
+                <button class="tab-btn active" onclick="changeProfileTab('posts')">Publicações</button>
+                <button class="tab-btn" onclick="changeProfileTab('about')">Sobre</button>
+                <button class="tab-btn" onclick="changeProfileTab('edit')">Editar Perfil</button>
+                <button class="tab-btn" onclick="changeProfileTab('cover')">Editar Capa</button>
+                <button class="tab-btn" onclick="changeProfileTab('security')">Segurança</button>
+            </div>
+
+            <div class="profile-content">
+                <!-- Tab: Publicações -->
+                <div id="profile-posts" class="tab-content active">
+                    <div class="posts-grid" id="postsGrid">
+                        <!-- Posts serão carregados dinamicamente -->
+                    </div>
+                </div>
+
+                <!-- Tab: Sobre -->
+                <div id="profile-about" class="tab-content">
+                    <div class="about-section">
+                        <h3><i class="fas fa-info-circle"></i> Informações Pessoais</h3>
+                        <div class="info-grid" id="aboutInfo">
+                            <!-- Informações serão carregadas dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Editar Perfil -->
+                <div id="profile-edit" class="tab-content">
+                    <div class="edit-form">
+                        <h3><i class="fas fa-user-edit"></i> Editar Perfil</h3>
+                        <form id="editProfileForm">
+                            <div class="avatar-upload">
+                                <div class="avatar-preview" id="avatarPreview">
+                                    <img id="editAvatarPreview" src="" alt="Preview">
+                                </div>
+                                <label class="avatar-upload-btn">
+                                    <i class="fas fa-camera"></i> Alterar Foto
+                                    <input type="file" id="avatarInput" accept="image/*" />
+                                </label>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editName" class="form-label">Nome Completo</label>
+                                <input type="text" class="form-control" id="editName" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editEmail" class="form-label">E-mail</label>
+                                <input type="email" class="form-control" id="editEmail" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editBio" class="form-label">Biografia</label>
+                                <textarea class="form-control" id="editBio" rows="3" placeholder="Conte um pouco sobre você..."></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editProfession" class="form-label">Profissão</label>
+                                <input type="text" class="form-control" id="editProfession">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="editLocation" class="form-label">Localização</label>
+                                <input type="text" class="form-control" id="editLocation">
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tab: Editar Capa -->
+                <div id="profile-cover" class="tab-content">
+                    <div class="edit-form">
+                        <h3><i class="fas fa-image"></i> Editar Foto de Capa</h3>
+                        <div class="cover-upload">
+                            <div class="cover-preview" id="coverPreview">
+                                <img id="editCoverPreview" src="" alt="Preview da Capa">
+                            </div>
+                            <label class="cover-upload-btn">
+                                <i class="fas fa-camera"></i> Alterar Foto de Capa
+                                <input type="file" id="coverInput" accept="image/*" />
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" onclick="saveCover()">
+                            <i class="fas fa-save"></i> Salvar Capa
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tab: Segurança -->
+                <div id="profile-security" class="tab-content">
+                    <div class="edit-form">
+                        <h3><i class="fas fa-shield-alt"></i> Segurança da Conta</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Alterar Senha</label>
+                            <input type="password" class="form-control" id="currentPassword" placeholder="Senha atual">
+                            <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" style="margin-top: 0.5rem;">
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirmar nova senha" style="margin-top: 0.5rem;">
+                            <button class="btn btn-primary" onclick="changePassword()" style="margin-top: 1rem;">
+                                <i class="fas fa-key"></i> Alterar Senha
+                            </button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Sessões Ativas</label>
+                            <div id="activeSessions">
+                                <!-- Sessões serão listadas aqui -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // =============================================
+        // BANCO DE DADOS E CONFIGURAÇÕES
+        // =============================================
+        const DB_NAME = 'DPSystemDB';
+        
+        function getDatabase() {
+            return JSON.parse(localStorage.getItem(DB_NAME)) || { users: [], sessions: [] };
+        }
+        
+        function saveDatabase(db) {
+            localStorage.setItem(DB_NAME, JSON.stringify(db));
+        }
+        
+        function getCurrentUser() {
+            const userData = localStorage.getItem('currentUser');
+            return userData ? JSON.parse(userData) : null;
+        }
+
+        // =============================================
+        // FUNÇÃO PARA ATUALIZAR DADOS NA PÁGINA DPS.HTML
+        // =============================================
+        
+        function updateDPSPage(userData) {
+            // Esta função será chamada quando o perfil for atualizado
+            // Ela atualiza os dados na página DPS.html
+            console.log('Perfil atualizado - dados para DPS.html:', userData);
+            
+            // Salvar dados atualizados no localStorage para acesso pela DPS.html
+            localStorage.setItem('userProfileData', JSON.stringify({
+                name: userData.name,
+                email: userData.email,
+                avatar: userData.avatar,
+                cover: userData.cover,
+                bio: userData.bio,
+                profession: userData.profession,
+                location: userData.location
+            }));
+        }
+
+        // =============================================
+        // FUNÇÕES DE CARREGAMENTO DE PERFIL
+        // =============================================
+        
+        function loadProfileData() {
+            const user = getCurrentUser();
+            const db = getDatabase();
+            
+            if (!user) {
+                alert('Usuário não autenticado!');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Atualizar informações básicas
+            document.getElementById('profileName').textContent = user.name;
+            document.getElementById('profileEmail').textContent = user.email;
+            document.getElementById('profileAvatar').src = user.avatar || 'https://source.unsplash.com/random/200x200/?portrait';
+            document.getElementById('editAvatarPreview').src = user.avatar || 'https://source.unsplash.com/random/200x200/?portrait';
+            document.getElementById('profileCover').src = user.cover || 'https://source.unsplash.com/random/1200x400/?landscape';
+            document.getElementById('editCoverPreview').src = user.cover || 'https://source.unsplash.com/random/1200x400/?landscape';
+            
+            // Carregar dados estendidos do usuário
+            const userData = db.users.find(u => u.id === user.id) || user;
+            
+            document.getElementById('profileBio').textContent = userData.bio || 'Usuário do D.Pedro Soluções';
+            document.getElementById('editName').value = userData.name;
+            document.getElementById('editEmail').value = userData.email;
+            document.getElementById('editBio').value = userData.bio || '';
+            document.getElementById('editProfession').value = userData.profession || '';
+            document.getElementById('editLocation').value = userData.location || '';
+            
+            // Carregar estatísticas
+            loadUserStats(user.id);
+            
+            // Carregar posts
+            loadUserPosts(user.id);
+            
+            // Carregar informações "Sobre"
+            loadAboutInfo(userData);
+            
+            // Carregar sessões ativas
+            loadActiveSessions(user.id);
+        }
+        
+        function loadUserStats(userId) {
+            const db = getDatabase();
+            
+            // Simular estatísticas (em um sistema real, isso viria do backend)
+            document.getElementById('statPosts').textContent = Math.floor(Math.random() * 50) + 10;
+            document.getElementById('statFollowers').textContent = Math.floor(Math.random() * 1000) + 100;
+            document.getElementById('statFollowing').textContent = Math.floor(Math.random() * 500) + 50;
+        }
+        
+        function loadUserPosts(userId) {
+            const postsGrid = document.getElementById('postsGrid');
+            postsGrid.innerHTML = '';
+            
+            // Posts simulados
+            const samplePosts = [
+                { image: 'https://source.unsplash.com/random/400x300/?technology', likes: 245, comments: 36 },
+                { image: 'https://source.unsplash.com/random/400x300/?code', likes: 189, comments: 24 },
+                { image: 'https://source.unsplash.com/random/400x300/?programming', likes: 312, comments: 42 },
+                { image: 'https://source.unsplash.com/random/400x300/?computer', likes: 156, comments: 18 },
+                { image: 'https://source.unsplash.com/random/400x300/?software', likes: 278, comments: 31 },
+                { image: 'https://source.unsplash.com/random/400x300/?development', likes: 198, comments: 22 }
+            ];
+            
+            samplePosts.forEach(post => {
+                const postCard = document.createElement('div');
+                postCard.className = 'post-card';
+                postCard.innerHTML = `
+                    <img src="${post.image}" alt="Post">
+                    <div class="post-info">
+                        <div class="post-stats">
+                            <span><i class="fas fa-heart"></i> ${post.likes}</span>
+                            <span><i class="fas fa-comment"></i> ${post.comments}</span>
+                        </div>
+                    </div>
+                `;
+                postsGrid.appendChild(postCard);
+            });
+        }
+        
+        function loadAboutInfo(userData) {
+            const aboutInfo = document.getElementById('aboutInfo');
+            aboutInfo.innerHTML = '';
+            
+            const infoItems = [
+                { icon: 'fas fa-briefcase', label: 'Profissão:', value: userData.profession || 'Não informado' },
+                { icon: 'fas fa-graduation-cap', label: 'Educação:', value: userData.education || 'Não informado' },
+                { icon: 'fas fa-map-marker-alt', label: 'Localização:', value: userData.location || 'Não informado' },
+                { icon: 'fas fa-heart', label: 'Interesses:', value: userData.interests || 'Tecnologia, Programação' },
+                { icon: 'fas fa-envelope', label: 'E-mail:', value: userData.email },
+                { icon: 'fas fa-calendar', label: 'Membro desde:', value: new Date(userData.createdAt).toLocaleDateString('pt-BR') },
+                { icon: 'fas fa-sign-in-alt', label: 'Último login:', value: new Date(userData.lastLogin).toLocaleDateString('pt-BR') },
+                { icon: 'fas fa-user-shield', label: 'Provedor:', value: userData.provider || 'Local' }
+            ];
+            
+            infoItems.forEach(item => {
+                const infoItem = document.createElement('div');
+                infoItem.className = 'info-item';
+                infoItem.innerHTML = `
+                    <strong><i class="${item.icon}"></i> ${item.label}</strong>
+                    <span>${item.value}</span>
+                `;
+                aboutInfo.appendChild(infoItem);
+            });
+        }
+        
+        function loadActiveSessions(userId) {
+            const db = getDatabase();
+            const activeSessions = db.sessions.filter(session => 
+                session.userId === userId && new Date(session.expiresAt) > new Date()
+            );
+            
+            const sessionsContainer = document.getElementById('activeSessions');
+            sessionsContainer.innerHTML = '';
+            
+            if (activeSessions.length === 0) {
+                sessionsContainer.innerHTML = '<p>Nenhuma sessão ativa</p>';
+                return;
+            }
+            
+            activeSessions.forEach(session => {
+                const sessionElement = document.createElement('div');
+                sessionElement.className = 'info-item';
+                sessionElement.innerHTML = `
+                    <strong><i class="fas fa-desktop"></i> Sessão:</strong>
+                    <span>${new Date(session.createdAt).toLocaleString('pt-BR')} (${session.provider})</span>
+                    <button class="btn btn-danger btn-sm" onclick="logoutSession('${session.token}')" style="margin-left: auto;">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                sessionsContainer.appendChild(sessionElement);
+            });
+        }
+        
+        // =============================================
+        // FUNÇÕES DE EDIÇÃO E ATUALIZAÇÃO
+        // =============================================
+        
+        function editProfile() {
+            changeProfileTab('edit');
+        }
+        
+        function editAvatar() {
+            document.getElementById('avatarInput').click();
+        }
+        
+        function editCover() {
+            changeProfileTab('cover');
+        }
+        
+        function showSettings() {
+            changeProfileTab('security');
+        }
+        
+        // Configurar preview do avatar
+        document.getElementById('avatarInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor, selecione uma imagem válida.');
+                    return;
+                }
+                
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 5MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editAvatarPreview').src = e.target.result;
+                    document.getElementById('profileAvatar').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Configurar preview da capa
+        document.getElementById('coverInput').addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor, selecione uma imagem válida.');
+                    return;
+                }
+                
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('A imagem deve ter no máximo 10MB.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editCoverPreview').src = e.target.result;
+                    document.getElementById('profileCover').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Formulário de edição de perfil
+        document.getElementById('editProfileForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const user = getCurrentUser();
+            const db = getDatabase();
+            const userIndex = db.users.findIndex(u => u.id === user.id);
+            
+            if (userIndex === -1) return;
+            
+            // Obter dados do formulário
+            const updatedUser = {
+                ...db.users[userIndex],
+                name: document.getElementById('editName').value,
+                email: document.getElementById('editEmail').value,
+                bio: document.getElementById('editBio').value,
+                profession: document.getElementById('editProfession').value,
+                location: document.getElementById('editLocation').value
+            };
+            
+            // Atualizar avatar se foi alterado
+            const avatarInput = document.getElementById('avatarInput');
+            if (avatarInput.files && avatarInput.files[0]) {
+                const avatarBase64 = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = e => resolve(e.target.result);
+                    reader.readAsDataURL(avatarInput.files[0]);
+                });
+                updatedUser.avatar = avatarBase64;
+            }
+            
+            // Salvar alterações
+            db.users[userIndex] = updatedUser;
+            saveDatabase(db);
+            
+            // Atualizar usuário atual
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+            
+            // Atualizar dados na página DPS.html
+            updateDPSPage(updatedUser);
+            
+            // Recarregar dados do perfil
+            loadProfileData();
+            
+            alert('Perfil atualizado com sucesso!');
+        });
+
+        // Função para salvar a capa
+        async function saveCover() {
+            const coverInput = document.getElementById('coverInput');
+            
+            if (!coverInput.files || !coverInput.files[0]) {
+                alert('Por favor, selecione uma imagem para a capa.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const db = getDatabase();
+            const userIndex = db.users.findIndex(u => u.id === user.id);
+            
+            if (userIndex === -1) return;
+            
+            // Converter imagem para base64
+            const coverBase64 = await new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.readAsDataURL(coverInput.files[0]);
+            });
+            
+            // Atualizar capa do usuário
+            const updatedUser = {
+                ...db.users[userIndex],
+                cover: coverBase64
+            };
+            
+            // Salvar alterações
+            db.users[userIndex] = updatedUser;
+            saveDatabase(db);
+            
+            // Atualizar usuário atual
+            localStorage.setItem('currentUser', JSON.stringify(updatedUser));
+            
+            // Atualizar dados na página DPS.html
+            updateDPSPage(updatedUser);
+            
+            alert('Capa atualizada com sucesso!');
+        }
+
+        // =============================================
+        // FUNÇÕES DE NAVEGAÇÃO E UTILITÁRIOS
+        // =============================================
+        
+        function changeProfileTab(tabName) {
+            // Esconder todas as tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remover classe active de todos os botões
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Mostrar tab selecionada
+            document.getElementById(`profile-${tabName}`).classList.add('active');
+            
+            // Ativar botão correspondente
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.textContent.toLowerCase().includes(tabName)) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        function changePassword() {
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('Por favor, preencha todos os campos de senha.');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                alert('As senhas não coincidem.');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                alert('A nova senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            const user = getCurrentUser();
+            const db = getDatabase();
+            const userIndex = db.users.findIndex(u => u.id === user.id);
+            
+            if (userIndex === -1) return;
+            
+            // Verificar senha atual (em um sistema real, isso seria criptografado)
+            if (db.users[userIndex].password !== currentPassword) {
+                alert('Senha atual incorreta.');
+                return;
+            }
+            
+            // Atualizar senha
+            db.users[userIndex].password = newPassword;
+            saveDatabase(db);
+            
+            // Limpar campos
+            document.getElementById('currentPassword').value = '';
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            
+            alert('Senha alterada com sucesso!');
+        }
+        
+        function logoutSession(token) {
+            const db = getDatabase();
+            db.sessions = db.sessions.filter(session => session.token !== token);
+            saveDatabase(db);
+            loadActiveSessions(getCurrentUser().id);
+        }
+        
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // =============================================
+        // INICIALIZAÇÃO
+        // =============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfileData();
+        });
+    </script>
+</body>
+</html>

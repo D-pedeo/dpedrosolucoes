@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meios de Comunicação - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/sql.js"></script>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #2980b9;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: none;
+        }
+
+        /* Layout de comunicação */
+        .comms-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .comms-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .comms-section {
+            margin-bottom: 2rem;
+        }
+
+        .comms-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Filtros e busca */
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 40px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Cards de comunicação */
+        .comms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .comm-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comm-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .comm-icon {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: white;
+        }
+
+        .comm-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .comm-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .comm-description {
+            color: #666;
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+
+        .comm-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        /* Cores para tipos de comunicação */
+        .type-social {
+            background: linear-gradient(135deg, #3b5998, #1877f2);
+        }
+
+        .type-voice {
+            background: linear-gradient(135deg, #00b09b, #96c93d);
+        }
+
+        .type-video {
+            background: linear-gradient(135deg, #833ab4, #fd1d1d);
+        }
+
+        .type-email {
+            background: linear-gradient(135deg, #ea4335, #fbbc05);
+        }
+
+        .type-api {
+            background: linear-gradient(135deg, #4285f4, #34a853);
+        }
+
+        .type-chat {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .type-workflow {
+            background: linear-gradient(135deg, #8e2de2, #4a00e0);
+        }
+
+        .type-document {
+            background: linear-gradient(135deg, #f46b45, #eea849);
+        }
+
+        /* Área de comunicação ativa */
+        .active-communication {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: none;
+        }
+
+        .active-header {
+            padding: 1rem;
+            background: var(--primary-color);
+            color: white;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .active-body {
+            padding: 1.5rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .active-footer {
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: var(--border-radius);
+            max-width: 80%;
+        }
+
+        .message-incoming {
+            background: #f0f5ff;
+            align-self: flex-start;
+        }
+
+        .message-outgoing {
+            background: var(--secondary-color);
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary-color), #2980b9);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            cursor: pointer;
+            z-index: 990;
+            transition: all var(--transition-speed);
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        /* Modal */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), #1a2530);
+            color: white;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Status de conexão */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #f8f9fa;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .status-indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success-color);
+        }
+
+        .status-indicator.offline {
+            background: var(--danger-color);
+        }
+
+        /* Botão voltar */
+        .back-button {
+            margin-left: auto;
+        }
+
+        /* Tabs */
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            background: none;
+        }
+
+        /* Fluxos de trabalho */
+        .workflow-card {
+            border: 2px dashed #dee2e6;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            margin-bottom: 1rem;
+        }
+
+        .workflow-card:hover {
+            border-color: var(--secondary-color);
+            background: #f8f9fa;
+        }
+
+        .workflow-steps {
+            margin-top: 1rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding: 0.5rem;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-weight: bold;
+        }
+
+        /* Documentos */
+        .document-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .document-item:hover {
+            background: #f8f9fa;
+        }
+
+        .document-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--light-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Tarefas */
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .task-checkbox {
+            margin-right: 1rem;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-priority {
+            padding: 0.25rem 0.5rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .priority-high {
+            background: #ffebee;
+            color: #d32f2f;
+        }
+
+        .priority-medium {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .priority-low {
+            background: #e8f5e8;
+            color: #388e3c;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .comms-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                justify-content: center;
+            }
+            
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .active-communication {
+                width: calc(100% - 40px);
+                right: 20px;
+                left: 20px;
+            }
+            
+            .back-button {
+                margin-left: 0;
+                margin-top: 1rem;
+                width: 100%;
+            }
+        }
+
+        /* Animações */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Notificações Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .notification-info {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho da página -->
+        <div class="header">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="page-title">
+                    <i class="fas fa-comments"></i>
+                    Meios de Comunicação Integrados
+                </h1>
+            </div>
+            <div class="connection-status">
+                <div class="status-indicator" id="connectionStatus"></div>
+                <span id="statusText">Conectado</span>
+            </div>
+            <button class="btn btn-secondary back-button" onclick="goToMainPage()">
+                <i class="fas fa-arrow-left"></i> Voltar ao Sistema
+            </button>
+        </div>
+
+        <!-- Abas principais -->
+        <ul class="nav nav-tabs" id="commsTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#channels">Canais</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#workflows">Fluxos de Trabalho</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#documents">Documentos</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#tasks">Tarefas</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#support">Atendimento</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Aba: Canais de Comunicação -->
+            <div class="tab-pane fade show active" id="channels">
+                <!-- Filtros e busca -->
+                <div class="card">
+                    <div class="filters-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Buscar canais de comunicação...">
+                        </div>
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-filter="all">Todos</button>
+                            <button class="filter-btn" data-filter="social">Redes Sociais</button>
+                            <button class="filter-btn" data-filter="voice">Voz</button>
+                            <button class="filter-btn" data-filter="video">Vídeo</button>
+                            <button class="filter-btn" data-filter="email">E-mail</button>
+                            <button class="filter-btn" data-filter="api">APIs</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid de comunicação -->
+                <div class="comms-grid" id="commsList">
+                    <!-- Conteúdo dinâmico será carregado aqui -->
+                </div>
+            </div>
+
+            <!-- Aba: Fluxos de Trabalho -->
+            <div class="tab-pane fade" id="workflows">
+                <div class="card">
+                    <h3><i class="fas fa-project-diagram"></i> Fluxos de Trabalho Automatizados</h3>
+                    <p>Automatize processos de comunicação e integre com outros sistemas</p>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="workflow-card" onclick="openWorkflow('atendimento')">
+                                <h4><i class="fas fa-headset"></i> Atendimento ao Cliente</h4>
+                                <p>Automatize o atendimento desde o primeiro contato</p>
+                                <div class="workflow-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <span>Recebimento da mensagem</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <span>Classificação automática</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <span>Encaminhamento para setor</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="workflow-card" onclick="openWorkflow('vendas')">
+                                <h4><i class="fas fa-shopping-cart"></i> Processo de Vendas</h4>
+                                <p>Automatize o funil de vendas por comunicação</p>
+                                <div class="workflow-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <span>Captura de lead</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <span>Segmentação automática</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <span>Sequência de follow-up</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <div class="workflow-card" onclick="openWorkflow('documentos')">
+                                <h4><i class="fas fa-file-contract"></i> Processamento de Documentos</h4>
+                                <p>Automatize criação e envio de documentos</p>
+                                <div class="workflow-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <span>Solicitação do documento</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <span>Geração automática</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <span>Assinatura e envio</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="workflow-card" onclick="openWorkflow('suporte')">
+                                <h4><i class="fas fa-tools"></i> Suporte Técnico</h4>
+                                <p>Automatize tickets de suporte</p>
+                                <div class="workflow-steps">
+                                    <div class="step">
+                                        <div class="step-number">1</div>
+                                        <span>Abertura de ticket</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">2</div>
+                                        <span>Triagem automática</span>
+                                    </div>
+                                    <div class="step">
+                                        <div class="step-number">3</div>
+                                        <span>Escalonamento</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Documentos -->
+            <div class="tab-pane fade" id="documents">
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3><i class="fas fa-file-alt"></i> Documentos e Contratos</h3>
+                        <button class="btn btn-primary" onclick="createNewDocument()">
+                            <i class="fas fa-plus"></i> Novo Documento
+                        </button>
+                    </div>
+
+                    <div class="document-list" id="documentList">
+                        <!-- Documentos serão carregados dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Tarefas -->
+            <div class="tab-pane fade" id="tasks">
+                <div class="card">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3><i class="fas fa-tasks"></i> Gerenciamento de Tarefas</h3>
+                        <button class="btn btn-primary" onclick="addNewTask()">
+                            <i class="fas fa-plus"></i> Nova Tarefa
+                        </button>
+                    </div>
+
+                    <div id="taskList">
+                        <!-- Tarefas serão carregadas dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Atendimento -->
+            <div class="tab-pane fade" id="support">
+                <div class="card">
+                    <h3><i class="fas fa-headset"></i> Central de Atendimento</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h4>Estatísticas do Dia</h4>
+                                <div class="row text-center">
+                                    <div class="col-4">
+                                        <h3 id="ticketsToday">0</h3>
+                                        <small>Tickets Hoje</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h3 id="responseTime">0m</h3>
+                                        <small>Tempo Médio</small>
+                                    </div>
+                                    <div class="col-4">
+                                        <h3 id="satisfaction">0%</h3>
+                                        <small>Satisfação</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card">
+                                <h4>Ações Rápidas</h4>
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-outline-primary" onclick="openQuickTicket()">
+                                        <i class="fas fa-plus"></i> Novo Ticket
+                                    </button>
+                                    <button class="btn btn-outline-secondary" onclick="openKnowledgeBase()">
+                                        <i class="fas fa-book"></i> Base de Conhecimento
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <h4>Tickets Recentes</h4>
+                        <div id="recentTickets">
+                            <!-- Tickets serão carregados dinamicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Área de Comunicação Ativa -->
+        <div class="active-communication" id="activeComm">
+            <div class="active-header">
+                <h3 id="activeTitle">Comunicação</h3>
+                <button class="btn btn-sm btn-secondary" onclick="closeActiveComm()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="active-body" id="activeBody">
+                <div class="message message-incoming">
+                    <strong>Sistema:</strong> Bem-vindo ao canal de comunicação. Como posso ajudar?
+                </div>
+            </div>
+            <div class="active-footer">
+                <input type="text" class="form-control" id="messageInput" placeholder="Digite sua mensagem..." onkeypress="handleMessageKeypress(event)">
+                <button class="btn btn-primary" onclick="sendMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- AI Assistant -->
+        <div class="ai-assistant" onclick="openAIAssistant()">
+            <i class="fas fa-robot"></i>
+        </div>
+
+        <!-- Modal de IA -->
+        <div class="modal fade" id="aiModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><i class="fas fa-robot me-2"></i> Assistente de IA Integrado</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label class="form-label">Como posso ajudar na integração de sistemas?</label>
+                            <select class="form-control" id="aiQuestion">
+                                <option value="">Selecione uma opção</option>
+                                <option value="integration">Como integrar diferentes sistemas?</option>
+                                <option value="automation">Como automatizar fluxos de trabalho?</option>
+                                <option value="documents">Como processar documentos automaticamente?</option>
+                                <option value="support">Como melhorar o atendimento ao cliente?</option>
+                                <option value="tasks">Como gerenciar tarefas de forma eficiente?</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ou faça sua pergunta:</label>
+                            <textarea class="form-control" id="aiCustomQuestion" rows="3" placeholder="Digite sua pergunta sobre integração..."></textarea>
+                        </div>
+                        <div id="aiResponse" style="display: none; margin-top: 1.5rem; padding: 1rem; background: #f8f9fa; border-radius: var(--border-radius);">
+                            <h5>Resposta do Assistente:</h5>
+                            <p id="responseText"></p>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn btn-primary" onclick="getAIResponse()">Obter Resposta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // =============================================
+    // SISTEMA INTEGRADO DE COMUNICAÇÃO
+    // =============================================
+    
+    // Configurações do sistema
+    const SYSTEM_CONFIG = {
+        companyName: "D.Pedro Soluções",
+        integrations: {
+            mainSystem: true,
+            workflowAutomation: true,
+            documentProcessing: true,
+            taskManagement: true,
+            customerSupport: true
+        }
+    };
+
+    // Estado do sistema
+    let activeChannel = null;
+    let messages = [];
+    let db = null;
+    let currentWorkflow = null;
+
+    // =============================================
+    // INICIALIZAÇÃO DO SISTEMA
+    // =============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar banco de dados integrado
+        initIntegratedDatabase();
+        
+        // Carregar dados do sistema principal
+        loadMainSystemData();
+        
+        // Configurar componentes
+        setupCommunicationChannels();
+        setupWorkflows();
+        loadDocuments();
+        loadTasks();
+        loadSupportData();
+        
+        // Configurar event listeners
+        setupEventListeners();
+        
+        // Iniciar serviços em background
+        startBackgroundServices();
+        
+        // Mostrar status do sistema
+        showSystemStatus();
+    });
+
+    // =============================================
+    // BANCO DE DADOS INTEGRADO
+    // =============================================
+    async function initIntegratedDatabase() {
+        try {
+            // Verificar se já existe um banco no localStorage
+            const dbData = localStorage.getItem('dps_integrated_db');
+            
+            if (dbData) {
+                const bytes = new Uint8Array(dbData.split(',').map(Number));
+                db = new SQL.Database(bytes);
+                console.log('Banco de dados integrado carregado');
+            } else {
+                // Criar um novo banco de dados integrado
+                db = new SQL.Database();
+                
+                const sqlScript = `
+                    -- Tabela de canais de comunicação
+                    CREATE TABLE IF NOT EXISTS communication_channels (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        type TEXT NOT NULL,
+                        description TEXT,
+                        icon TEXT,
+                        url TEXT,
+                        enabled INTEGER DEFAULT 1,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Tabela de fluxos de trabalho
+                    CREATE TABLE IF NOT EXISTS workflows (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        description TEXT,
+                        steps TEXT,
+                        triggers TEXT,
+                        enabled INTEGER DEFAULT 1,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Tabela de documentos
+                    CREATE TABLE IF NOT EXISTS documents (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        type TEXT,
+                        content TEXT,
+                        status TEXT DEFAULT 'rascunho',
+                        assigned_to TEXT,
+                        due_date DATE,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Tabela de tarefas
+                    CREATE TABLE IF NOT EXISTS tasks (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        description TEXT,
+                        priority TEXT DEFAULT 'medium',
+                        status TEXT DEFAULT 'pendente',
+                        assigned_to TEXT,
+                        due_date DATE,
+                        related_to TEXT,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Tabela de tickets de suporte
+                    CREATE TABLE IF NOT EXISTS support_tickets (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        description TEXT,
+                        customer_name TEXT,
+                        customer_email TEXT,
+                        priority TEXT DEFAULT 'medium',
+                        status TEXT DEFAULT 'aberto',
+                        assigned_to TEXT,
+                        response_time INTEGER,
+                        satisfaction_score INTEGER,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    );
+
+                    -- Inserir dados iniciais
+                    INSERT OR IGNORE INTO communication_channels (name, type, description, icon, url) VALUES 
+                    ('WhatsApp Business', 'social,chat', 'Comunicação integrada com clientes', 'fab fa-whatsapp', 'https://web.whatsapp.com'),
+                    ('Sistema de Tickets', 'support', 'Gestão integrada de atendimento', 'fas fa-headset', NULL),
+                    ('Automação de E-mails', 'email,workflow', 'Fluxos automatizados de e-mail', 'fas fa-envelope', NULL),
+                    ('API de Integração', 'api', 'Conexão com sistemas externos', 'fas fa-code', NULL),
+                    ('Processamento de Docs', 'document', 'Automação de documentos', 'fas fa-file-contract', NULL);
+
+                    INSERT OR IGNORE INTO workflows (name, description, steps, triggers) VALUES 
+                    ('Atendimento ao Cliente', 'Automatiza todo o processo de atendimento', '["Recebimento", "Triagem", "Atribuição", "Resolução", "Feedback"]', '["Novo ticket", "Mensagem recebida"]'),
+                    ('Processo de Vendas', 'Automatiza o funil de vendas', '["Captura", "Qualificação", "Proposta", "Follow-up", "Fechamento"]', '["Novo lead", "Formulário preenchido"]'),
+                    ('Processamento Documental', 'Automatiza criação e envio de documentos', '["Solicitação", "Geração", "Revisão", "Assinatura", "Arquivamento"]', '["Documento solicitado", "Contrato necessário"]');
+
+                    INSERT OR IGNORE INTO documents (title, type, status) VALUES 
+                    ('Contrato de Serviço Padrão', 'contrato', 'ativo'),
+                    ('Proposta Comercial Modelo', 'proposta', 'ativo'),
+                    ('Termo de Confidencialidade', 'legal', 'ativo');
+
+                    INSERT OR IGNORE INTO tasks (title, priority, status) VALUES 
+                    ('Revisar fluxo de atendimento', 'high', 'pendente'),
+                    ('Integrar novo canal de comunicação', 'medium', 'andamento'),
+                    ('Atualizar documentação técnica', 'low', 'pendente');
+                `;
+                
+                db.run(sqlScript);
+                saveDatabase();
+                console.log('Banco de dados integrado criado');
+            }
+        } catch (error) {
+            console.error('Erro ao inicializar banco de dados:', error);
+        }
+    }
+
+    function saveDatabase() {
+        if (db) {
+            const data = db.export();
+            const array = Array.from(data);
+            localStorage.setItem('dps_integrated_db', array.toString());
+        }
+    }
+
+    // =============================================
+    // INTEGRAÇÃO COM SISTEMA PRINCIPAL
+    // =============================================
+    function loadMainSystemData() {
+        // Carregar dados do sistema principal
+        const mainData = localStorage.getItem('dps_main_data');
+        const settings = localStorage.getItem('dps_settings');
+        
+        if (mainData) {
+            const data = JSON.parse(mainData);
+            console.log('Dados do sistema principal carregados:', data);
+            
+            // Atualizar interface com dados do sistema
+            updateInterfaceWithMainData(data);
+        }
+        
+        if (settings) {
+            const config = JSON.parse(settings);
+            applySystemSettings(config);
+        }
+    }
+
+    function updateInterfaceWithMainData(data) {
+        // Atualizar estatísticas com dados do sistema principal
+        if (data.projects) {
+            document.getElementById('projectsCount').textContent = data.projects.length;
+        }
+        
+        if (data.clients) {
+            document.getElementById('clientsCount').textContent = data.clients.length;
+        }
+    }
+
+    function applySystemSettings(settings) {
+        // Aplicar configurações do sistema
+        if (settings.primaryColor) {
+            document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
+        }
+        if (settings.secondaryColor) {
+            document.documentElement.style.setProperty('--secondary-color', settings.secondaryColor);
+        }
+    }
+
+    function goToMainPage() {
+        // Salvar dados atuais antes de sair
+        saveCurrentState();
+        window.location.href = 'DPS.html';
+    }
+
+    function saveCurrentState() {
+        const state = {
+            activeChannel: activeChannel,
+            messages: messages,
+            lastUpdate: new Date().toISOString(),
+            unreadMessages: messages.filter(m => m.type === 'incoming').length
+        };
+        
+        localStorage.setItem('dps_communication_state', JSON.stringify(state));
+    }
+
+    // =============================================
+    // SISTEMA DE COMUNICAÇÃO
+    // =============================================
+    function setupCommunicationChannels() {
+        const commsList = document.getElementById('commsList');
+        commsList.innerHTML = '';
+        
+        const channels = [
+            {
+                name: 'WhatsApp Business',
+                type: 'social,chat',
+                description: 'Comunicação integrada com clientes via WhatsApp. Sincroniza com sistema de tickets.',
+                icon: 'fab fa-whatsapp',
+                integration: 'high'
+            },
+            {
+                name: 'Sistema de Tickets',
+                type: 'support,workflow',
+                description: 'Gestão centralizada de atendimento ao cliente. Integrado com fluxos de trabalho.',
+                icon: 'fas fa-headset',
+                integration: 'high'
+            },
+            {
+                name: 'Automação de E-mails',
+                type: 'email,workflow',
+                description: 'Fluxos automatizados de e-mail marketing e comunicação comercial.',
+                icon: 'fas fa-envelope',
+                integration: 'high'
+            },
+            {
+                name: 'API de Integração',
+                type: 'api,workflow',
+                description: 'Conexão RESTful com sistemas externos e automação de processos.',
+                icon: 'fas fa-code',
+                integration: 'high'
+            },
+            {
+                name: 'Processamento de Docs',
+                type: 'document,workflow',
+                description: 'Automação na criação, assinatura e envio de documentos.',
+                icon: 'fas fa-file-contract',
+                integration: 'high'
+            },
+            {
+                name: 'Chat Interno',
+                type: 'chat,internal',
+                description: 'Comunicação interna entre equipes com integração de tarefas.',
+                icon: 'fas fa-comments',
+                integration: 'medium'
+            }
+        ];
+        
+        channels.forEach(channel => {
+            createIntegratedChannelCard(channel);
+        });
+    }
+
+    function createIntegratedChannelCard(channel) {
+        const commsList = document.getElementById('commsList');
+        const card = document.createElement('div');
+        card.className = 'comm-card';
+        card.setAttribute('data-type', channel.type);
+        
+        let typeClass = 'type-social';
+        if (channel.type.includes('support')) typeClass = 'type-workflow';
+        if (channel.type.includes('email')) typeClass = 'type-email';
+        if (channel.type.includes('api')) typeClass = 'type-api';
+        if (channel.type.includes('document')) typeClass = 'type-document';
+        if (channel.type.includes('internal')) typeClass = 'type-chat';
+        
+        card.innerHTML = `
+            <div class="comm-icon ${typeClass}">
+                <i class="${channel.icon}"></i>
+            </div>
+            <div class="comm-content">
+                <h3 class="comm-title">${channel.name}</h3>
+                <p class="comm-description">${channel.description}</p>
+                <div class="integration-badge" style="background: ${getIntegrationColor(channel.integration)}; color: white; padding: 0.2rem 0.5rem; border-radius: 10px; font-size: 0.8rem; display: inline-block; margin-bottom: 0.5rem;">
+                    Integração: ${channel.integration}
+                </div>
+                <div class="comm-actions">
+                    <button class="btn btn-primary" onclick="openIntegratedChannel('${channel.name}')">
+                        <i class="fas fa-play"></i> Usar
+                    </button>
+                    <button class="btn btn-secondary" onclick="configureIntegration('${channel.name}')">
+                        <i class="fas fa-cog"></i> Integrar
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        commsList.appendChild(card);
+    }
+
+    function getIntegrationColor(level) {
+        switch(level) {
+            case 'high': return '#27ae60';
+            case 'medium': return '#f39c12';
+            case 'low': return '#e74c3c';
+            default: return '#95a5a6';
+        }
+    }
+
+    // =============================================
+    // FLUXOS DE TRABALHO AUTOMATIZADOS
+    // =============================================
+    function setupWorkflows() {
+        // Os fluxos já estão definidos no HTML
+        console.log('Sistema de fluxos de trabalho carregado');
+    }
+
+    function openWorkflow(workflowType) {
+        showNotification('Fluxo de Trabalho', `Iniciando fluxo automatizado: ${workflowType}`, 'info');
+        
+        switch(workflowType) {
+            case 'atendimento':
+                startCustomerSupportWorkflow();
+                break;
+            case 'vendas':
+                startSalesWorkflow();
+                break;
+            case 'documentos':
+                startDocumentWorkflow();
+                break;
+            case 'suporte':
+                startTechnicalSupportWorkflow();
+                break;
+        }
+    }
+
+    function startCustomerSupportWorkflow() {
+        const steps = [
+            "Recebendo mensagem do cliente...",
+            "Classificando automaticamente...",
+            "Buscando histórico do cliente...",
+            "Encaminhando para setor responsável...",
+            "Criando ticket de atendimento..."
+        ];
+        
+        executeWorkflowSteps('Atendimento ao Cliente', steps, () => {
+            // Criar ticket automaticamente
+            createSupportTicket(
+                'Solicitação via Fluxo Automatizado',
+                'Cliente entrou em contato através do sistema integrado',
+                'Cliente',
+                'cliente@email.com'
+            );
+            
+            showNotification('Fluxo Concluído', 'Ticket de atendimento criado automaticamente', 'success');
+        });
+    }
+
+    function executeWorkflowSteps(workflowName, steps, completionCallback) {
+        currentWorkflow = {
+            name: workflowName,
+            currentStep: 0,
+            totalSteps: steps.length
+        };
+        
+        const executeStep = (index) => {
+            if (index >= steps.length) {
+                completionCallback();
+                return;
+            }
+            
+            showNotification(workflowName, steps[index], 'info');
+            
+            setTimeout(() => {
+                executeStep(index + 1);
+            }, 2000);
+        };
+        
+        executeStep(0);
+    }
+
+    // =============================================
+    // PROCESSAMENTO DE DOCUMENTOS
+    // =============================================
+    function loadDocuments() {
+        const documentList = document.getElementById('documentList');
+        documentList.innerHTML = '';
+        
+        const documents = [
+            { id: 1, title: 'Contrato de Serviço Padrão', type: 'contrato', status: 'ativo', lastModified: '2023-07-28' },
+            { id: 2, title: 'Proposta Comercial Modelo', type: 'proposta', status: 'ativo', lastModified: '2023-07-25' },
+            { id: 3, title: 'Termo de Confidencialidade', type: 'legal', status: 'ativo', lastModified: '2023-07-20' },
+            { id: 4, title: 'Relatório Mensal de Atividades', type: 'relatorio', status: 'rascunho', lastModified: '2023-07-27' }
+        ];
+        
+        documents.forEach(doc => {
+            const docElement = document.createElement('div');
+            docElement.className = 'document-item';
+            docElement.innerHTML = `
+                <div class="document-icon">
+                    <i class="fas fa-file-${getDocumentIcon(doc.type)}"></i>
+                </div>
+                <div style="flex: 1;">
+                    <div style="font-weight: 500;">${doc.title}</div>
+                    <div style="font-size: 0.8rem; color: #666;">
+                        ${doc.type} • ${doc.status} • ${formatDate(doc.lastModified)}
+                    </div>
+                </div>
+                <div>
+                    <button class="btn btn-sm btn-outline-primary" onclick="openDocument(${doc.id})">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="generateDocument(${doc.id})">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            `;
+            documentList.appendChild(docElement);
+        });
+    }
+
+    function getDocumentIcon(type) {
+        switch(type) {
+            case 'contrato': return 'contract';
+            case 'proposta': return 'proposal';
+            case 'legal': return 'signature';
+            case 'relatorio': return 'chart-line';
+            default: return 'file';
+        }
+    }
+
+    function createNewDocument() {
+        showNotification('Documentos', 'Abrindo editor de documentos...', 'info');
+        // Simular abertura de editor
+        setTimeout(() => {
+            showNotification('Documentos', 'Editor de documentos pronto para uso', 'success');
+        }, 1000);
+    }
+
+    function generateDocument(docId) {
+        showNotification('Documentos', 'Gerando documento automaticamente...', 'info');
+        
+        // Simular geração de documento
+        setTimeout(() => {
+            showNotification('Documentos', 'Documento gerado com sucesso!', 'success');
+            
+            // Criar tarefa de revisão automaticamente
+            createTask(
+                `Revisar documento #${docId}`,
+                'Documento gerado automaticamente necessita revisão',
+                'medium',
+                'documentos'
+            );
+        }, 2000);
+    }
+
+    // =============================================
+    // GERENCIAMENTO DE TAREFAS INTEGRADO
+    // =============================================
+    function loadTasks() {
+        const taskList = document.getElementById('taskList');
+        taskList.innerHTML = '';
+        
+        try {
+            if (db) {
+                const result = db.exec("SELECT * FROM tasks ORDER BY priority DESC, created_at DESC");
+                if (result.length > 0) {
+                    const tasks = result[0].values;
+                    const columns = result[0].columns;
+                    
+                    tasks.forEach(taskData => {
+                        const task = {};
+                        columns.forEach((col, index) => {
+                            task[col] = taskData[index];
+                        });
+                        createTaskElement(task);
+                    });
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar tarefas:', error);
+        }
+        
+        // Fallback para tarefas padrão
+        const defaultTasks = [
+            { id: 1, title: 'Integrar sistema de comunicação', description: 'Conectar todos os canais de comunicação', priority: 'high', status: 'andamento' },
+            { id: 2, title: 'Configurar fluxos de trabalho', description: 'Automatizar processos de atendimento', priority: 'high', status: 'pendente' },
+            { id: 3, title: 'Treinar equipe no novo sistema', description: 'Capacitação sobre as integrações', priority: 'medium', status: 'pendente' }
+        ];
+        
+        defaultTasks.forEach(task => createTaskElement(task));
+    }
+
+    function createTaskElement(task) {
+        const taskList = document.getElementById('taskList');
+        const taskElement = document.createElement('div');
+        taskElement.className = 'task-item';
+        taskElement.innerHTML = `
+            <div class="task-checkbox">
+                <input type="checkbox" ${task.status === 'concluída' ? 'checked' : ''} onchange="toggleTask(${task.id}, this.checked)">
+            </div>
+            <div class="task-content">
+                <div style="font-weight: 500;">${task.title}</div>
+                <div style="font-size: 0.9rem; color: #666;">${task.description || ''}</div>
+            </div>
+            <div class="task-priority priority-${task.priority}">
+                ${task.priority}
+            </div>
+        `;
+        taskList.appendChild(taskElement);
+    }
+
+    function addNewTask() {
+        const title = prompt('Digite o título da nova tarefa:');
+        if (title) {
+            createTask(title, '', 'medium', 'comunicação');
+            loadTasks(); // Recarregar a lista
+        }
+    }
+
+    function createTask(title, description, priority, relatedTo) {
+        try {
+            if (db) {
+                db.run(
+                    "INSERT INTO tasks (title, description, priority, related_to) VALUES (?, ?, ?, ?)",
+                    [title, description || '', priority, relatedTo || '']
+                );
+                saveDatabase();
+            }
+            
+            showNotification('Tarefas', `Nova tarefa criada: ${title}`, 'success');
+        } catch (error) {
+            console.error('Erro ao criar tarefa:', error);
+        }
+    }
+
+    function toggleTask(taskId, completed) {
+        const status = completed ? 'concluída' : 'pendente';
+        
+        try {
+            if (db) {
+                db.run(
+                    "UPDATE tasks SET status = ? WHERE id = ?",
+                    [status, taskId]
+                );
+                saveDatabase();
+            }
+            
+            showNotification('Tarefas', `Tarefa ${completed ? 'concluída' : 'reaberta'}`, 'info');
+        } catch (error) {
+            console.error('Erro ao atualizar tarefa:', error);
+        }
+    }
+
+    // =============================================
+    // SISTEMA DE ATENDIMENTO AO CLIENTE
+    // =============================================
+    function loadSupportData() {
+        // Carregar estatísticas
+        updateSupportStats();
+        
+        // Carregar tickets recentes
+        loadRecentTickets();
+    }
+
+    function updateSupportStats() {
+        try {
+            if (db) {
+                // Tickets do dia
+                const today = new Date().toISOString().split('T')[0];
+                const ticketsResult = db.exec(
+                    "SELECT COUNT(*) as count FROM support_tickets WHERE DATE(created_at) = ?",
+                    [today]
+                );
+                
+                if (ticketsResult.length > 0) {
+                    document.getElementById('ticketsToday').textContent = ticketsResult[0].values[0][0];
+                }
+                
+                // Tempo médio de resposta
+                const timeResult = db.exec(
+                    "SELECT AVG(response_time) as avg_time FROM support_tickets WHERE response_time IS NOT NULL"
+                );
+                
+                if (timeResult.length > 0) {
+                    const avgTime = timeResult[0].values[0][0] || 0;
+                    document.getElementById('responseTime').textContent = `${Math.round(avgTime)}m`;
+                }
+                
+                // Satisfação
+                const satisfactionResult = db.exec(
+                    "SELECT AVG(satisfaction_score) as avg_score FROM support_tickets WHERE satisfaction_score IS NOT NULL"
+                );
+                
+                if (satisfactionResult.length > 0) {
+                    const avgScore = satisfactionResult[0].values[0][0] || 0;
+                    document.getElementById('satisfaction').textContent = `${Math.round(avgScore)}%`;
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar estatísticas:', error);
+        }
+    }
+
+    function loadRecentTickets() {
+        const recentTickets = document.getElementById('recentTickets');
+        recentTickets.innerHTML = '';
+        
+        try {
+            if (db) {
+                const result = db.exec(
+                    "SELECT * FROM support_tickets ORDER BY created_at DESC LIMIT 5"
+                );
+                
+                if (result.length > 0) {
+                    const tickets = result[0].values;
+                    const columns = result[0].columns;
+                    
+                    tickets.forEach(ticketData => {
+                        const ticket = {};
+                        columns.forEach((col, index) => {
+                            ticket[col] = ticketData[index];
+                        });
+                        createTicketElement(ticket);
+                    });
+                    return;
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar tickets:', error);
+        }
+        
+        // Fallback
+        recentTickets.innerHTML = '<p>Nenhum ticket recente</p>';
+    }
+
+    function createTicketElement(ticket) {
+        const recentTickets = document.getElementById('recentTickets');
+        const ticketElement = document.createElement('div');
+        ticketElement.className = 'document-item';
+        ticketElement.innerHTML = `
+            <div class="document-icon" style="background: ${getPriorityColor(ticket.priority)};">
+                <i class="fas fa-ticket-alt"></i>
+            </div>
+            <div style="flex: 1;">
+                <div style="font-weight: 500;">${ticket.title}</div>
+                <div style="font-size: 0.8rem; color: #666;">
+                    ${ticket.customer_name} • ${ticket.status} • ${formatDate(ticket.created_at)}
+                </div>
+            </div>
+            <div>
+                <span class="task-priority priority-${ticket.priority}">
+                    ${ticket.priority}
+                </span>
+            </div>
+        `;
+        recentTickets.appendChild(ticketElement);
+    }
+
+    function getPriorityColor(priority) {
+        switch(priority) {
+            case 'high': return '#e74c3c';
+            case 'medium': return '#f39c12';
+            case 'low': return '#27ae60';
+            default: return '#95a5a6';
+        }
+    }
+
+    function createSupportTicket(title, description, customerName, customerEmail) {
+        try {
+            if (db) {
+                db.run(
+                    "INSERT INTO support_tickets (title, description, customer_name, customer_email) VALUES (?, ?, ?, ?)",
+                    [title, description, customerName, customerEmail]
+                );
+                saveDatabase();
+                
+                // Atualizar estatísticas
+                updateSupportStats();
+                loadRecentTickets();
+                
+                // Criar tarefa relacionada
+                createTask(
+                    `Resolver ticket: ${title}`,
+                    `Ticket criado para ${customerName}`,
+                    'medium',
+                    'atendimento'
+                );
+            }
+        } catch (error) {
+            console.error('Erro ao criar ticket:', error);
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES UTILITÁRIAS
+    // =============================================
+    function setupEventListeners() {
+        // Filtros de comunicação
+        document.getElementById('searchInput').addEventListener('input', filterComms);
+        
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                filterComms();
+            });
+        });
+
+        // Verificação de conexão
+        setInterval(() => {
+            updateConnectionStatus(navigator.onLine);
+        }, 30000);
+    }
+
+    function startBackgroundServices() {
+        // Serviço de verificação de integração
+        setInterval(() => {
+            checkSystemIntegrations();
+        }, 60000);
+        
+        // Atualização de estatísticas em tempo real
+        setInterval(() => {
+            updateSupportStats();
+        }, 30000);
+    }
+
+    function showSystemStatus() {
+        const integrations = checkIntegrationStatus();
+        showNotification(
+            'Sistema Integrado', 
+            `Todos os ${integrations.active} sistemas de ${integrations.total} estão funcionando`, 
+            'success'
+        );
+    }
+
+    function checkSystemIntegrations() {
+        const integrations = {
+            total: 5,
+            active: 4 + Math.round(Math.random()) // Simulação
+        };
+        
+        return integrations;
+    }
+
+    function updateConnectionStatus(isOnline) {
+        const statusIndicator = document.getElementById('connectionStatus');
+        const statusText = document.getElementById('statusText');
+        
+        if (isOnline) {
+            statusIndicator.style.backgroundColor = 'var(--success-color)';
+            statusText.textContent = 'Conectado';
+        } else {
+            statusIndicator.style.backgroundColor = 'var(--danger-color)';
+            statusText.textContent = 'Offline';
+        }
+    }
+
+    function filterComms() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const filter = document.querySelector('.filter-btn.active').dataset.filter;
+        
+        document.querySelectorAll('.comm-card').forEach(card => {
+            const title = card.querySelector('.comm-title').textContent.toLowerCase();
+            const description = card.querySelector('.comm-description').textContent.toLowerCase();
+            const types = card.dataset.type.split(',');
+            
+            const matchesSearch = title.includes(searchTerm) || description.includes(searchTerm);
+            const matchesFilter = filter === 'all' || types.some(t => t.includes(filter));
+            
+            card.style.display = (matchesSearch && matchesFilter) ? 'flex' : 'none';
+        });
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('pt-BR', options);
+    }
+
+    function showNotification(title, message, type = 'info') {
+        // Implementação simplificada de notificação
+        console.log(`[${type.toUpperCase()}] ${title}: ${message}`);
+        
+        // Aqui você pode implementar um sistema de notificação mais elaborado
+        if (type === 'error') {
+            console.error(message);
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES DE INTEGRAÇÃO (para completar)
+    // =============================================
+    function openIntegratedChannel(channelName) {
+        showNotification('Sistema Integrado', `Abrindo ${channelName}...`, 'info');
+        // Implementação específica para cada canal
+    }
+
+    function configureIntegration(serviceName) {
+        showNotification('Integração', `Configurando integração com ${serviceName}...`, 'info');
+        // Implementação de configuração de integração
+    }
+
+    function openQuickTicket() {
+        const title = prompt('Título do ticket:');
+        if (title) {
+            createSupportTicket(title, 'Ticket criado rapidamente', 'Cliente', 'cliente@email.com');
+        }
+    }
+
+    function openKnowledgeBase() {
+        showNotification('Base de Conhecimento', 'Abrindo base de conhecimento...', 'info');
+    }
+
+    function handleMessageKeypress(event) {
+        if (event.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    // Funções de comunicação (simplificadas)
+    function sendMessage() {
+        const input = document.getElementById('messageInput');
+        const message = input.value.trim();
+        if (message) {
+            console.log('Mensagem enviada:', message);
+            input.value = '';
+        }
+    }
+
+    function closeActiveComm() {
+        document.getElementById('activeComm').style.display = 'none';
+    }
+
+    function openAIAssistant() {
+        const modal = new bootstrap.Modal(document.getElementById('aiModal'));
+        modal.show();
+    }
+
+    function getAIResponse() {
+        showNotification('IA', 'Processando sua solicitação...', 'info');
+        // Implementação do assistente de IA
+    }
+
+    // =============================================
+    // INTEGRAÇÃO FINAL
+    // =============================================
+    console.log('Sistema de Comunicação Integrado carregado com sucesso!');
+    console.log('Recursos disponíveis:');
+    console.log('- Integração de sistemas');
+    console.log('- Automação de fluxos de trabalho');
+    console.log('- Comunicação multicanal');
+    console.log('- Atendimento ao cliente');
+    console.log('- Processamento de documentos');
+    console.log('- Gerenciamento de tarefas');
+    </script>
+</body>
+</html>

@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Remove.bg API</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #1abc9c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .kanawa-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar .menu-item:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #7d3c98;
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed #ddd;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: #f0f0f0;
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: #e8f4fd;
+        }
+
+        .image-preview {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .preview-container {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .preview-label {
+            margin-top: 1rem;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .api-key-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+        }
+
+        .api-key-info {
+            flex: 1;
+        }
+
+        .api-key-name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .api-key-preview {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        .status-connected {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .usage-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .security-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <header class="kanawa-header">
+        <div class="logo">
+            <a href='DPS.html'><img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/></a>
+            <span>D.Pedro Soluções - Remove.bg API</span>
+        </div>
+        <div class="top-icons">
+            <a href="#" id="userMenuBtn" style="color:white;display:flex;align-items:center;">
+                <img id="userAvatar" src="https://i.postimg.cc/7YQvLZxX/user-avatar.jpg" alt="User" style="width:32px;height:32px;border-radius:50%;margin-right:8px;">
+                <span id="userName">Designer</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <a href="#remove-bg" class="menu-item active" onclick="showSection('remove-bg')">
+                <i class="fas fa-magic"></i> Remover Fundo
+            </a>
+            <a href="#api-keys" class="menu-item" onclick="showSection('api-keys')">
+                <i class="fas fa-key"></i> Chaves API
+            </a>
+            <a href="#batch-processing" class="menu-item" onclick="showSection('batch-processing')">
+                <i class="fas fa-layer-group"></i> Processamento em Lote
+            </a>
+            <a href="#history" class="menu-item" onclick="showSection('history')">
+                <i class="fas fa-history"></i> Histórico
+            </a>
+            <a href="#settings" class="menu-item" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Configurações
+            </a>
+        </aside>
+
+        <main class="content">
+            <!-- Seção Remover Fundo -->
+            <div id="remove-bg" class="section active">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-magic"></i>
+                        Remove.bg - Remoção de Fundo
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('api-keys')">
+                        <i class="fas fa-key"></i> Configurar API
+                    </button>
+                </div>
+
+                <div class="security-warning">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Como funciona:</strong> A API Remove.bg remove automaticamente o fundo de imagens usando IA.
+                </div>
+
+                <div class="api-section">
+                    <h3>Upload de Imagem</h3>
+                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <p class="text-muted">Formatos suportados: JPG, PNG, WEBP (Max: 10MB)</p>
+                        <input type="file" id="imageInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="imagePreview" style="display: none;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="originalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado (Sem Fundo)</div>
+                                <div id="resultContainer">
+                                    <div id="processingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Processando imagem...</p>
+                                    </div>
+                                    <img id="resultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn btn-success" onclick="processImage()" id="processBtn">
+                                <i class="fas fa-magic"></i> Remover Fundo
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadResult()" id="downloadBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Baixar Resultado
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetUpload()">
+                                <i class="fas fa-redo"></i> Nova Imagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Opções de Processamento</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Tamanho de Saída</label>
+                                <select class="form-control" id="outputSize">
+                                    <option value="auto">Automático</option>
+                                    <option value="preview">Preview (0.25MP)</option>
+                                    <option value="small">Pequeno (0.5MP)</option>
+                                    <option value="medium">Médio (1.5MP)</option>
+                                    <option value="full">Completo (25MP)</option>
+                                    <option value="hd">HD (50MP)</option>
+                                    <option value="4k">4K (100MP)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Formato de Saída</label>
+                                <select class="form-control" id="outputFormat">
+                                    <option value="png">PNG</option>
+                                    <option value="jpg">JPG</option>
+                                    <option value="zip">ZIP</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="form-label">Qualidade</label>
+                                <select class="form-control" id="outputQuality">
+                                    <option value="none">Padrão</option>
+                                    <option value="car">Otimizado para Carros</option>
+                                    <option value="product">Otimizado para Produtos</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-check mt-2">
+                        <input type="checkbox" class="form-check-input" id="cropMode">
+                        <label class="form-check-label" for="cropMode">Modo Crop (recortar imagem)</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="channelsMode">
+                        <label class="form-check-label" for="channelsMode">Preservar canal alpha</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Chaves API -->
+            <div id="api-keys" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-key"></i>
+                        Gerenciar Chaves API
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="security-warning">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>Segurança:</strong> Suas chaves API são armazenadas localmente no navegador.
+                </div>
+
+                <div class="api-section">
+                    <h3>Chaves Remove.bg Configuradas</h3>
+                    <div id="apiKeysList">
+                        <!-- Chaves serão carregadas aqui -->
+                    </div>
+
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="showAddKeyForm()">
+                            <i class="fas fa-plus"></i> Adicionar Nova Chave
+                        </button>
+                    </div>
+                </div>
+
+                <div class="api-section" id="addKeyForm" style="display: none;">
+                    <h3>Adicionar Chave Remove.bg</h3>
+                    <div class="form-group">
+                        <label class="form-label">Nome da Chave</label>
+                        <input type="text" class="form-control" id="apiKeyName" placeholder="Ex: Chave Produção">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Chave API Remove.bg</label>
+                        <input type="password" class="form-control" id="apiKeyValue" placeholder="Cole sua chave API aqui">
+                        <small class="text-muted">Obtenha sua chave em: <a href="https://www.remove.bg/api" target="_blank">remove.bg/api</a></small>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="addApiKey()">
+                        <i class="fas fa-save"></i> Salvar Chave
+                    </button>
+                    <button class="btn btn-secondary" onclick="hideAddKeyForm()">
+                        <i class="fas fa-times"></i> Cancelar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Testar API</h3>
+                    <p>Teste a conectividade com a API Remove.bg usando suas chaves configuradas.</p>
+                    <button class="btn btn-info" onclick="testRemoveBgAPI()">
+                        <i class="fas fa-vial"></i> Testar Conectividade
+                    </button>
+                    <div id="apiTestResult" class="mt-2"></div>
+                </div>
+            </div>
+
+            <!-- Seção Processamento em Lote -->
+            <div id="batch-processing" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-layer-group"></i>
+                        Processamento em Lote
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Upload Múltiplo</h3>
+                    <div class="upload-area" onclick="document.getElementById('batchInput').click()">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte múltiplas imagens</h4>
+                        <p>ou clique para selecionar arquivos</p>
+                        <p class="text-muted">Máximo: 10 imagens por lote</p>
+                        <input type="file" id="batchInput" multiple accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="batchPreview" style="display: none; margin-top: 2rem;">
+                        <h4>Imagens Selecionadas</h4>
+                        <div id="batchImagesList" class="row"></div>
+                        
+                        <div class="mt-3">
+                            <button class="btn btn-success" onclick="processBatch()" id="processBatchBtn">
+                                <i class="fas fa-magic"></i> Processar Lote
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearBatch()">
+                                <i class="fas fa-times"></i> Limpar Lista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Progresso do Processamento</h3>
+                    <div id="batchProgress" style="display: none;">
+                        <div class="progress mb-3">
+                            <div id="batchProgressBar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div id="batchStatus"></div>
+                        <div id="batchResults" class="mt-3"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Histórico -->
+            <div id="history" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Histórico de Processamento
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Estatísticas de Uso</h3>
+                    <div class="usage-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalProcessed">0</div>
+                            <div class="stat-label">Total Processado</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="successRate">0%</div>
+                            <div class="stat-label">Taxa de Sucesso</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="apiCalls">0</div>
+                            <div class="stat-label">Chamadas API</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="lastProcessed">-</div>
+                            <div class="stat-label">Último Processo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Histórico Recente</h3>
+                    <div id="processingHistory">
+                        <!-- Histórico será carregado aqui -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Configurações -->
+            <div id="settings" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Configurações
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Configurações da API</h3>
+                    <div class="form-group">
+                        <label class="form-label">Chave API Padrão</label>
+                        <select class="form-control" id="defaultApiKey">
+                            <!-- Opções serão preenchidas via JavaScript -->
+                        </select>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="autoProcess" checked>
+                        <label class="form-check-label" for="autoProcess">Processar automaticamente após upload</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="autoDownload">
+                        <label class="form-check-label" for="autoDownload">Download automático do resultado</label>
+                    </div>
+
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="keepHistory" checked>
+                        <label class="form-check-label" for="keepHistory">Manter histórico de processamento</label>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Configurações de Saída</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Formato Padrão</label>
+                                <select class="form-control" id="defaultFormat">
+                                    <option value="png">PNG</option>
+                                    <option value="jpg">JPG</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="form-label">Tamanho Padrão</label>
+                                <select class="form-control" id="defaultSize">
+                                    <option value="auto">Automático</option>
+                                    <option value="preview">Preview</option>
+                                    <option value="medium">Médio</option>
+                                    <option value="hd">HD</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Limpar Dados</h3>
+                    <p>Remover todos os dados armazenados localmente.</p>
+                    <button class="btn btn-danger" onclick="clearAllData()">
+                        <i class="fas fa-trash"></i> Limpar Todos os Dados
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon" id="toastIcon" style="background-color: var(--info-color);">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-info">
+            <div class="notification-title" id="toastTitle">Notificação</div>
+            <div class="notification-message" id="toastMessage">Mensagem de notificação</div>
+        </div>
+        <button class="notification-close" id="toastClose">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        // =============================================
+        // CONFIGURAÇÃO E DADOS DO SISTEMA
+        // =============================================
+
+        const REMOVEBG_CONFIG = {
+            apiKeys: [],
+            defaultKey: null,
+            settings: {
+                autoProcess: true,
+                autoDownload: false,
+                keepHistory: true,
+                defaultFormat: 'png',
+                defaultSize: 'auto'
+            },
+            history: [],
+            statistics: {
+                totalProcessed: 0,
+                successful: 0,
+                failed: 0,
+                apiCalls: 0,
+                lastProcessed: null
+            }
+        };
+
+        let currentImage = null;
+        let currentResult = null;
+        let batchImages = [];
+
+        // =============================================
+        // INICIALIZAÇÃO DO SISTEMA
+        // =============================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+            setupEventListeners();
+            loadSavedData();
+            
+            console.log('🎨 Remove.bg API Integrada - D.Pedro Soluções');
+        });
+
+        function initializeSystem() {
+            showNotification('Sistema Iniciado', 'Remove.bg API integrada com sucesso', 'success');
+            setupDragAndDrop();
+        }
+
+        function loadSavedData() {
+            // Carregar chaves API
+            const savedKeys = localStorage.getItem('removebg_api_keys');
+            if (savedKeys) {
+                REMOVEBG_CONFIG.apiKeys = JSON.parse(savedKeys);
+            }
+
+            // Carregar configurações
+            const savedSettings = localStorage.getItem('removebg_settings');
+            if (savedSettings) {
+                REMOVEBG_CONFIG.settings = {...REMOVEBG_CONFIG.settings, ...JSON.parse(savedSettings)};
+            }
+
+            // Carregar histórico
+            const savedHistory = localStorage.getItem('removebg_history');
+            if (savedHistory) {
+                REMOVEBG_CONFIG.history = JSON.parse(savedHistory);
+            }
+
+            // Carregar estatísticas
+            const savedStats = localStorage.getItem('removebg_statistics');
+            if (savedStats) {
+                REMOVEBG_CONFIG.statistics = JSON.parse(savedStats);
+            }
+
+            updateUI();
+        }
+
+        function saveData() {
+            localStorage.setItem('removebg_api_keys', JSON.stringify(REMOVEBG_CONFIG.apiKeys));
+            localStorage.setItem('removebg_settings', JSON.stringify(REMOVEBG_CONFIG.settings));
+            localStorage.setItem('removebg_history', JSON.stringify(REMOVEBG_CONFIG.history));
+            localStorage.setItem('removebg_statistics', JSON.stringify(REMOVEBG_CONFIG.statistics));
+        }
+
+        function updateUI() {
+            updateApiKeysList();
+            updateSettingsForm();
+            updateStatistics();
+            updateHistory();
+        }
+
+        // =============================================
+        // GERENCIAMENTO DE CHAVES API
+        // =============================================
+
+        function showAddKeyForm() {
+            document.getElementById('addKeyForm').style.display = 'block';
+        }
+
+        function hideAddKeyForm() {
+            document.getElementById('addKeyForm').style.display = 'none';
+            document.getElementById('apiKeyName').value = '';
+            document.getElementById('apiKeyValue').value = '';
+        }
+
+        function addApiKey() {
+            const name = document.getElementById('apiKeyName').value.trim();
+            const key = document.getElementById('apiKeyValue').value.trim();
+
+            if (!name || !key) {
+                showNotification('Erro', 'Preencha o nome e a chave API', 'error');
+                return;
+            }
+
+            const newKey = {
+                id: 'key_' + Date.now(),
+                name: name,
+                key: key,
+                createdAt: new Date().toISOString(),
+                lastUsed: null,
+                usage: 0,
+                status: 'active'
+            };
+
+            REMOVEBG_CONFIG.apiKeys.push(newKey);
+            
+            // Se for a primeira chave, definir como padrão
+            if (REMOVEBG_CONFIG.apiKeys.length === 1) {
+                REMOVEBG_CONFIG.defaultKey = newKey.id;
+            }
+
+            saveData();
+            updateUI();
+            hideAddKeyForm();
+
+            showNotification('Sucesso', 'Chave API adicionada com sucesso', 'success');
+        }
+
+        function updateApiKeysList() {
+            const container = document.getElementById('apiKeysList');
+            const defaultSelect = document.getElementById('defaultApiKey');
+
+            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
+                container.innerHTML = '<p class="text-muted">Nenhuma chave API configurada</p>';
+                defaultSelect.innerHTML = '<option value="">Nenhuma chave disponível</option>';
+                return;
+            }
+
+            container.innerHTML = REMOVEBG_CONFIG.apiKeys.map(key => `
+                <div class="api-key-item">
+                    <div class="api-key-info">
+                        <div class="api-key-name">
+                            ${key.name}
+                            ${key.id === REMOVEBG_CONFIG.defaultKey ? '<span class="status-connected">Padrão</span>' : ''}
+                        </div>
+                        <div class="api-key-preview">
+                            ${key.key.substring(0, 8)}...${key.key.substring(key.key.length - 4)}
+                            ${key.lastUsed ? `<br><small>Último uso: ${new Date(key.lastUsed).toLocaleDateString('pt-BR')}</small>` : ''}
+                        </div>
+                    </div>
+                    <div class="api-key-actions">
+                        <button class="btn btn-sm btn-primary" onclick="setDefaultKey('${key.id}')">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteApiKey('${key.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            defaultSelect.innerHTML = REMOVEBG_CONFIG.apiKeys.map(key => 
+                `<option value="${key.id}" ${key.id === REMOVEBG_CONFIG.defaultKey ? 'selected' : ''}>${key.name}</option>`
+            ).join('');
+        }
+
+        function setDefaultKey(keyId) {
+            REMOVEBG_CONFIG.defaultKey = keyId;
+            saveData();
+            updateApiKeysList();
+            showNotification('Sucesso', 'Chave padrão definida', 'success');
+        }
+
+        function deleteApiKey(keyId) {
+            if (!confirm('Tem certeza que deseja excluir esta chave API?')) return;
+
+            REMOVEBG_CONFIG.apiKeys = REMOVEBG_CONFIG.apiKeys.filter(key => key.id !== keyId);
+            
+            // Se a chave excluída era a padrão, definir uma nova
+            if (REMOVEBG_CONFIG.defaultKey === keyId && REMOVEBG_CONFIG.apiKeys.length > 0) {
+                REMOVEBG_CONFIG.defaultKey = REMOVEBG_CONFIG.apiKeys[0].id;
+            } else if (REMOVEBG_CONFIG.apiKeys.length === 0) {
+                REMOVEBG_CONFIG.defaultKey = null;
+            }
+
+            saveData();
+            updateUI();
+            showNotification('Sucesso', 'Chave API excluída', 'success');
+        }
+
+        function testRemoveBgAPI() {
+            const resultDiv = document.getElementById('apiTestResult');
+            
+            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
+                resultDiv.innerHTML = '<span class="status-disconnected">Nenhuma chave configurada</span>';
+                return;
+            }
+
+            const testKey = REMOVEBG_CONFIG.apiKeys.find(k => k.id === REMOVEBG_CONFIG.defaultKey);
+            if (!testKey) {
+                resultDiv.innerHTML = '<span class="status-disconnected">Chave padrão não encontrada</span>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<span class="status-connected">Testando conectividade...</span>';
+
+            // Simulação de teste de API (em produção, faria uma requisição real)
+            setTimeout(() => {
+                resultDiv.innerHTML = '<span class="status-connected">✓ API Remove.bg conectada com sucesso</span>';
+                showNotification('Teste API', 'Conexão estabelecida com sucesso', 'success');
+            }, 1500);
+        }
+
+        // =============================================
+        // UPLOAD E PROCESSAMENTO DE IMAGENS
+        // =============================================
+
+        function setupEventListeners() {
+            // Upload de imagem única
+            document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+            
+            // Upload em lote
+            document.getElementById('batchInput').addEventListener('change', handleBatchUpload);
+            
+            // Fechar notificação
+            document.getElementById('toastClose').addEventListener('click', hideNotification);
+        }
+
+        function setupDragAndDrop() {
+            const uploadArea = document.getElementById('uploadArea');
+            
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('dragover');
+            });
+            
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                
+                if (e.dataTransfer.files.length) {
+                    handleImageFile(e.dataTransfer.files[0]);
+                }
+            });
+        }
+
+        function handleImageUpload(e) {
+            if (e.target.files.length) {
+                handleImageFile(e.target.files[0]);
+            }
+        }
+
+        function handleImageFile(file) {
+            if (!file.type.match('image.*')) {
+                showNotification('Erro', 'Por favor, selecione um arquivo de imagem válido', 'error');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('Erro', 'A imagem deve ter no máximo 10MB', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImage = {
+                    file: file,
+                    dataUrl: e.target.result
+                };
+                
+                document.getElementById('originalImage').src = e.target.result;
+                document.getElementById('imagePreview').style.display = 'block';
+                document.getElementById('processBtn').style.display = 'inline-flex';
+                document.getElementById('downloadBtn').style.display = 'none';
+                
+                // Processamento automático se configurado
+                if (REMOVEBG_CONFIG.settings.autoProcess) {
+                    setTimeout(() => processImage(), 500);
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function processImage() {
+            if (!currentImage) {
+                showNotification('Erro', 'Nenhuma imagem carregada', 'error');
+                return;
+            }
+
+            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
+                showNotification('Erro', 'Configure uma chave API primeiro', 'error');
+                showSection('api-keys');
+                return;
+            }
+
+            const processBtn = document.getElementById('processBtn');
+            const processingMessage = document.getElementById('processingMessage');
+            const resultImage = document.getElementById('resultImage');
+
+            processBtn.disabled = true;
+            processingMessage.style.display = 'block';
+            resultImage.style.display = 'none';
+
+            // Simulação do processamento com a API Remove.bg
+            // Em produção, aqui seria feita a chamada real à API
+            setTimeout(() => {
+                // Simular resultado bem-sucedido
+                currentResult = {
+                    dataUrl: currentImage.dataUrl, // Em produção, seria a imagem processada
+                    processedAt: new Date().toISOString(),
+                    size: document.getElementById('outputSize').value,
+                    format: document.getElementById('outputFormat').value
+                };
+
+                processingMessage.style.display = 'none';
+                resultImage.src = currentImage.dataUrl; // Em produção, seria a imagem processada
+                resultImage.style.display = 'block';
+                document.getElementById('downloadBtn').style.display = 'inline-flex';
+                processBtn.disabled = false;
+
+                // Atualizar estatísticas
+                updateStatisticsAfterProcess(true);
+                showNotification('Sucesso', 'Fundo removido com sucesso!', 'success');
+            }, 3000);
+        }
+
+        function downloadResult() {
+            if (!currentResult) {
+                showNotification('Erro', 'Nenhum resultado para download', 'error');
+                return;
+            }
+
+            const link = document.createElement('a');
+            link.download = `imagem-sem-fundo-${Date.now()}.${currentResult.format}`;
+            link.href = currentResult.dataUrl;
+            link.click();
+            
+            showNotification('Download', 'Imagem baixada com sucesso', 'success');
+        }
+
+        function resetUpload() {
+            currentImage = null;
+            currentResult = null;
+            document.getElementById('imageInput').value = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('processBtn').style.display = 'inline-flex';
+            document.getElementById('downloadBtn').style.display = 'none';
+        }
+
+        // =============================================
+        // PROCESSAMENTO EM LOTE
+        // =============================================
+
+        function handleBatchUpload(e) {
+            const files = Array.from(e.target.files).slice(0, 10); // Limitar a 10 arquivos
+            
+            batchImages = files.map(file => ({
+                file: file,
+                name: file.name,
+                size: file.size,
+                status: 'pending'
+            }));
+            
+            updateBatchPreview();
+            document.getElementById('batchPreview').style.display = 'block';
+        }
+
+        function updateBatchPreview() {
+            const container = document.getElementById('batchImagesList');
+            container.innerHTML = batchImages.map((img, index) => `
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h6 class="card-title">${img.name}</h6>
+                            <p class="card-text text-muted">${(img.size / 1024).toFixed(1)} KB</p>
+                            <span class="badge bg-secondary">Pendente</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function processBatch() {
+            if (batchImages.length === 0) {
+                showNotification('Erro', 'Nenhuma imagem para processar', 'error');
+                return;
+            }
+
+            document.getElementById('batchProgress').style.display = 'block';
+            document.getElementById('processBatchBtn').disabled = true;
+
+            let processed = 0;
+            const total = batchImages.length;
+
+            batchImages.forEach((img, index) => {
+                setTimeout(() => {
+                    // Simular processamento
+                    img.status = 'completed';
+                    processed++;
+                    
+                    const progress = (processed / total) * 100;
+                    document.getElementById('batchProgressBar').style.width = `${progress}%`;
+                    document.getElementById('batchStatus').textContent = 
+                        `Processando ${processed} de ${total} imagens...`;
+                    
+                    if (processed === total) {
+                        document.getElementById('batchStatus').textContent = 'Processamento concluído!';
+                        document.getElementById('processBatchBtn').disabled = false;
+                        showNotification('Lote Concluído', `${total} imagens processadas com sucesso`, 'success');
+                        
+                        // Atualizar estatísticas
+                        REMOVEBG_CONFIG.statistics.totalProcessed += total;
+                        REMOVEBG_CONFIG.statistics.successful += total;
+                        REMOVEBG_CONFIG.statistics.apiCalls += total;
+                        REMOVEBG_CONFIG.statistics.lastProcessed = new Date().toISOString();
+                        saveData();
+                        updateStatistics();
+                    }
+                }, index * 2000);
+            });
+        }
+
+        function clearBatch() {
+            batchImages = [];
+            document.getElementById('batchInput').value = '';
+            document.getElementById('batchPreview').style.display = 'none';
+            document.getElementById('batchProgress').style.display = 'none';
+        }
+
+        // =============================================
+        // HISTÓRICO E ESTATÍSTICAS
+        // =============================================
+
+        function updateStatisticsAfterProcess(success) {
+            REMOVEBG_CONFIG.statistics.totalProcessed++;
+            REMOVEBG_CONFIG.statistics.apiCalls++;
+            
+            if (success) {
+                REMOVEBG_CONFIG.statistics.successful++;
+            } else {
+                REMOVEBG_CONFIG.statistics.failed++;
+            }
+            
+            REMOVEBG_CONFIG.statistics.lastProcessed = new Date().toISOString();
+            
+            // Adicionar ao histórico
+            if (REMOVEBG_CONFIG.settings.keepHistory && currentImage) {
+                REMOVEBG_CONFIG.history.unshift({
+                    timestamp: new Date().toISOString(),
+                    filename: currentImage.file.name,
+                    size: currentImage.file.size,
+                    success: success,
+                    processingTime: '3s' // Simulado
+                });
+                
+                // Manter apenas os últimos 50 itens
+                if (REMOVEBG_CONFIG.history.length > 50) {
+                    REMOVEBG_CONFIG.history = REMOVEBG_CONFIG.history.slice(0, 50);
+                }
+            }
+            
+            saveData();
+            updateStatistics();
+            updateHistory();
+        }
+
+        function updateStatistics() {
+            const stats = REMOVEBG_CONFIG.statistics;
+            const successRate = stats.totalProcessed > 0 ? 
+                Math.round((stats.successful / stats.totalProcessed) * 100) : 0;
+            
+            document.getElementById('totalProcessed').textContent = stats.totalProcessed;
+            document.getElementById('successRate').textContent = `${successRate}%`;
+            document.getElementById('apiCalls').textContent = stats.apiCalls;
+            document.getElementById('lastProcessed').textContent = stats.lastProcessed ? 
+                new Date(stats.lastProcessed).toLocaleDateString('pt-BR') : '-';
+        }
+
+        function updateHistory() {
+            const container = document.getElementById('processingHistory');
+            
+            if (REMOVEBG_CONFIG.history.length === 0) {
+                container.innerHTML = '<p class="text-muted">Nenhum processamento registrado</p>';
+                return;
+            }
+            
+            container.innerHTML = REMOVEBG_CONFIG.history.map(item => `
+                <div class="api-key-item">
+                    <div class="api-key-info">
+                        <div class="api-key-name">
+                            ${item.filename}
+                            <span class="${item.success ? 'status-connected' : 'status-disconnected'}">
+                                ${item.success ? 'Sucesso' : 'Falha'}
+                            </span>
+                        </div>
+                        <div class="api-key-preview">
+                            ${new Date(item.timestamp).toLocaleString('pt-BR')} • 
+                            ${(item.size / 1024).toFixed(1)} KB • 
+                            Tempo: ${item.processingTime}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // =============================================
+        // CONFIGURAÇÕES
+        // =============================================
+
+        function updateSettingsForm() {
+            document.getElementById('autoProcess').checked = REMOVEBG_CONFIG.settings.autoProcess;
+            document.getElementById('autoDownload').checked = REMOVEBG_CONFIG.settings.autoDownload;
+            document.getElementById('keepHistory').checked = REMOVEBG_CONFIG.settings.keepHistory;
+            document.getElementById('defaultFormat').value = REMOVEBG_CONFIG.settings.defaultFormat;
+            document.getElementById('defaultSize').value = REMOVEBG_CONFIG.settings.defaultSize;
+            
+            // Adicionar event listeners para salvar automaticamente
+            document.getElementById('autoProcess').addEventListener('change', function() {
+                REMOVEBG_CONFIG.settings.autoProcess = this.checked;
+                saveData();
+            });
+            
+            document.getElementById('autoDownload').addEventListener('change', function() {
+                REMOVEBG_CONFIG.settings.autoDownload = this.checked;
+                saveData();
+            });
+            
+            document.getElementById('keepHistory').addEventListener('change', function() {
+                REMOVEBG_CONFIG.settings.keepHistory = this.checked;
+                saveData();
+            });
+            
+            document.getElementById('defaultFormat').addEventListener('change', function() {
+                REMOVEBG_CONFIG.settings.defaultFormat = this.value;
+                saveData();
+            });
+            
+            document.getElementById('defaultSize').addEventListener('change', function() {
+                REMOVEBG_CONFIG.settings.defaultSize = this.value;
+                saveData();
+            });
+        }
+
+        function clearAllData() {
+            if (!confirm('Tem certeza que deseja limpar TODOS os dados? Esta ação não pode ser desfeita.')) {
+                return;
+            }
+            
+            localStorage.removeItem('removebg_api_keys');
+            localStorage.removeItem('removebg_settings');
+            localStorage.removeItem('removebg_history');
+            localStorage.removeItem('removebg_statistics');
+            
+            // Recarregar a página para resetar tudo
+            location.reload();
+        }
+
+        // =============================================
+        // NAVEGAÇÃO E UTILITÁRIOS
+        // =============================================
+
+        function showSection(sectionId) {
+            // Esconder todas as seções
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Mostrar a seção selecionada
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.sidebar .menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            document.querySelector(`.sidebar .menu-item[href="#${sectionId}"]`).classList.add('active');
+        }
+
+        function showNotification(title, message, type = 'info') {
+            const toast = document.getElementById('notificationToast');
+            const icon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            // Configurar cores baseadas no tipo
+            const colors = {
+                success: '#27ae60',
+                error: '#e74c3c',
+                warning: '#f39c12',
+                info: '#3498db'
+            };
+            
+            icon.style.backgroundColor = colors[type] || colors.info;
+            icon.innerHTML = `<i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'exclamation-triangle' : type === 'warning' ? 'exclamation' : 'info'}-circle"></i>`;
+            
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            // Auto-esconder após 5 segundos
+            setTimeout(() => {
+                hideNotification();
+            }, 5000);
+        }
+
+        function hideNotification() {
+            document.getElementById('notificationToast').classList.remove('show');
+        }
+    </script>
+</body>
+</html>

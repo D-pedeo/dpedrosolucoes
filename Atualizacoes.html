@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizações/Postagens - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #2980b9;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #555;
+            border: 1px solid #ddd;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: none;
+        }
+
+        /* Sistema Avançado de Filtros */
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 45px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .search-box input:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 100;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-suggestion {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f0f0f0;
+            transition: background-color var(--transition-speed);
+        }
+
+        .search-suggestion:hover {
+            background-color: #f8f9fa;
+        }
+
+        .search-suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .search-suggestion .category {
+            font-size: 0.8rem;
+            color: var(--secondary-color);
+            margin-left: 0.5rem;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            position: relative;
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .filter-btn .count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .advanced-filters {
+            display: none;
+            width: 100%;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            border: 1px solid #eee;
+        }
+
+        .advanced-filters.active {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .filter-section {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-section h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .date-range {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .date-input {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            flex: 1;
+        }
+
+        .sort-options {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            background: white;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+            margin-top: 1rem;
+        }
+
+        .active-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .active-filter {
+            background: var(--secondary-color);
+            color: white;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .active-filter .remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .toggle-filters {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .toggle-filters:hover {
+            color: #2980b9;
+        }
+
+        /* Layout de postagens */
+        .posts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .post-image {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .post-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .post-card:hover .post-image img {
+            transform: scale(1.05);
+        }
+
+        .post-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-category {
+            display: inline-block;
+            padding: 0.3rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 0.8rem;
+        }
+
+        .post-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+        }
+
+        .post-excerpt {
+            color: #666;
+            margin-bottom: 1.2rem;
+            flex-grow: 1;
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .post-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            color: #888;
+            cursor: pointer;
+            transition: color var(--transition-speed);
+        }
+
+        .post-action:hover {
+            color: var(--secondary-color);
+        }
+
+        .post-action.active {
+            color: var(--secondary-color);
+        }
+
+        /* Resultados da busca */
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .search-results-count {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .search-highlight {
+            background-color: #fff3cd;
+            padding: 0.1rem 0.2rem;
+            border-radius: 2px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .posts-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-group {
+                justify-content: center;
+            }
+            
+            .search-box {
+                min-width: 100%;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+            }
+            
+            .page-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+        }
+
+        /* Cores para categorias */
+        .category-system {
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+        }
+
+        .category-update {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success-color);
+        }
+
+        .category-news {
+            background: rgba(155, 89, 182, 0.1);
+            color: #9b59b6;
+        }
+
+        .category-event {
+            background: rgba(241, 196, 15, 0.1);
+            color: #f1c40f;
+        }
+
+        .category-maintenance {
+            background: rgba(231, 76, 60, 0.1);
+            color: var(--danger-color);
+        }
+        
+        /* Loader */
+        .loader {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Estados vazios */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+            grid-column: 1 / -1;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+        
+        /* Animações */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho da página -->
+        <div class="page-header">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="page-title">
+                    <i class="fas fa-sync-alt"></i>
+                    Atualizações e Postagens
+                </h1>
+            </div>
+            <button class="btn btn-primary" id="newPostBtn">
+                <i class="fas fa-plus"></i> Nova Postagem
+            </button>
+        </div>
+
+        <!-- Sistema Avançado de Filtros e Busca -->
+        <div class="card">
+            <div class="filters-container">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar em títulos, conteúdo, categorias...">
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+                <div class="filter-group">
+                    <button class="filter-btn active" data-filter="all">
+                        Todas
+                        <span class="count" id="count-all">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="system">
+                        Sistema
+                        <span class="count" id="count-system">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="update">
+                        Atualizações
+                        <span class="count" id="count-update">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="news">
+                        Notícias
+                        <span class="count" id="count-news">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="event">
+                        Eventos
+                        <span class="count" id="count-event">0</span>
+                    </button>
+                    <button class="filter-btn" data-filter="maintenance">
+                        Manutenção
+                        <span class="count" id="count-maintenance">0</span>
+                    </button>
+                </div>
+                <button class="toggle-filters" id="toggleFilters">
+                    <i class="fas fa-sliders-h"></i>
+                    Filtros Avançados
+                </button>
+            </div>
+
+            <!-- Filtros Avançados -->
+            <div class="advanced-filters" id="advancedFilters">
+                <div class="filter-row">
+                    <div class="filter-section">
+                        <h4>Período</h4>
+                        <div class="date-range">
+                            <input type="date" class="date-input" id="startDate">
+                            <span>até</span>
+                            <input type="date" class="date-input" id="endDate">
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h4>Ordenar por</h4>
+                        <div class="sort-options">
+                            <select class="sort-select" id="sortBy">
+                                <option value="newest">Mais Recentes</option>
+                                <option value="oldest">Mais Antigos</option>
+                                <option value="popular">Mais Populares</option>
+                                <option value="title">Título (A-Z)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="filter-section">
+                        <h4>Status</h4>
+                        <div class="filter-group">
+                            <button class="filter-btn small" data-status="all">Todos</button>
+                            <button class="filter-btn small" data-status="liked">Curtidos</button>
+                            <button class="filter-btn small" data-status="saved">Salvos</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <button class="btn btn-secondary" id="clearFilters">
+                        <i class="fas fa-times"></i> Limpar Filtros
+                    </button>
+                    <button class="btn btn-primary" id="applyFilters">
+                        <i class="fas fa-check"></i> Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros Ativos -->
+            <div class="active-filters" id="activeFilters"></div>
+        </div>
+
+        <!-- Cabeçalho de Resultados -->
+        <div class="search-results-header" id="searchResultsHeader" style="display: none;">
+            <h3 id="resultsTitle">Resultados da Busca</h3>
+            <div class="search-results-count" id="resultsCount"></div>
+        </div>
+
+        <!-- Lista de postagens -->
+        <div class="posts-container" id="postsList">
+            <!-- Postagens serão carregadas via JavaScript -->
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // =============================================
+    // SISTEMA AVANÇADO DE FILTROS E BUSCA
+    // =============================================
+    class AdvancedSearchManager {
+        constructor(postsManager) {
+            this.postsManager = postsManager;
+            this.currentFilters = {
+                category: 'all',
+                search: '',
+                dateRange: { start: null, end: null },
+                sortBy: 'newest',
+                status: 'all'
+            };
+            this.searchTimeout = null;
+            this.init();
+        }
+
+        init() {
+            this.setupEventListeners();
+            this.updateFilterCounts();
+        }
+
+        setupEventListeners() {
+            // Busca em tempo real
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                this.handleSearchInput(e.target.value);
+            });
+
+            // Filtros de categoria
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    this.handleCategoryFilter(btn.dataset.filter);
+                });
+            });
+
+            // Filtros de status
+            document.querySelectorAll('.filter-btn[data-status]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    this.handleStatusFilter(btn.dataset.status);
+                });
+            });
+
+            // Toggle filtros avançados
+            document.getElementById('toggleFilters').addEventListener('click', () => {
+                this.toggleAdvancedFilters();
+            });
+
+            // Aplicar filtros avançados
+            document.getElementById('applyFilters').addEventListener('click', () => {
+                this.applyAdvancedFilters();
+            });
+
+            // Limpar filtros
+            document.getElementById('clearFilters').addEventListener('click', () => {
+                this.clearAllFilters();
+            });
+
+            // Fechar sugestões ao clicar fora
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-box')) {
+                    this.hideSuggestions();
+                }
+            });
+
+            // Teclas de atalho
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.key === 'k') {
+                    e.preventDefault();
+                    document.getElementById('searchInput').focus();
+                }
+            });
+        }
+
+        handleSearchInput(value) {
+            this.currentFilters.search = value;
+            
+            // Debounce para evitar buscas excessivas
+            clearTimeout(this.searchTimeout);
+            
+            if (value.length > 0) {
+                this.showSearchSuggestions(value);
+            } else {
+                this.hideSuggestions();
+            }
+            
+            this.searchTimeout = setTimeout(() => {
+                this.applyFilters();
+            }, 300);
+        }
+
+        showSearchSuggestions(query) {
+            const suggestions = this.generateSearchSuggestions(query);
+            const container = document.getElementById('searchSuggestions');
+            
+            if (suggestions.length === 0) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.innerHTML = suggestions.map(suggestion => `
+                <div class="search-suggestion" data-suggestion="${suggestion.text}">
+                    <i class="fas fa-${suggestion.icon}"></i>
+                    ${this.highlightText(suggestion.text, query)}
+                    <span class="category">${suggestion.category}</span>
+                </div>
+            `).join('');
+            
+            // Event listeners para sugestões
+            container.querySelectorAll('.search-suggestion').forEach(suggestion => {
+                suggestion.addEventListener('click', () => {
+                    document.getElementById('searchInput').value = suggestion.dataset.suggestion;
+                    this.currentFilters.search = suggestion.dataset.suggestion;
+                    this.applyFilters();
+                    this.hideSuggestions();
+                });
+            });
+            
+            container.style.display = 'block';
+        }
+
+        generateSearchSuggestions(query) {
+            const suggestions = [];
+            const lowerQuery = query.toLowerCase();
+            
+            // Sugestões baseadas nas postagens
+            this.postsManager.posts.forEach(post => {
+                if (post.title.toLowerCase().includes(lowerQuery)) {
+                    suggestions.push({
+                        text: post.title,
+                        category: this.postsManager.getCategoryName(post.category),
+                        icon: 'file-alt'
+                    });
+                }
+                
+                if (post.content.toLowerCase().includes(lowerQuery) && 
+                    !suggestions.some(s => s.text === post.title)) {
+                    const excerpt = post.content.substring(0, 50) + '...';
+                    suggestions.push({
+                        text: excerpt,
+                        category: 'Conteúdo',
+                        icon: 'align-left'
+                    });
+                }
+            });
+            
+            // Sugestões de categorias
+            const categories = {
+                'sistema': { name: 'Sistema', icon: 'cog' },
+                'atualização': { name: 'Atualização', icon: 'sync' },
+                'notícia': { name: 'Notícia', icon: 'newspaper' },
+                'evento': { name: 'Evento', icon: 'calendar' },
+                'manutenção': { name: 'Manutenção', icon: 'tools' }
+            };
+            
+            Object.entries(categories).forEach(([key, value]) => {
+                if (key.includes(lowerQuery) || value.name.toLowerCase().includes(lowerQuery)) {
+                    suggestions.push({
+                        text: value.name,
+                        category: 'Categoria',
+                        icon: value.icon
+                    });
+                }
+            });
+            
+            return suggestions.slice(0, 5); // Limitar a 5 sugestões
+        }
+
+        highlightText(text, query) {
+            const lowerText = text.toLowerCase();
+            const lowerQuery = query.toLowerCase();
+            const index = lowerText.indexOf(lowerQuery);
+            
+            if (index === -1) return text;
+            
+            const before = text.substring(0, index);
+            const match = text.substring(index, index + query.length);
+            const after = text.substring(index + query.length);
+            
+            return `${before}<span class="search-highlight">${match}</span>${after}`;
+        }
+
+        hideSuggestions() {
+            document.getElementById('searchSuggestions').style.display = 'none';
+        }
+
+        handleCategoryFilter(category) {
+            this.currentFilters.category = category;
+            
+            // Atualizar UI dos botões
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${category}"]`).classList.add('active');
+            
+            this.applyFilters();
+        }
+
+        handleStatusFilter(status) {
+            this.currentFilters.status = status;
+            
+            // Atualizar UI dos botões de status
+            document.querySelectorAll('.filter-btn[data-status]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[data-status="${status}"]`).classList.add('active');
+            
+            this.applyFilters();
+        }
+
+        applyAdvancedFilters() {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const sortBy = document.getElementById('sortBy').value;
+            
+            this.currentFilters.dateRange = {
+                start: startDate || null,
+                end: endDate || null
+            };
+            this.currentFilters.sortBy = sortBy;
+            
+            this.applyFilters();
+        }
+
+        applyFilters() {
+            let filteredPosts = [...this.postsManager.posts];
+            
+            // Aplicar filtro de categoria
+            if (this.currentFilters.category !== 'all') {
+                filteredPosts = filteredPosts.filter(post => 
+                    post.category === this.currentFilters.category
+                );
+            }
+            
+            // Aplicar filtro de busca
+            if (this.currentFilters.search) {
+                const searchTerm = this.currentFilters.search.toLowerCase();
+                filteredPosts = filteredPosts.filter(post => 
+                    post.title.toLowerCase().includes(searchTerm) ||
+                    post.content.toLowerCase().includes(searchTerm) ||
+                    this.postsManager.getCategoryName(post.category).toLowerCase().includes(searchTerm) ||
+                    post.author.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            // Aplicar filtro de data
+            if (this.currentFilters.dateRange.start || this.currentFilters.dateRange.end) {
+                filteredPosts = filteredPosts.filter(post => {
+                    const postDate = new Date(post.date);
+                    const startDate = this.currentFilters.dateRange.start ? 
+                        new Date(this.currentFilters.dateRange.start) : null;
+                    const endDate = this.currentFilters.dateRange.end ? 
+                        new Date(this.currentFilters.dateRange.end) : null;
+                    
+                    let valid = true;
+                    if (startDate) valid = valid && postDate >= startDate;
+                    if (endDate) valid = valid && postDate <= endDate;
+                    
+                    return valid;
+                });
+            }
+            
+            // Aplicar filtro de status
+            if (this.currentFilters.status !== 'all') {
+                if (this.currentFilters.status === 'liked') {
+                    filteredPosts = filteredPosts.filter(post => 
+                        this.postsManager.likedPosts.has(post.id)
+                    );
+                } else if (this.currentFilters.status === 'saved') {
+                    filteredPosts = filteredPosts.filter(post => 
+                        this.postsManager.savedPosts.has(post.id)
+                    );
+                }
+            }
+            
+            // Aplicar ordenação
+            filteredPosts = this.sortPosts(filteredPosts, this.currentFilters.sortBy);
+            
+            // Atualizar UI
+            this.updateResultsHeader(filteredPosts);
+            this.updateActiveFilters();
+            this.postsManager.posts = filteredPosts;
+            this.postsManager.renderPosts();
+        }
+
+        sortPosts(posts, sortBy) {
+            switch (sortBy) {
+                case 'newest':
+                    return posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                case 'oldest':
+                    return posts.sort((a, b) => new Date(a.date) - new Date(b.date));
+                case 'popular':
+                    return posts.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                case 'title':
+                    return posts.sort((a, b) => a.title.localeCompare(b.title));
+                default:
+                    return posts;
+            }
+        }
+
+        updateResultsHeader(filteredPosts) {
+            const header = document.getElementById('searchResultsHeader');
+            const title = document.getElementById('resultsTitle');
+            const count = document.getElementById('resultsCount');
+            
+            const totalPosts = this.postsManager.posts.length;
+            const filteredCount = filteredPosts.length;
+            
+            if (this.hasActiveFilters() && filteredCount !== totalPosts) {
+                header.style.display = 'flex';
+                title.textContent = this.getResultsTitle();
+                count.textContent = `${filteredCount} de ${totalPosts} postagens encontradas`;
+            } else {
+                header.style.display = 'none';
+            }
+        }
+
+        getResultsTitle() {
+            const filters = [];
+            
+            if (this.currentFilters.category !== 'all') {
+                filters.push(this.postsManager.getCategoryName(this.currentFilters.category));
+            }
+            
+            if (this.currentFilters.search) {
+                filters.push(`"${this.currentFilters.search}"`);
+            }
+            
+            if (this.currentFilters.status !== 'all') {
+                filters.push(this.currentFilters.status === 'liked' ? 'Curtidos' : 'Salvos');
+            }
+            
+            if (filters.length === 0) {
+                return 'Todas as Postagens';
+            }
+            
+            return `Filtrado por: ${filters.join(', ')}`;
+        }
+
+        updateActiveFilters() {
+            const container = document.getElementById('activeFilters');
+            const activeFilters = [];
+            
+            if (this.currentFilters.category !== 'all') {
+                activeFilters.push({
+                    text: `Categoria: ${this.postsManager.getCategoryName(this.currentFilters.category)}`,
+                    type: 'category'
+                });
+            }
+            
+            if (this.currentFilters.search) {
+                activeFilters.push({
+                    text: `Busca: "${this.currentFilters.search}"`,
+                    type: 'search'
+                });
+            }
+            
+            if (this.currentFilters.dateRange.start || this.currentFilters.dateRange.end) {
+                const dateText = [
+                    this.currentFilters.dateRange.start,
+                    this.currentFilters.dateRange.end
+                ].filter(Boolean).join(' a ');
+                activeFilters.push({
+                    text: `Período: ${dateText}`,
+                    type: 'date'
+                });
+            }
+            
+            if (this.currentFilters.status !== 'all') {
+                activeFilters.push({
+                    text: `Status: ${this.currentFilters.status === 'liked' ? 'Curtidos' : 'Salvos'}`,
+                    type: 'status'
+                });
+            }
+            
+            if (this.currentFilters.sortBy !== 'newest') {
+                const sortTexts = {
+                    'oldest': 'Mais Antigos',
+                    'popular': 'Mais Populares',
+                    'title': 'Ordem Alfabética'
+                };
+                activeFilters.push({
+                    text: `Ordenação: ${sortTexts[this.currentFilters.sortBy]}`,
+                    type: 'sort'
+                });
+            }
+            
+            container.innerHTML = activeFilters.map(filter => `
+                <div class="active-filter">
+                    ${filter.text}
+                    <span class="remove" data-type="${filter.type}">×</span>
+                </div>
+            `).join('');
+            
+            // Event listeners para remover filtros
+            container.querySelectorAll('.remove').forEach(removeBtn => {
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeFilter(removeBtn.dataset.type);
+                });
+            });
+        }
+
+        removeFilter(type) {
+            switch (type) {
+                case 'category':
+                    this.handleCategoryFilter('all');
+                    break;
+                case 'search':
+                    document.getElementById('searchInput').value = '';
+                    this.currentFilters.search = '';
+                    this.applyFilters();
+                    break;
+                case 'date':
+                    document.getElementById('startDate').value = '';
+                    document.getElementById('endDate').value = '';
+                    this.currentFilters.dateRange = { start: null, end: null };
+                    this.applyFilters();
+                    break;
+                case 'status':
+                    this.handleStatusFilter('all');
+                    break;
+                case 'sort':
+                    document.getElementById('sortBy').value = 'newest';
+                    this.currentFilters.sortBy = 'newest';
+                    this.applyFilters();
+                    break;
+            }
+        }
+
+        clearAllFilters() {
+            // Resetar todos os filtros
+            this.currentFilters = {
+                category: 'all',
+                search: '',
+                dateRange: { start: null, end: null },
+                sortBy: 'newest',
+                status: 'all'
+            };
+            
+            // Resetar UI
+            document.getElementById('searchInput').value = '';
+            document.querySelectorAll('.filter-btn[data-filter]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('[data-filter="all"]').classList.add('active');
+            
+            document.querySelectorAll('.filter-btn[data-status]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('[data-status="all"]').classList.add('active');
+            
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('sortBy').value = 'newest';
+            
+            this.applyFilters();
+            this.hideSuggestions();
+        }
+
+        toggleAdvancedFilters() {
+            const filters = document.getElementById('advancedFilters');
+            const toggleBtn = document.getElementById('toggleFilters');
+            
+            filters.classList.toggle('active');
+            
+            if (filters.classList.contains('active')) {
+                toggleBtn.innerHTML = '<i class="fas fa-sliders-h"></i> Ocultar Filtros';
+            } else {
+                toggleBtn.innerHTML = '<i class="fas fa-sliders-h"></i> Filtros Avançados';
+            }
+        }
+
+        updateFilterCounts() {
+            const counts = {
+                all: this.postsManager.posts.length,
+                system: 0,
+                update: 0,
+                news: 0,
+                event: 0,
+                maintenance: 0
+            };
+            
+            this.postsManager.posts.forEach(post => {
+                if (counts.hasOwnProperty(post.category)) {
+                    counts[post.category]++;
+                }
+            });
+            
+            // Atualizar contadores na UI
+            Object.entries(counts).forEach(([category, count]) => {
+                const element = document.getElementById(`count-${category}`);
+                if (element) {
+                    element.textContent = count;
+                    element.style.display = count > 0 ? 'flex' : 'none';
+                }
+            });
+        }
+
+        hasActiveFilters() {
+            return (
+                this.currentFilters.category !== 'all' ||
+                this.currentFilters.search !== '' ||
+                this.currentFilters.dateRange.start !== null ||
+                this.currentFilters.dateRange.end !== null ||
+                this.currentFilters.status !== 'all' ||
+                this.currentFilters.sortBy !== 'newest'
+            );
+        }
+    }
+
+    // =============================================
+    // INICIALIZAÇÃO DO SISTEMA
+    // =============================================
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializar o gerenciador de postagens (simplificado)
+        const postsManager = {
+            posts: [],
+            likedPosts: new Set(),
+            savedPosts: new Set(),
+            getCategoryName: function(category) {
+                const categories = {
+                    'system': 'Sistema',
+                    'update': 'Atualização',
+                    'news': 'Notícia',
+                    'event': 'Evento',
+                    'maintenance': 'Manutenção'
+                };
+                return categories[category] || 'Geral';
+            },
+            renderPosts: function() {
+                // Implementação simplificada para demonstração
+                const container = document.getElementById('postsList');
+                if (this.posts.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-search"></i>
+                            <h3>Nenhuma postagem encontrada</h3>
+                            <p>Tente ajustar os filtros ou termos de busca</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = this.posts.map(post => `
+                        <div class="post-card fade-in">
+                            <div class="post-image">
+                                <img src="${post.image || 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80'}" alt="${post.title}">
+                            </div>
+                            <div class="post-content">
+                                <span class="post-category category-${post.category}">${this.getCategoryName(post.category)}</span>
+                                <h3 class="post-title">${post.title}</h3>
+                                <p class="post-excerpt">${post.content.substring(0, 100)}...</p>
+                                <div class="post-meta">
+                                    <span>${new Date(post.date).toLocaleDateString('pt-BR')}</span>
+                                    <div class="post-actions">
+                                        <div class="post-action">
+                                            <i class="far fa-heart"></i>
+                                            <span>${post.likes || 0}</span>
+                                        </div>
+                                        <div class="post-action">
+                                            <i class="far fa-comment"></i>
+                                            <span>${post.comments ? post.comments.length : 0}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            }
+        };
+
+        // Carregar dados de exemplo
+        postsManager.posts = [
+            {
+                id: 1,
+                title: "Nova atualização do sistema disponível",
+                category: "system",
+                content: "Acabamos de lançar uma nova versão do sistema com diversas melhorias...",
+                image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                author: "Daniel Pedro",
+                date: "2023-08-20",
+                likes: 12,
+                comments: []
+            },
+            {
+                id: 2,
+                title: "Evento de capacitação para usuários",
+                category: "event",
+                content: "No próximo dia 25, realizaremos um evento online para capacitação...",
+                image: "https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                author: "Carlos Silva",
+                date: "2023-08-15",
+                likes: 8,
+                comments: []
+            },
+            {
+                id: 3,
+                title: "Manutenção programada para o próximo fim de semana",
+                category: "maintenance",
+                content: "Informamos que no próximo fim de semana realizaremos uma manutenção...",
+                image: "https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                author: "Admin",
+                date: "2023-08-10",
+                likes: 5,
+                comments: []
+            }
+        ];
+
+        // Inicializar o sistema de busca avançada
+        window.searchManager = new AdvancedSearchManager(postsManager);
+        
+        // Renderizar postagens iniciais
+        postsManager.renderPosts();
+        window.searchManager.updateFilterCounts();
+
+        // Botão nova postagem (funcionalidade básica)
+        document.getElementById('newPostBtn').addEventListener('click', () => {
+            alert('Funcionalidade de nova postagem - Em desenvolvimento');
+        });
+    });
+    </script>
+</body>
+</html>

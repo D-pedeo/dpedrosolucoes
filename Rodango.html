@@ -1,0 +1,4863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rodango - Rede Social Multimídia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/sql.js"></script>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #9b59b6;
+            --accent-color: #e74c3c;
+            --light-color: #f9f9f9;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #3498db;
+            --border-radius: 12px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        /* Header */
+        .rodango-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .search-container {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 0.8rem 1rem 0.8rem 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all var(--transition-speed);
+        }
+
+        .search-container input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .search-container input:focus {
+            outline: none;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .search-container i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-icon {
+            font-size: 1.3rem;
+            color: white;
+            position: relative;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .header-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            cursor: pointer;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 3fr 1.2fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr 2fr;
+            }
+            
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .left-sidebar {
+                display: none;
+            }
+            
+            .search-container {
+                display: none;
+            }
+        }
+
+        /* Sidebars */
+        .sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .sidebar-title i {
+            color: var(--primary-color);
+        }
+
+        /* Left Sidebar */
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 1rem;
+            color: #555;
+            transition: all var(--transition-speed);
+            border-radius: var(--border-radius);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+        }
+
+        .menu-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background-color: rgba(142, 68, 173, 0.1);
+            color: var(--primary-color);
+        }
+
+        /* Mini Perfil do Usuário */
+        .user-profile-mini {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(142, 68, 173, 0.05);
+            border-radius: var(--border-radius);
+        }
+
+        .user-profile-mini img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+
+        .user-info .user-name {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .user-info .user-bio {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Integração com Sistema de Perfil */
+        .profile-integration {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .profile-integration h4 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-integration p {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-integration .btn {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Right Sidebar */
+        .friend-request, .suggestion {
+            display: flex;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .friend-request:last-child, .suggestion:last-child {
+            border-bottom: none;
+        }
+
+        .friend-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .friend-mutual {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f0f2f5;
+            color: #555;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .action-btn.accept:hover {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .action-btn.reject:hover {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* Main Content */
+        .create-post {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .create-post-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .create-post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+        }
+
+        .create-post-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .create-post-input:hover {
+            background: #f5f7fa;
+        }
+
+        .create-post-actions {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: #666;
+        }
+
+        .post-action:hover {
+            background: #f5f7fa;
+        }
+
+        .post-action i {
+            font-size: 1.2rem;
+        }
+
+        .live-video i {
+            color: var(--danger-color);
+        }
+
+        .photo-video i {
+            color: var(--success-color);
+        }
+
+        .feeling-activity i {
+            color: var(--warning-color);
+        }
+
+        /* Post */
+        .post {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info h4 {
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .post-time {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .post-options {
+            color: #777;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all var(--transition-speed);
+        }
+
+        .post-options:hover {
+            background: #f5f7fa;
+            color: #333;
+        }
+
+        .post-content {
+            margin-bottom: 1rem;
+        }
+
+        .post-text {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .post-media {
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .post-media img, .post-media video {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 0.8rem;
+            color: #777;
+            font-size: 0.9rem;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .post-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            color: #666;
+        }
+
+        .post-action-btn:hover {
+            background: #f5f7fa;
+        }
+
+        .post-action-btn.active {
+            color: var(--primary-color);
+        }
+
+        .post-action-btn i {
+            font-size: 1.2rem;
+        }
+
+        .post-comments {
+            margin-top: 1rem;
+        }
+
+        .comment {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+
+        .comment-content {
+            flex: 1;
+            background: #f0f2f5;
+            padding: 0.8rem;
+            border-radius: 18px;
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.3rem;
+        }
+
+        .comment-author {
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .comment-time {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .comment-text {
+            font-size: 0.9rem;
+        }
+
+        .comment-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        .comment-action {
+            cursor: pointer;
+        }
+
+        .comment-action:hover {
+            text-decoration: underline;
+        }
+
+        .add-comment {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            border: 1px solid #ddd;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            resize: none;
+            height: 40px;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .comment-submit {
+            margin-left: 0.5rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .comment-submit:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Modal para criação de post */
+        .modal-content {
+            border-radius: var(--border-radius);
+            border: none;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+
+        .modal-footer {
+            border-top: 1px solid #eee;
+            padding: 1rem;
+        }
+
+        .post-form {
+            padding: 1rem;
+        }
+
+        .post-textarea {
+            width: 100%;
+            border: none;
+            resize: none;
+            min-height: 120px;
+            font-size: 1.1rem;
+            padding: 0.5rem;
+        }
+
+        .post-textarea:focus {
+            outline: none;
+        }
+
+        .media-preview {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .media-preview img, .media-preview video {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: var(--border-radius);
+        }
+
+        .media-preview audio {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* Stories */
+        .stories-container {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin-bottom: 1.5rem;
+            scrollbar-width: thin;
+        }
+
+        .story {
+            flex: 0 0 auto;
+            width: 100px;
+            height: 160px;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            box-shadow: var(--box-shadow);
+        }
+
+        .story-background {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .story-avatar {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+        }
+
+        .story-username {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+            font-size: 0.8rem;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .add-story {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .add-story i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .add-story span {
+            font-size: 0.8rem;
+            color: #777;
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            z-index: 2000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 350px;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .notification-info {
+            flex: 1;
+        }
+
+        .notification-title {
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-message {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Novos estilos para recursos adicionados */
+        .custom-file-upload {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            background: #f5f7fa;
+            border-radius: var(--border-radius);
+            margin-right: 0.5rem;
+            transition: all var(--transition-speed);
+        }
+
+        .custom-file-upload:hover {
+            background: #e8ecf0;
+        }
+
+        .custom-file-upload i {
+            margin-right: 0.5rem;
+        }
+
+        #media-file {
+            display: none;
+        }
+
+        .media-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+
+        .btn-post {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-post:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-post:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+            border-radius: 30px;
+            background: #f5f7fa;
+        }
+
+        .video-player {
+            width: 100%;
+            border-radius: var(--border-radius);
+            background: #000;
+        }
+
+        /* Páginas específicas */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title i {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-body {
+            padding: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-card {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary-color);
+        }
+
+        .btn-secondary {
+            background: #f0f2f5;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background: #e4e6e9;
+        }
+
+        /* Configurações */
+        .settings-menu {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+
+        .settings-item:hover {
+            background: #f9f9f9;
+        }
+
+        .settings-item i {
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--primary-color);
+        }
+
+        .settings-content {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            background: white;
+            cursor: pointer;
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .form-check-input {
+            margin-right: 0.5rem;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .form-check-label {
+            cursor: pointer;
+        }
+
+        .btn-save {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .btn-save:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Perfil de usuário */
+        .profile-header {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .profile-cover {
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: var(--border-radius);
+            margin-bottom: 4rem;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            transform: translateY(50%);
+        }
+
+        .profile-details {
+            margin-left: 170px;
+            padding-bottom: 1rem;
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-bio {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .profile-stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .profile-actions {
+            position: absolute;
+            right: 0;
+            bottom: 1rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 0.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            white-space: nowrap;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* Player de música */
+        .music-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 1rem;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .player-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 2;
+        }
+
+        .player-album {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .player-details {
+            flex: 1;
+        }
+
+        .player-title {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .player-artist {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .player-progress {
+            flex: 3;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #eee;
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 2px;
+            width: 30%;
+        }
+
+        .player-time {
+            font-size: 0.8rem;
+            color: #666;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .player-buttons {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+            justify-content: flex-end;
+        }
+
+        .player-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f7fa;
+            color: #555;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .player-btn:hover {
+            background: #e8ecf0;
+        }
+
+        .player-btn.play-pause {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .player-btn.play-pause:hover {
+            background: var(--secondary-color);
+        }
+
+        /* Informações do perfil */
+        .about-section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-item strong {
+            color: var(--dark-color);
+        }
+
+        .info-item i {
+            margin-right: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        /* Mensagens */
+        .messages-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .conversation-list {
+            border-right: 1px solid #eee;
+            height: 600px;
+            overflow-y: auto;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .conversation-item:hover, .conversation-item.active {
+            background: #f5f7fa;
+        }
+
+        .conversation-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        .conversation-info {
+            flex: 1;
+        }
+
+        .conversation-name {
+            font-weight: 500;
+            margin-bottom: 0.2rem;
+        }
+
+        .conversation-preview {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .conversation-time {
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-header {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 0.8rem 1rem;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .message.sent {
+            align-self: flex-end;
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .message.received {
+            align-self: flex-start;
+            background: #f0f2f5;
+            color: #333;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            margin-top: 0.3rem;
+            opacity: 0.7;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #eee;
+            gap: 0.5rem;
+        }
+
+        .chat-input-field {
+            flex: 1;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .chat-send-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Notificações */
+        .notifications-container {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            transition: all var(--transition-speed);
+        }
+
+        .notification-item:hover {
+            background: #f9f9f9;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-icon-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: white;
+        }
+
+        .notification-icon-container.like {
+            background: var(--primary-color);
+        }
+
+        .notification-icon-container.comment {
+            background: var(--info-color);
+        }
+
+        .notification-icon-container.friend {
+            background: var(--success-color);
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-text {
+            margin-bottom: 0.2rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Grupos */
+        .group-card {
+            position: relative;
+        }
+
+        .group-members {
+            display: flex;
+            margin-top: 0.5rem;
+        }
+
+        .group-member {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            margin-left: -5px;
+        }
+
+        .group-member:first-child {
+            margin-left: 0;
+        }
+
+        .group-member.more {
+            background: #f0f2f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        /* Eventos */
+        .event-date {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .event-day {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .event-month {
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Marketplace */
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-location {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ddd;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+        }
+
+        .badge-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .badge-danger {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        /* Online Status */
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: var(--success-color);
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        /* Dark Mode Support */
+        .dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .sidebar,
+        .dark-mode .create-post,
+        .dark-mode .post,
+        .dark-mode .card,
+        .dark-mode .settings-content,
+        .dark-mode .about-section,
+        .dark-mode .notification-toast {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .post-text,
+        .dark-mode .card-text,
+        .dark-mode .form-control,
+        .dark-mode .form-select {
+            color: #e0e0e0;
+        }
+
+        .dark-mode .form-control,
+        .dark-mode .form-select {
+            background: #3d3d3d;
+            border-color: #555;
+        }
+
+        .dark-mode .comment-content {
+            background: #3d3d3d;
+        }
+    </style>
+</head>
+<body>
+    <header class="rodango-header">
+        <div class="logo" onclick="navigateTo('home')">
+            <i class="fas fa-film"></i>
+            <span>Rodango</span>
+        </div>
+        
+        <div class="search-container">
+            <i class="fas fa-search"></i>
+            <input type="text" id="global-search" placeholder="Pesquisar no Rodango...">
+        </div>
+        
+        <div class="header-icons">
+            <div class="header-icon" onclick="navigateTo('home')">
+                <i class="fas fa-home"></i>
+            </div>
+            <div class="header-icon" onclick="navigateTo('messages')">
+                <i class="fas fa-envelope"></i>
+                <span class="notification-badge" id="messages-badge">3</span>
+            </div>
+            <div class="header-icon" onclick="navigateTo('notifications')">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge" id="notifications-badge">5</span>
+            </div>
+            <div class="header-icon" onclick="toggleDarkMode()">
+                <i class="fas fa-moon" id="dark-mode-icon"></i>
+            </div>
+            <img id="header-user-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="user-avatar" onclick="navigateTo('profile')">
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Página Inicial -->
+        <div id="home-page" class="page active">
+            <!-- Stories -->
+            <div class="stories-container">
+                <div class="story add-story" onclick="showCreateStoryModal()">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Criar Story</span>
+                </div>
+                <!-- Stories serão carregados via JavaScript -->
+            </div>
+
+            <div class="main-layout">
+                <!-- Left Sidebar -->
+                <div class="left-sidebar sidebar">
+                    <div class="user-profile-mini">
+                        <div class="position-relative">
+                            <img id="sidebar-user-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User">
+                            <div class="online-indicator"></div>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name" id="sidebar-user-name">João Silva</div>
+                            <div class="user-bio" id="sidebar-user-bio">Desenvolvedor Web</div>
+                        </div>
+                    </div>
+
+                    <div class="menu-item active" onclick="navigateTo('home')">
+                        <i class="fas fa-home"></i>
+                        <span>Página Inicial</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('friends')">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Amigos</span>
+                        <span class="notification-badge" style="margin-left: auto;">3</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('groups')">
+                        <i class="fas fa-users"></i>
+                        <span>Grupos</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('marketplace')">
+                        <i class="fas fa-store"></i>
+                        <span>Marketplace</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('videos')">
+                        <i class="fas fa-video"></i>
+                        <span>Vídeos</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('music')">
+                        <i class="fas fa-music"></i>
+                        <span>Música</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('photos')">
+                        <i class="fas fa-images"></i>
+                        <span>Fotos</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('events')">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Eventos</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('messages')">
+                        <i class="fas fa-comments"></i>
+                        <span>Mensagens</span>
+                        <span class="notification-badge" style="margin-left: auto;">3</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('settings')">
+                        <i class="fas fa-cog"></i>
+                        <span>Configurações</span>
+                    </div>
+                    <div class="menu-item" onclick="navigateTo('profile')">
+                        <i class="fas fa-user-circle"></i>
+                        <span>Meu Perfil</span>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Create Post -->
+                    <div class="create-post">
+                        <div class="create-post-header">
+                            <img id="create-post-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="create-post-avatar">
+                            <div class="create-post-input" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                                No que você está pensando, João?
+                            </div>
+                        </div>
+                        <div class="create-post-actions">
+                            <div class="post-action live-video" onclick="showNotification('Live', 'Funcionalidade de vídeo ao vivo em desenvolvimento', 'info')">
+                                <i class="fas fa-video"></i>
+                                <span>Vídeo ao Vivo</span>
+                            </div>
+                            <div class="post-action photo-video" data-bs-toggle="modal" data-bs-target="#createPostModal">
+                                <i class="fas fa-photo-video"></i>
+                                <span>Foto/Vídeo</span>
+                            </div>
+                            <div class="post-action feeling-activity" onclick="showFeelingModal()">
+                                <i class="fas fa-laugh-beam"></i>
+                                <span>Sentimento/Atividade</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Posts -->
+                    <div id="posts-container">
+                        <div class="loading">
+                            <div class="spinner"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar -->
+                <div class="right-sidebar sidebar">
+                    <div class="sidebar-title">
+                        <i class="fas fa-user-friends"></i>
+                        <h3>Solicitações de Amizade</h3>
+                    </div>
+                    <div id="friend-requests-container">
+                        <!-- Solicitações serão carregadas via JavaScript -->
+                    </div>
+
+                    <div class="sidebar-title" style="margin-top: 2rem;">
+                        <i class="fas fa-user-plus"></i>
+                        <h3>Sugestões para Você</h3>
+                    </div>
+                    <div id="friend-suggestions-container">
+                        <!-- Sugestões serão carregadas via JavaScript -->
+                    </div>
+
+                    <div class="sidebar-title" style="margin-top: 2rem;">
+                        <i class="fas fa-birthday-cake"></i>
+                        <h3>Aniversários</h3>
+                    </div>
+                    <div id="birthdays-container">
+                        <!-- Aniversários serão carregados via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Mensagens -->
+        <div id="messages-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-comments"></i>
+                    <h2>Mensagens</h2>
+                </div>
+                <button class="btn-save" onclick="startNewConversation()">
+                    <i class="fas fa-plus"></i> Nova Mensagem
+                </button>
+            </div>
+
+            <div class="messages-container">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <div class="conversation-list">
+                            <div class="conversation-item active">
+                                <div class="position-relative">
+                                    <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="User" class="conversation-avatar">
+                                    <div class="online-indicator"></div>
+                                </div>
+                                <div class="conversation-info">
+                                    <div class="conversation-name">Maria Santos</div>
+                                    <div class="conversation-preview">Olá, como você está?</div>
+                                </div>
+                                <div class="conversation-time">10:30</div>
+                            </div>
+                            <!-- Mais conversas serão carregadas via JavaScript -->
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="chat-container">
+                            <div class="chat-header">
+                                <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="User" class="conversation-avatar">
+                                <div class="conversation-info">
+                                    <div class="conversation-name">Maria Santos</div>
+                                    <div class="conversation-preview">Online</div>
+                                </div>
+                            </div>
+                            <div class="chat-messages" id="chat-messages">
+                                <!-- Mensagens serão carregadas via JavaScript -->
+                            </div>
+                            <div class="chat-input">
+                                <input type="text" class="chat-input-field" placeholder="Digite uma mensagem...">
+                                <button class="chat-send-btn">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Notificações -->
+        <div id="notifications-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-bell"></i>
+                    <h2>Notificações</h2>
+                </div>
+                <div class="btn-group">
+                    <button class="btn-save" onclick="markAllAsRead()">
+                        <i class="fas fa-check-double"></i> Marcar todas como lidas
+                    </button>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showNotificationsTab('all')">Todas</div>
+                <div class="tab" onclick="showNotificationsTab('unread')">Não lidas</div>
+                <div class="tab" onclick="showNotificationsTab('mentions')">Menções</div>
+            </div>
+
+            <div class="notifications-container">
+                <div id="notifications-list">
+                    <!-- Notificações serão carregadas via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Amigos -->
+        <div id="friends-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-user-friends"></i>
+                    <h2>Amigos</h2>
+                </div>
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="friends-search" placeholder="Pesquisar amigos...">
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showFriendsTab('all')">Todos os Amigos</div>
+                <div class="tab" onclick="showFriendsTab('requests')">Solicitações</div>
+                <div class="tab" onclick="showFriendsTab('suggestions')">Sugestões</div>
+                <div class="tab" onclick="showFriendsTab('birthdays')">Aniversários</div>
+            </div>
+
+            <div id="friends-all" class="friends-tab">
+                <div class="grid-container" id="all-friends-container">
+                    <!-- Amigos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="friends-requests" class="friends-tab" style="display: none;">
+                <div class="grid-container" id="friend-requests-page-container">
+                    <!-- Solicitações de amizade serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="friends-suggestions" class="friends-tab" style="display: none;">
+                <div class="grid-container" id="friend-suggestions-page-container">
+                    <!-- Sugestões de amizade serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="friends-birthdays" class="friends-tab" style="display: none;">
+                <div class="grid-container" id="birthdays-page-container">
+                    <!-- Aniversários serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Grupos -->
+        <div id="groups-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-users"></i>
+                    <h2>Grupos</h2>
+                </div>
+                <button class="btn-save" onclick="showCreateGroupModal()">
+                    <i class="fas fa-plus"></i> Criar Grupo
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showGroupsTab('my')">Meus Grupos</div>
+                <div class="tab" onclick="showGroupsTab('discover')">Descobrir</div>
+                <div class="tab" onclick="showGroupsTab('invites')">Convites</div>
+                <div class="tab" onclick="showGroupsTab('managed')">Gerenciados</div>
+            </div>
+
+            <div id="groups-my" class="groups-tab">
+                <div class="grid-container" id="my-groups-container">
+                    <!-- Grupos do usuário serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="groups-discover" class="groups-tab" style="display: none;">
+                <div class="grid-container" id="discover-groups-container">
+                    <!-- Grupos para descobrir serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="groups-invites" class="groups-tab" style="display: none;">
+                <div class="grid-container" id="group-invites-container">
+                    <!-- Convites para grupos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="groups-managed" class="groups-tab" style="display: none;">
+                <div class="grid-container" id="managed-groups-container">
+                    <!-- Grupos gerenciados serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Marketplace -->
+        <div id="marketplace-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-store"></i>
+                    <h2>Marketplace</h2>
+                </div>
+                <button class="btn-save" onclick="showCreateListingModal()">
+                    <i class="fas fa-plus"></i> + Novo Anúncio
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showMarketplaceTab('browse')">Procurar</div>
+                <div class="tab" onclick="showMarketplaceTab('my')">Meus Itens</div>
+                <div class="tab" onclick="showMarketplaceTab('saved')">Salvos</div>
+                <div class="tab" onclick="showMarketplaceTab('purchases')">Compras</div>
+            </div>
+
+            <div id="marketplace-browse" class="marketplace-tab">
+                <div class="grid-container" id="browse-items-container">
+                    <!-- Itens do marketplace serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="marketplace-my" class="marketplace-tab" style="display: none;">
+                <div class="grid-container" id="my-items-container">
+                    <!-- Itens do usuário serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="marketplace-saved" class="marketplace-tab" style="display: none;">
+                <div class="grid-container" id="saved-items-container">
+                    <!-- Itens salvos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="marketplace-purchases" class="marketplace-tab" style="display: none;">
+                <div class="grid-container" id="purchases-container">
+                    <!-- Compras serão carregadas via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Vídeos -->
+        <div id="videos-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-video"></i>
+                    <h2>Vídeos</h2>
+                </div>
+                <button class="btn-save" onclick="showUploadVideoModal()">
+                    <i class="fas fa-upload"></i> Enviar Vídeo
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showVideosTab('feed')">Feed</div>
+                <div class="tab" onclick="showVideosTab('my')">Meus Vídeos</div>
+                <div class="tab" onclick="showVideosTab('saved')">Salvos</div>
+                <div class="tab" onclick="showVideosTab('live')">Ao Vivo</div>
+                <div class="tab" onclick="showVideosTab('watch-later')">Assistir Depois</div>
+            </div>
+
+            <div id="videos-feed" class="videos-tab">
+                <div class="grid-container" id="videos-feed-container">
+                    <!-- Vídeos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="videos-my" class="videos-tab" style="display: none;">
+                <div class="grid-container" id="my-videos-container">
+                    <!-- Vídeos do usuário serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="videos-saved" class="videos-tab" style="display: none;">
+                <div class="grid-container" id="saved-videos-container">
+                    <!-- Vídeos salvos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="videos-live" class="videos-tab" style="display: none;">
+                <div class="grid-container" id="live-videos-container">
+                    <!-- Vídeos ao vivo serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="videos-watch-later" class="videos-tab" style="display: none;">
+                <div class="grid-container" id="watch-later-container">
+                    <!-- Vídeos para assistir depois serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Música -->
+        <div id="music-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-music"></i>
+                    <h2>Música</h2>
+                </div>
+                <button class="btn-save" onclick="showUploadMusicModal()">
+                    <i class="fas fa-upload"></i> Enviar Música
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showMusicTab('discover')">Descobrir</div>
+                <div class="tab" onclick="showMusicTab('my')">Minha Música</div>
+                <div class="tab" onclick="showMusicTab('playlists')">Playlists</div>
+                <div class="tab" onclick="showMusicTab('artists')">Artistas</div>
+                <div class="tab" onclick="showMusicTab('albums')">Álbuns</div>
+            </div>
+
+            <div id="music-discover" class="music-tab">
+                <div class="grid-container" id="discover-music-container">
+                    <!-- Músicas para descobrir serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="music-my" class="music-tab" style="display: none;">
+                <div class="grid-container" id="my-music-container">
+                    <!-- Músicas do usuário serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="music-playlists" class="music-tab" style="display: none;">
+                <div class="grid-container" id="playlists-container">
+                    <!-- Playlists serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="music-artists" class="music-tab" style="display: none;">
+                <div class="grid-container" id="artists-container">
+                    <!-- Artistas serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="music-albums" class="music-tab" style="display: none;">
+                <div class="grid-container" id="albums-container">
+                    <!-- Álbuns serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Fotos -->
+        <div id="photos-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-images"></i>
+                    <h2>Fotos</h2>
+                </div>
+                <button class="btn-save" onclick="showUploadPhotoModal()">
+                    <i class="fas fa-plus"></i> Adicionar Fotos
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showPhotosTab('my')">Minhas Fotos</div>
+                <div class="tab" onclick="showPhotosTab('albums')">Álbuns</div>
+                <div class="tab" onclick="showPhotosTab('tagged')">Marcadas</div>
+                <div class="tab" onclick="showPhotosTab('saved')">Salvas</div>
+            </div>
+
+            <div id="photos-my" class="photos-tab">
+                <div class="grid-container" id="my-photos-container">
+                    <!-- Fotos do usuário serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="photos-albums" class="photos-tab" style="display: none;">
+                <div class="grid-container" id="albums-container">
+                    <!-- Álbuns serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="photos-tagged" class="photos-tab" style="display: none;">
+                <div class="grid-container" id="tagged-photos-container">
+                    <!-- Fotos marcadas serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="photos-saved" class="photos-tab" style="display: none;">
+                <div class="grid-container" id="saved-photos-container">
+                    <!-- Fotos salvas serão carregadas via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Eventos -->
+        <div id="events-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h2>Eventos</h2>
+                </div>
+                <button class="btn-save" onclick="showCreateEventModal()">
+                    <i class="fas fa-plus"></i> Criar Evento
+                </button>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showEventsTab('upcoming')">Próximos</div>
+                <div class="tab" onclick="showEventsTab('past')">Passados</div>
+                <div class="tab" onclick="showEventsTab('invites')">Convites</div>
+                <div class="tab" onclick="showEventsTab('my')">Meus Eventos</div>
+                <div class="tab" onclick="showEventsTab('saved')">Salvos</div>
+            </div>
+
+            <div id="events-upcoming" class="events-tab">
+                <div class="grid-container" id="upcoming-events-container">
+                    <!-- Eventos próximos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="events-past" class="events-tab" style="display: none;">
+                <div class="grid-container" id="past-events-container">
+                    <!-- Eventos passados serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="events-invites" class="events-tab" style="display: none;">
+                <div class="grid-container" id="event-invites-container">
+                    <!-- Convites para eventos serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="events-my" class="events-tab" style="display: none;">
+                <div class="grid-container" id="my-events-container">
+                    <!-- Eventos do usuário serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="events-saved" class="events-tab" style="display: none;">
+                <div class="grid-container" id="saved-events-container">
+                    <!-- Eventos salvos serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Configurações -->
+        <div id="settings-page" class="page">
+            <div class="page-header">
+                <div class="page-title">
+                    <i class="fas fa-cog"></i>
+                    <h2>Configurações</h2>
+                </div>
+            </div>
+
+            <div class="main-layout">
+                <div class="left-sidebar sidebar">
+                    <div class="settings-item active" onclick="showSettingsTab('account')">
+                        <i class="fas fa-user-cog"></i>
+                        <span>Conta</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('privacy')">
+                        <i class="fas fa-lock"></i>
+                        <span>Privacidade</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('notifications')">
+                        <i class="fas fa-bell"></i>
+                        <span>Notificações</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('language')">
+                        <i class="fas fa-globe"></i>
+                        <span>Idioma</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('accessibility')">
+                        <i class="fas fa-universal-access"></i>
+                        <span>Acessibilidade</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('security')">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Segurança</span>
+                    </div>
+                    <div class="settings-item" onclick="showSettingsTab('payment')">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Pagamentos</span>
+                    </div>
+                </div>
+
+                <div class="main-content">
+                    <div id="settings-account" class="settings-content">
+                        <h3>Configurações da Conta</h3>
+                        <form id="account-settings-form">
+                            <div class="form-group">
+                                <label class="form-label" for="account-name">Nome</label>
+                                <input type="text" class="form-control" id="account-name" value="João Silva">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account-email">E-mail</label>
+                                <input type="email" class="form-control" id="account-email" value="joao.silva@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account-username">Nome de usuário</label>
+                                <input type="text" class="form-control" id="account-username" value="joaosilva">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account-bio">Biografia</label>
+                                <textarea class="form-control" id="account-bio" rows="3">Desenvolvedor Web</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account-location">Localização</label>
+                                <input type="text" class="form-control" id="account-location" value="São Paulo, Brasil">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="account-website">Website</label>
+                                <input type="url" class="form-control" id="account-website" placeholder="https://exemplo.com">
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Alterações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-privacy" class="settings-content" style="display: none;">
+                        <h3>Configurações de Privacidade</h3>
+                        <form id="privacy-settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Quem pode ver suas publicações?</label>
+                                <select class="form-select" id="privacy-posts">
+                                    <option value="public">Público</option>
+                                    <option value="friends" selected>Amigos</option>
+                                    <option value="friends_except">Amigos exceto...</option>
+                                    <option value="specific">Somente algumas pessoas</option>
+                                    <option value="only_me">Somente eu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quem pode enviar solicitações de amizade?</label>
+                                <select class="form-select" id="privacy-friend-requests">
+                                    <option value="everyone" selected>Qualquer pessoa</option>
+                                    <option value="friends_of_friends">Amigos de amigos</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quem pode ver sua lista de amigos?</label>
+                                <select class="form-select" id="privacy-friends-list">
+                                    <option value="public">Público</option>
+                                    <option value="friends" selected>Amigos</option>
+                                    <option value="only_me">Somente eu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quem pode ver seu e-mail?</label>
+                                <select class="form-select" id="privacy-email">
+                                    <option value="public">Público</option>
+                                    <option value="friends" selected>Amigos</option>
+                                    <option value="only_me">Somente eu</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Quem pode te marcar em publicações?</label>
+                                <select class="form-select" id="privacy-tagging">
+                                    <option value="everyone" selected>Qualquer pessoa</option>
+                                    <option value="friends">Amigos</option>
+                                    <option value="only_me">Somente eu</option>
+                                </select>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="privacy-search-engine" checked>
+                                <label class="form-check-label" for="privacy-search-engine">Permitir que mecanismos de busca liguem ao seu perfil</label>
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Configurações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-notifications" class="settings-content" style="display: none;">
+                        <h3>Configurações de Notificações</h3>
+                        <form id="notifications-settings-form">
+                            <h5>Notificações por E-mail</h5>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-email-posts" checked>
+                                <label class="form-check-label" for="notifications-email-posts">Novas publicações de amigos</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-email-comments" checked>
+                                <label class="form-check-label" for="notifications-email-comments">Comentários em suas publicações</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-email-likes" checked>
+                                <label class="form-check-label" for="notifications-email-likes">Curtidas em suas publicações</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-email-friend-requests" checked>
+                                <label class="form-check-label" for="notifications-email-friend-requests">Solicitações de amizade</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-email-messages">
+                                <label class="form-check-label" for="notifications-email-messages">Novas mensagens</label>
+                            </div>
+
+                            <h5 class="mt-4">Notificações Push</h5>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-posts" checked>
+                                <label class="form-check-label" for="notifications-push-posts">Novas publicações</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-comments" checked>
+                                <label class="form-check-label" for="notifications-push-comments">Comentários</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-likes">
+                                <label class="form-check-label" for="notifications-push-likes">Curtidas</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-friend-requests" checked>
+                                <label class="form-check-label" for="notifications-push-friend-requests">Solicitações de amizade</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-messages" checked>
+                                <label class="form-check-label" for="notifications-push-messages">Mensagens</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-events" checked>
+                                <label class="form-check-label" for="notifications-push-events">Eventos</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="notifications-push-groups" checked>
+                                <label class="form-check-label" for="notifications-push-groups">Grupos</label>
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Configurações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-language" class="settings-content" style="display: none;">
+                        <h3>Configurações de Idioma</h3>
+                        <form id="language-settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Idioma de exibição</label>
+                                <select class="form-select" id="language-display">
+                                    <option value="pt" selected>Português (Brasil)</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Idioma de conteúdo</label>
+                                <select class="form-select" id="language-content">
+                                    <option value="pt" selected>Português (Brasil)</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                    <option value="fr">Français</option>
+                                    <option value="de">Deutsch</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Formato de data</label>
+                                <select class="form-select" id="language-date-format">
+                                    <option value="dd/mm/yyyy" selected>DD/MM/AAAA</option>
+                                    <option value="mm/dd/yyyy">MM/DD/AAAA</option>
+                                    <option value="yyyy-mm-dd">AAAA-MM-DD</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Fuso horário</label>
+                                <select class="form-select" id="language-timezone">
+                                    <option value="brazil" selected>Brasília (UTC-3)</option>
+                                    <option value="eastern">Eastern Time (UTC-5)</option>
+                                    <option value="central">Central Time (UTC-6)</option>
+                                    <option value="pacific">Pacific Time (UTC-8)</option>
+                                    <option value="europe">Europa Central (UTC+1)</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Configurações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-accessibility" class="settings-content" style="display: none;">
+                        <h3>Configurações de Acessibilidade</h3>
+                        <form id="accessibility-settings-form">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="accessibility-high-contrast">
+                                <label class="form-check-label" for="accessibility-high-contrast">Alto contraste</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="accessibility-large-text">
+                                <label class="form-check-label" for="accessibility-large-text">Texto grande</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="accessibility-reduced-motion">
+                                <label class="form-check-label" for="accessibility-reduced-motion">Reduzir movimento</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="accessibility-screen-reader">
+                                <label class="form-check-label" for="accessibility-screen-reader">Otimizado para leitores de tela</label>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Tamanho do texto</label>
+                                <select class="form-select" id="accessibility-text-size">
+                                    <option value="small">Pequeno</option>
+                                    <option value="medium" selected>Médio</option>
+                                    <option value="large">Grande</option>
+                                    <option value="x-large">Extra Grande</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Esquema de cores</label>
+                                <select class="form-select" id="accessibility-color-scheme">
+                                    <option value="auto" selected>Automático</option>
+                                    <option value="light">Claro</option>
+                                    <option value="dark">Escuro</option>
+                                    <option value="high-contrast">Alto Contraste</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Configurações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-security" class="settings-content" style="display: none;">
+                        <h3>Configurações de Segurança</h3>
+                        <form id="security-settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Alterar senha</label>
+                                <input type="password" class="form-control" id="security-current-password" placeholder="Senha atual">
+                                <input type="password" class="form-control mt-2" id="security-new-password" placeholder="Nova senha">
+                                <input type="password" class="form-control mt-2" id="security-confirm-password" placeholder="Confirmar nova senha">
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="security-two-factor" checked>
+                                <label class="form-check-label" for="security-two-factor">Autenticação de dois fatores</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="security-login-alerts" checked>
+                                <label class="form-check-label" for="security-login-alerts">Alertas de login</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="security-recognized-devices">
+                                <label class="form-check-label" for="security-recognized-devices">Lembrar dispositivos reconhecidos</label>
+                            </div>
+                            <div class="mt-4">
+                                <h5>Sessões ativas</h5>
+                                <div class="session-item">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <strong>Chrome - Windows</strong>
+                                            <div class="text-muted">São Paulo, Brasil • Ativo agora</div>
+                                        </div>
+                                        <button class="btn btn-outline-danger btn-sm">Terminar sessão</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-save mt-3">Salvar Configurações</button>
+                        </form>
+                    </div>
+
+                    <div id="settings-payment" class="settings-content" style="display: none;">
+                        <h3>Configurações de Pagamento</h3>
+                        <form id="payment-settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Métodos de pagamento</label>
+                                <div class="payment-method">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fas fa-credit-card"></i>
+                                            <strong>Cartão de Crédito •••• 1234</strong>
+                                        </div>
+                                        <div>
+                                            <button class="btn btn-outline-primary btn-sm">Editar</button>
+                                            <button class="btn btn-outline-danger btn-sm">Remover</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-primary mt-2">
+                                    <i class="fas fa-plus"></i> Adicionar método de pagamento
+                                </button>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Endereço de cobrança</label>
+                                <textarea class="form-control" rows="3" placeholder="Endereço de cobrança"></textarea>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="payment-auto-renew">
+                                <label class="form-check-label" for="payment-auto-renew">Renovação automática para assinaturas</label>
+                            </div>
+                            <button type="submit" class="btn-save">Salvar Configurações</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Página de Perfil -->
+        <div id="profile-page" class="page">
+            <div class="profile-header">
+                <div class="profile-cover">
+                    <button class="btn-save" style="position: absolute; top: 1rem; right: 1rem;" onclick="changeCoverPhoto()">
+                        <i class="fas fa-camera"></i> Alterar capa
+                    </button>
+                </div>
+                <div class="profile-info">
+                    <div class="position-relative">
+                        <img id="profile-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="profile-avatar">
+                        <button class="btn-save" style="position: absolute; bottom: 0; right: 0;" onclick="changeProfilePhoto()">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                    </div>
+                    <div class="profile-details">
+                        <h1 class="profile-name" id="profile-name">João Silva</h1>
+                        <p class="profile-bio" id="profile-bio">Desenvolvedor Web</p>
+                        <div class="profile-stats">
+                            <div class="profile-stat">
+                                <div class="stat-value" id="profile-friends-count">245</div>
+                                <div class="stat-label">Amigos</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-value" id="profile-posts-count">128</div>
+                                <div class="stat-label">Publicações</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-value" id="profile-photos-count">56</div>
+                                <div class="stat-label">Fotos</div>
+                            </div>
+                            <div class="profile-stat">
+                                <div class="stat-value" id="profile-videos-count">12</div>
+                                <div class="stat-label">Vídeos</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn-save" onclick="showEditProfileModal()">
+                            <i class="fas fa-edit"></i> Editar Perfil
+                        </button>
+                        <button class="btn-save" style="background: var(--secondary-color);">
+                            <i class="fas fa-user-plus"></i> Adicionar Amigo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" onclick="showProfileTab('posts')">Publicações</div>
+                <div class="tab" onclick="showProfileTab('about')">Sobre</div>
+                <div class="tab" onclick="showProfileTab('friends')">Amigos</div>
+                <div class="tab" onclick="showProfileTab('photos')">Fotos</div>
+                <div class="tab" onclick="showProfileTab('videos')">Vídeos</div>
+                <div class="tab" onclick="showProfileTab('groups')">Grupos</div>
+                <div class="tab" onclick="showProfileTab('events')">Eventos</div>
+            </div>
+
+            <div id="profile-posts" class="profile-tab">
+                <div class="main-layout">
+                    <div class="main-content">
+                        <div id="profile-posts-container">
+                            <!-- Publicações do perfil serão carregadas via JavaScript -->
+                        </div>
+                    </div>
+                    <div class="right-sidebar sidebar">
+                        <div class="about-section">
+                            <h3>Informações</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span><i class="fas fa-briefcase"></i> Trabalho</span>
+                                    <span>Desenvolvedor Web</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-graduation-cap"></i> Educação</span>
+                                    <span>Universidade de São Paulo</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-home"></i> Cidade</span>
+                                    <span>São Paulo, Brasil</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-map-marker-alt"></i> De</span>
+                                    <span>Rio de Janeiro, Brasil</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-heart"></i> Relacionamento</span>
+                                    <span>Solteiro</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Fotos</h3>
+                            <div class="grid-container" style="grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                                <!-- Fotos em miniatura serão carregadas via JavaScript -->
+                            </div>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Amigos</h3>
+                            <div class="grid-container" style="grid-template-columns: repeat(3, 1fr); gap: 0.5rem;">
+                                <!-- Amigos em miniatura serão carregados via JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-about" class="profile-tab" style="display: none;">
+                <div class="main-layout">
+                    <div class="main-content">
+                        <div class="about-section">
+                            <h3>Visão Geral</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span><i class="fas fa-user"></i> Nome</span>
+                                    <span id="about-name">João Silva</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-briefcase"></i> Trabalho</span>
+                                    <span id="about-work">Desenvolvedor Web</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-graduation-cap"></i> Educação</span>
+                                    <span id="about-education">Universidade de São Paulo</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-home"></i> Cidade</span>
+                                    <span id="about-city">São Paulo, Brasil</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-map-marker-alt"></i> De</span>
+                                    <span id="about-from">Rio de Janeiro, Brasil</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-heart"></i> Relacionamento</span>
+                                    <span id="about-relationship">Solteiro</span>
+                                </div>
+                                <div class="info-item">
+                                    <span><i class="fas fa-birthday-cake"></i> Aniversário</span>
+                                    <span id="about-birthday">15 de Março</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Biografia</h3>
+                            <p id="about-bio">Desenvolvedor Web apaixonado por tecnologia e inovação. Adoro criar soluções que facilitam a vida das pessoas.</p>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Experiência Profissional</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span><strong>Desenvolvedor Web Sênior</strong></span>
+                                    <span>2020 - Presente</span>
+                                </div>
+                                <div class="info-item">
+                                    <span>Tech Solutions Inc.</span>
+                                    <span>São Paulo, Brasil</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="about-section">
+                            <h3>Educação</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <span><strong>Bacharelado em Ciência da Computação</strong></span>
+                                    <span>2016 - 2020</span>
+                                </div>
+                                <div class="info-item">
+                                    <span>Universidade de São Paulo</span>
+                                    <span>São Paulo, Brasil</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile-friends" class="profile-tab" style="display: none;">
+                <div class="grid-container" id="profile-friends-container">
+                    <!-- Amigos do perfil serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="profile-photos" class="profile-tab" style="display: none;">
+                <div class="grid-container" id="profile-photos-container">
+                    <!-- Fotos do perfil serão carregadas via JavaScript -->
+                </div>
+            </div>
+
+            <div id="profile-videos" class="profile-tab" style="display: none;">
+                <div class="grid-container" id="profile-videos-container">
+                    <!-- Vídeos do perfil serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="profile-groups" class="profile-tab" style="display: none;">
+                <div class="grid-container" id="profile-groups-container">
+                    <!-- Grupos do perfil serão carregados via JavaScript -->
+                </div>
+            </div>
+
+            <div id="profile-events" class="profile-tab" style="display: none;">
+                <div class="grid-container" id="profile-events-container">
+                    <!-- Eventos do perfil serão carregados via JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para criar post -->
+    <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createPostModalLabel">Criar Publicação</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="post-form">
+                        <div class="create-post-header">
+                            <img id="modal-post-avatar" src="https://randomuser.me/api/portraits/men/1.jpg" alt="User" class="create-post-avatar">
+                            <div class="user-info">
+                                <div class="user-name">João Silva</div>
+                                <select class="form-select form-select-sm mt-1" style="width: auto;">
+                                    <option selected>Público</option>
+                                    <option>Amigos</option>
+                                    <option>Somente eu</option>
+                                </select>
+                            </div>
+                        </div>
+                        <textarea class="post-textarea" id="post-text" placeholder="No que você está pensando, João?"></textarea>
+                        <div class="media-preview" id="media-preview"></div>
+                        <div class="media-actions">
+                            <label for="media-file" class="custom-file-upload">
+                                <i class="fas fa-photo-video"></i> Mídia
+                            </label>
+                            <input type="file" id="media-file" accept="image/*,video/*,audio/*" multiple>
+                            <button class="btn-post" id="submit-post" disabled>Publicar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para sentimentos/atividades -->
+    <div class="modal fade" id="feelingModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Como você está se sentindo?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="happy">
+                                <i class="fas fa-laugh-beam fa-2x"></i>
+                                <div>Feliz</div>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="loved">
+                                <i class="fas fa-heart fa-2x"></i>
+                                <div>Apaixonado</div>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="excited">
+                                <i class="fas fa-grin-stars fa-2x"></i>
+                                <div>Animado</div>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="blessed">
+                                <i class="fas fa-pray fa-2x"></i>
+                                <div>Abençoado</div>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="nostalgic">
+                                <i class="fas fa-history fa-2x"></i>
+                                <div>Nostálgico</div>
+                            </button>
+                        </div>
+                        <div class="col-4 text-center">
+                            <button class="btn btn-outline-primary feeling-btn" data-feeling="proud">
+                                <i class="fas fa-trophy fa-2x"></i>
+                                <div>Orgulhoso</div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Player de música -->
+    <div class="music-player" id="music-player" style="display: none;">
+        <div class="player-controls">
+            <div class="player-btn" onclick="toggleShuffle()">
+                <i class="fas fa-random"></i>
+            </div>
+            <div class="player-btn" onclick="previousTrack()">
+                <i class="fas fa-step-backward"></i>
+            </div>
+            <div class="player-btn play-pause" onclick="togglePlayPause()">
+                <i class="fas fa-play" id="play-icon"></i>
+            </div>
+            <div class="player-btn" onclick="nextTrack()">
+                <i class="fas fa-step-forward"></i>
+            </div>
+            <div class="player-btn" onclick="toggleRepeat()">
+                <i class="fas fa-redo"></i>
+            </div>
+        </div>
+        <div class="player-info">
+            <img src="https://source.unsplash.com/random/100x100/?album" alt="Album" class="player-album" id="player-album">
+            <div class="player-details">
+                <div class="player-title" id="player-title">Nome da Música</div>
+                <div class="player-artist" id="player-artist">Artista</div>
+            </div>
+        </div>
+        <div class="player-progress">
+            <div class="player-time" id="player-current-time">0:00</div>
+            <div class="progress-bar" onclick="seekMusic(event)">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+            <div class="player-time" id="player-total-time">0:00</div>
+        </div>
+        <div class="player-buttons">
+            <div class="player-btn" onclick="togglePlaylist()">
+                <i class="fas fa-list"></i>
+            </div>
+            <div class="player-btn" onclick="toggleMute()">
+                <i class="fas fa-volume-up" id="volume-icon"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notificação Toast -->
+    <div class="notification-toast" id="notification-toast">
+        <div class="notification-icon" id="notification-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <div class="notification-info">
+            <div class="notification-title" id="notification-title">Sucesso</div>
+            <div class="notification-message" id="notification-message">Ação realizada com sucesso!</div>
+        </div>
+        <button class="notification-close" id="notification-close">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =============================================
+        // SISTEMA COMPLETO DO RODANGO
+        // =============================================
+
+        // Banco de dados simulado
+        let database = {
+            currentUser: {
+                id: 1,
+                name: "João Silva",
+                email: "joao.silva@example.com",
+                bio: "Desenvolvedor Web",
+                avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+                cover: "https://source.unsplash.com/random/1200x400/?landscape",
+                location: "São Paulo, Brasil",
+                work: "Desenvolvedor Web",
+                education: "Universidade de São Paulo",
+                from: "Rio de Janeiro, Brasil",
+                relationship: "Solteiro",
+                birthday: "15 de Março",
+                website: "",
+                joined: "2020-01-15"
+            },
+            users: [
+                {
+                    id: 1,
+                    name: "João Silva",
+                    email: "joao.silva@example.com",
+                    bio: "Desenvolvedor Web",
+                    avatar: "https://randomuser.me/api/portraits/men/1.jpg",
+                    location: "São Paulo, Brasil",
+                    work: "Desenvolvedor Web",
+                    education: "Universidade de São Paulo",
+                    from: "Rio de Janeiro, Brasil",
+                    relationship: "Solteiro",
+                    birthday: "15 de Março",
+                    isOnline: true
+                },
+                {
+                    id: 2,
+                    name: "Maria Santos",
+                    email: "maria.santos@example.com",
+                    bio: "Designer Gráfico",
+                    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+                    location: "Rio de Janeiro, Brasil",
+                    work: "Designer Sênior",
+                    education: "Universidade Federal do Rio de Janeiro",
+                    from: "São Paulo, Brasil",
+                    relationship: "Casada",
+                    birthday: "22 de Julho",
+                    isOnline: true
+                },
+                {
+                    id: 3,
+                    name: "Carlos Oliveira",
+                    email: "carlos.oliveira@example.com",
+                    bio: "Engenheiro de Software",
+                    avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+                    location: "Belo Horizonte, Brasil",
+                    work: "Engenheiro de Software",
+                    education: "UFMG",
+                    from: "Belo Horizonte, Brasil",
+                    relationship: "Solteiro",
+                    birthday: "10 de Novembro",
+                    isOnline: false
+                }
+            ],
+            posts: [
+                {
+                    id: 1,
+                    userId: 1,
+                    text: "Acabei de terminar um projeto incrível! #programação #webdev",
+                    media: null,
+                    likes: 15,
+                    comments: 3,
+                    shares: 2,
+                    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    privacy: "public",
+                    feeling: null
+                },
+                {
+                    id: 2,
+                    userId: 1,
+                    text: "Que dia lindo para um passeio no parque!",
+                    media: "https://source.unsplash.com/random/600x400/?park",
+                    likes: 32,
+                    comments: 5,
+                    shares: 1,
+                    timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                    privacy: "friends",
+                    feeling: "happy"
+                },
+                {
+                    id: 3,
+                    userId: 2,
+                    text: "Novo design finalizado! O que acham?",
+                    media: "https://source.unsplash.com/random/600x400/?design",
+                    likes: 45,
+                    comments: 8,
+                    shares: 3,
+                    timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+                    privacy: "public",
+                    feeling: "proud"
+                }
+            ],
+            comments: [
+                {
+                    id: 1,
+                    postId: 1,
+                    userId: 2,
+                    text: "Parabéns pelo projeto! Ficou incrível!",
+                    timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+                    likes: 2
+                },
+                {
+                    id: 2,
+                    postId: 1,
+                    userId: 3,
+                    text: "Muito bom! Qual tecnologia você usou?",
+                    timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+                    likes: 1
+                }
+            ],
+            friends: [
+                {
+                    id: 2,
+                    name: "Maria Santos",
+                    avatar: "https://randomuser.me/api/portraits/women/2.jpg",
+                    mutualFriends: 5,
+                    isOnline: true
+                },
+                {
+                    id: 3,
+                    name: "Carlos Oliveira",
+                    avatar: "https://randomuser.me/api/portraits/men/3.jpg",
+                    mutualFriends: 8,
+                    isOnline: false
+                },
+                {
+                    id: 4,
+                    name: "Ana Costa",
+                    avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+                    mutualFriends: 12,
+                    isOnline: true
+                }
+            ],
+            friendRequests: [
+                {
+                    id: 5,
+                    name: "Juliana Santos",
+                    avatar: "https://randomuser.me/api/portraits/women/6.jpg",
+                    mutualFriends: 5
+                },
+                {
+                    id: 6,
+                    name: "Ricardo Almeida",
+                    avatar: "https://randomuser.me/api/portraits/men/7.jpg",
+                    mutualFriends: 3
+                }
+            ],
+            friendSuggestions: [
+                {
+                    id: 7,
+                    name: "Fernanda Costa",
+                    avatar: "https://randomuser.me/api/portraits/women/8.jpg",
+                    mutualFriends: 8
+                },
+                {
+                    id: 8,
+                    name: "Marcos Oliveira",
+                    avatar: "https://randomuser.me/api/portraits/men/9.jpg",
+                    mutualFriends: 12
+                }
+            ],
+            groups: [
+                {
+                    id: 1,
+                    name: "Desenvolvedores Web",
+                    description: "Grupo para desenvolvedores web compartilharem conhecimentos",
+                    members: 1250,
+                    image: "https://source.unsplash.com/random/300x200/?coding",
+                    isMember: true,
+                    isAdmin: false
+                },
+                {
+                    id: 2,
+                    name: "Fotografia Amadora",
+                    description: "Compartilhe suas fotos e aprenda com outros fotógrafos",
+                    members: 850,
+                    image: "https://source.unsplash.com/random/300x200/?photography",
+                    isMember: true,
+                    isAdmin: true
+                },
+                {
+                    id: 3,
+                    name: "Música Brasileira",
+                    description: "Discussões sobre música brasileira e artistas nacionais",
+                    members: 3200,
+                    image: "https://source.unsplash.com/random/300x200/?music",
+                    isMember: false,
+                    isAdmin: false
+                }
+            ],
+            marketplaceItems: [
+                {
+                    id: 1,
+                    title: "iPhone 12 Pro",
+                    description: "Em ótimo estado, com capa e película",
+                    price: "R$ 3.200",
+                    location: "São Paulo, SP",
+                    image: "https://source.unsplash.com/random/300x200/?iphone",
+                    sellerId: 2,
+                    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2,
+                    title: "Sofá 3 lugares",
+                    description: "Sofá em couro sintético, pouco uso",
+                    price: "R$ 800",
+                    location: "Rio de Janeiro, RJ",
+                    image: "https://source.unsplash.com/random/300x200/?sofa",
+                    sellerId: 3,
+                    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ],
+            videos: [
+                {
+                    id: 1,
+                    title: "Como criar um site responsivo",
+                    description: "Tutorial completo de HTML e CSS",
+                    duration: "15:30",
+                    views: "12K",
+                    thumbnail: "https://source.unsplash.com/random/300x200/?coding",
+                    userId: 1,
+                    timestamp: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2,
+                    title: "Receita de bolo de chocolate",
+                    description: "Bolo fofinho e delicioso",
+                    duration: "8:45",
+                    views: "25K",
+                    thumbnail: "https://source.unsplash.com/random/300x200/?cake",
+                    userId: 2,
+                    timestamp: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ],
+            music: [
+                {
+                    id: 1,
+                    title: "Música Relaxante",
+                    artist: "Artista Desconhecido",
+                    album: "Álbum Relax",
+                    duration: "3:45",
+                    cover: "https://source.unsplash.com/random/300x200/?music",
+                    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+                },
+                {
+                    id: 2,
+                    title: "Pop Hits 2023",
+                    artist: "Vários Artistas",
+                    album: "Melhores do Ano",
+                    duration: "4:20",
+                    cover: "https://source.unsplash.com/random/300x200/?pop",
+                    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+                }
+            ],
+            photos: [
+                {
+                    id: 1,
+                    title: "Pôr do sol na praia",
+                    image: "https://source.unsplash.com/random/300x200/?sunset",
+                    userId: 1,
+                    timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2,
+                    title: "Viagem para as montanhas",
+                    image: "https://source.unsplash.com/random/300x200/?mountain",
+                    userId: 1,
+                    timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+                }
+            ],
+            events: [
+                {
+                    id: 1,
+                    title: "Conferência de Tecnologia",
+                    date: "15/10/2023",
+                    time: "09:00",
+                    location: "São Paulo, Brasil",
+                    description: "Maior conferência de tecnologia do Brasil",
+                    image: "https://source.unsplash.com/random/300x200/?conference",
+                    attendees: 1500,
+                    isAttending: true
+                },
+                {
+                    id: 2,
+                    title: "Festival de Música",
+                    date: "20/11/2023",
+                    time: "14:00",
+                    location: "Rio de Janeiro, Brasil",
+                    description: "Festival com os maiores artistas nacionais",
+                    image: "https://source.unsplash.com/random/300x200/?festival",
+                    attendees: 5000,
+                    isAttending: false
+                }
+            ],
+            notifications: [
+                {
+                    id: 1,
+                    type: "like",
+                    text: "Maria Santos curtiu sua publicação",
+                    timestamp: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+                    isRead: false
+                },
+                {
+                    id: 2,
+                    type: "comment",
+                    text: "Carlos Oliveira comentou na sua publicação",
+                    timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+                    isRead: false
+                },
+                {
+                    id: 3,
+                    type: "friend",
+                    text: "Juliana Santos enviou uma solicitação de amizade",
+                    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                    isRead: true
+                }
+            ],
+            messages: [
+                {
+                    id: 1,
+                    conversationId: 1,
+                    senderId: 2,
+                    text: "Olá, como você está?",
+                    timestamp: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+                    isRead: true
+                },
+                {
+                    id: 2,
+                    conversationId: 1,
+                    senderId: 1,
+                    text: "Estou bem, obrigado! E você?",
+                    timestamp: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
+                    isRead: true
+                }
+            ],
+            conversations: [
+                {
+                    id: 1,
+                    participants: [1, 2],
+                    lastMessage: "Estou bem, obrigado! E você?",
+                    timestamp: new Date(Date.now() - 3 * 60 * 1000).toISOString(),
+                    unreadCount: 0
+                }
+            ],
+            stories: [
+                {
+                    id: 1,
+                    userId: 2,
+                    image: "https://source.unsplash.com/random/200x300/?person",
+                    timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
+                },
+                {
+                    id: 2,
+                    userId: 3,
+                    image: "https://source.unsplash.com/random/200x300/?nature",
+                    timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+                }
+            ]
+        };
+
+        // Estado da aplicação
+        let appState = {
+            currentPage: 'home',
+            currentAudio: null,
+            isPlaying: false,
+            isShuffle: false,
+            isRepeat: false,
+            isMuted: false,
+            currentTrackIndex: 0,
+            darkMode: false,
+            notifications: [],
+            unreadMessages: 3,
+            unreadNotifications: 5
+        };
+
+        // =============================================
+        // FUNÇÕES PRINCIPAIS
+        // =============================================
+
+        // Função para navegar entre páginas
+        function navigateTo(page) {
+            // Esconder todas as páginas
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Mostrar a página selecionada
+            document.getElementById(`${page}-page`).classList.add('active');
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Encontrar e ativar o item do menu correspondente
+            const menuItem = Array.from(document.querySelectorAll('.menu-item')).find(item => {
+                return item.textContent.trim().toLowerCase().includes(page.toLowerCase());
+            });
+            
+            if (menuItem) {
+                menuItem.classList.add('active');
+            }
+            
+            // Atualizar estado
+            appState.currentPage = page;
+            
+            // Carregar dados específicos da página
+            loadPageData(page);
+        }
+
+        // Função para carregar dados específicos de cada página
+        function loadPageData(page) {
+            switch(page) {
+                case 'home':
+                    loadStories();
+                    loadPosts();
+                    loadFriendRequests();
+                    loadFriendSuggestions();
+                    loadBirthdays();
+                    break;
+                case 'messages':
+                    loadConversations();
+                    loadMessages(1); // Carregar primeira conversa por padrão
+                    break;
+                case 'notifications':
+                    loadNotifications();
+                    break;
+                case 'friends':
+                    loadFriendsPage();
+                    break;
+                case 'groups':
+                    loadGroupsPage();
+                    break;
+                case 'marketplace':
+                    loadMarketplacePage();
+                    break;
+                case 'videos':
+                    loadVideosPage();
+                    break;
+                case 'music':
+                    loadMusicPage();
+                    break;
+                case 'photos':
+                    loadPhotosPage();
+                    break;
+                case 'events':
+                    loadEventsPage();
+                    break;
+                case 'profile':
+                    loadProfilePage();
+                    break;
+                case 'settings':
+                    // Configurações já carregadas no HTML
+                    break;
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES PARA PÁGINA INICIAL
+        // =============================================
+
+        function loadStories() {
+            const storiesContainer = document.querySelector('.stories-container');
+            if (!storiesContainer) return;
+
+            // Limpar stories existentes (exceto o de criar)
+            const addStory = storiesContainer.querySelector('.add-story');
+            storiesContainer.innerHTML = '';
+            if (addStory) {
+                storiesContainer.appendChild(addStory);
+            }
+
+            // Adicionar stories
+            database.stories.forEach(story => {
+                const user = database.users.find(u => u.id === story.userId);
+                if (user) {
+                    const storyElement = document.createElement('div');
+                    storyElement.className = 'story';
+                    storyElement.innerHTML = `
+                        <img src="${story.image}" alt="Story" class="story-background">
+                        <img src="${user.avatar}" alt="User" class="story-avatar">
+                        <span class="story-username">${user.name.split(' ')[0]}</span>
+                    `;
+                    storiesContainer.appendChild(storyElement);
+                }
+            });
+        }
+
+        function loadPosts() {
+            const postsContainer = document.getElementById('posts-container');
+            if (!postsContainer) return;
+
+            postsContainer.innerHTML = '';
+
+            // Ordenar posts por timestamp (mais recentes primeiro)
+            const sortedPosts = [...database.posts].sort((a, b) => 
+                new Date(b.timestamp) - new Date(a.timestamp)
+            );
+
+            if (sortedPosts.length === 0) {
+                postsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-newspaper"></i>
+                        <h3>Nenhuma publicação ainda</h3>
+                        <p>Seja o primeiro a publicar algo!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            sortedPosts.forEach(post => {
+                const user = database.users.find(u => u.id === post.userId);
+                if (user) {
+                    const postElement = createPostElement(post, user);
+                    postsContainer.appendChild(postElement);
+                }
+            });
+        }
+
+        function createPostElement(post, user) {
+            const postDiv = document.createElement('div');
+            postDiv.className = 'post';
+            postDiv.dataset.postId = post.id;
+
+            const feelingHtml = post.feeling ? 
+                `<span class="badge badge-primary"><i class="fas fa-smile"></i> ${getFeelingText(post.feeling)}</span>` : '';
+
+            const mediaHtml = post.media ? `
+                <div class="post-media">
+                    <img src="${post.media}" alt="Post media" onclick="openMediaModal('${post.media}', 'image')">
+                </div>
+            ` : '';
+
+            // Buscar comentários para este post
+            const postComments = database.comments.filter(c => c.postId === post.id);
+            const commentsHtml = postComments.map(comment => {
+                const commentUser = database.users.find(u => u.id === comment.userId);
+                if (!commentUser) return '';
+                
+                return `
+                    <div class="comment">
+                        <img src="${commentUser.avatar}" alt="User" class="comment-avatar" onclick="navigateTo('profile')">
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <span class="comment-author" onclick="navigateTo('profile')">${commentUser.name}</span>
+                                <span class="comment-time">${formatTime(comment.timestamp)}</span>
+                            </div>
+                            <p class="comment-text">${comment.text}</p>
+                            <div class="comment-actions">
+                                <div class="comment-action" onclick="likeComment(${comment.id})">Curtir</div>
+                                <div class="comment-action" onclick="replyToComment(${comment.id})">Responder</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            postDiv.innerHTML = `
+                <div class="post-header">
+                    <div class="post-user">
+                        <img src="${user.avatar}" alt="User" class="post-avatar" onclick="navigateTo('profile')">
+                        <div class="post-user-info">
+                            <h4 onclick="navigateTo('profile')">${user.name}</h4>
+                            <div class="post-time">
+                                ${formatTime(post.timestamp)}
+                                ${feelingHtml}
+                                <span class="badge badge-secondary">${getPrivacyText(post.privacy)}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-options" onclick="showPostOptions(${post.id})">
+                        <i class="fas fa-ellipsis-h"></i>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-text">${post.text}</div>
+                    ${mediaHtml}
+                </div>
+                <div class="post-stats">
+                    <div class="post-likes" onclick="showLikes(${post.id})">
+                        <i class="fas fa-thumbs-up"></i> ${post.likes}
+                    </div>
+                    <div class="post-comments-count" onclick="toggleComments(${post.id})">
+                        ${post.comments} comentários • ${post.shares} compartilhamentos
+                    </div>
+                </div>
+                <div class="post-actions">
+                    <div class="post-action-btn like-btn ${isPostLiked(post.id) ? 'active' : ''}" onclick="toggleLike(${post.id})">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span>${isPostLiked(post.id) ? 'Curtido' : 'Curtir'}</span>
+                    </div>
+                    <div class="post-action-btn comment-btn" onclick="focusCommentInput(${post.id})">
+                        <i class="fas fa-comment"></i>
+                        <span>Comentar</span>
+                    </div>
+                    <div class="post-action-btn share-btn" onclick="sharePost(${post.id})">
+                        <i class="fas fa-share"></i>
+                        <span>Compartilhar</span>
+                    </div>
+                </div>
+                <div class="post-comments" id="comments-${post.id}" style="display: none;">
+                    <div class="comments-list">
+                        ${commentsHtml}
+                    </div>
+                    <div class="add-comment">
+                        <img src="${database.currentUser.avatar}" alt="User" class="comment-avatar">
+                        <input type="text" class="comment-input" placeholder="Escreva um comentário..." onkeypress="handleCommentKeypress(event, ${post.id})">
+                        <button class="comment-submit" onclick="addComment(${post.id})">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return postDiv;
+        }
+
+        function loadFriendRequests() {
+            const container = document.getElementById('friend-requests-container');
+            if (!container) return;
+
+            if (database.friendRequests.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">Nenhuma solicitação pendente</p>';
+                return;
+            }
+
+            container.innerHTML = database.friendRequests.map(request => `
+                <div class="friend-request">
+                    <img src="${request.avatar}" alt="User" class="friend-avatar">
+                    <div class="friend-info">
+                        <div class="friend-name">${request.name}</div>
+                        <div class="friend-mutual">${request.mutualFriends} amigos em comum</div>
+                    </div>
+                    <div class="action-buttons">
+                        <div class="action-btn accept" onclick="acceptFriendRequest(${request.id})">
+                            <i class="fas fa-check"></i>
+                        </div>
+                        <div class="action-btn reject" onclick="rejectFriendRequest(${request.id})">
+                            <i class="fas fa-times"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadFriendSuggestions() {
+            const container = document.getElementById('friend-suggestions-container');
+            if (!container) return;
+
+            if (database.friendSuggestions.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">Nenhuma sugestão no momento</p>';
+                return;
+            }
+
+            container.innerHTML = database.friendSuggestions.map(suggestion => `
+                <div class="suggestion">
+                    <img src="${suggestion.avatar}" alt="User" class="friend-avatar">
+                    <div class="friend-info">
+                        <div class="friend-name">${suggestion.name}</div>
+                        <div class="friend-mutual">${suggestion.mutualFriends} amigos em comum</div>
+                    </div>
+                    <div class="action-buttons">
+                        <div class="action-btn add" onclick="sendFriendRequest(${suggestion.id})">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadBirthdays() {
+            const container = document.getElementById('birthdays-container');
+            if (!container) return;
+
+            // Simular alguns aniversários
+            const birthdays = [
+                { name: "Ana Costa", days: 2 },
+                { name: "Pedro Silva", days: 5 },
+                { name: "Mariana Oliveira", days: 7 }
+            ];
+
+            if (birthdays.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">Nenhum aniversário próximo</p>';
+                return;
+            }
+
+            container.innerHTML = birthdays.map(birthday => `
+                <div class="suggestion">
+                    <div class="friend-info">
+                        <div class="friend-name">${birthday.name}</div>
+                        <div class="friend-mutual">Faz aniversário em ${birthday.days} dias</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // =============================================
+        // FUNÇÕES PARA INTERAÇÕES
+        // =============================================
+
+        function toggleLike(postId) {
+            const post = database.posts.find(p => p.id === postId);
+            if (!post) return;
+
+            // Simulação de like/deslike
+            const isLiked = Math.random() > 0.5; // Simulação
+
+            if (isLiked) {
+                post.likes++;
+                showNotification('Publicação curtida', 'success');
+            } else {
+                post.likes--;
+                showNotification('Curtida removida', 'info');
+            }
+
+            // Atualizar interface
+            const likeBtn = document.querySelector(`.post[data-post-id="${postId}"] .like-btn`);
+            if (likeBtn) {
+                if (isLiked) {
+                    likeBtn.classList.add('active');
+                    likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i><span>Curtido</span>';
+                } else {
+                    likeBtn.classList.remove('active');
+                    likeBtn.innerHTML = '<i class="fas fa-thumbs-up"></i><span>Curtir</span>';
+                }
+
+                // Atualizar contador
+                const likesCount = likeBtn.closest('.post').querySelector('.post-likes');
+                likesCount.innerHTML = `<i class="fas fa-thumbs-up"></i> ${post.likes}`;
+            }
+        }
+
+        function isPostLiked(postId) {
+            // Simulação - na implementação real, verificar no banco de dados
+            return Math.random() > 0.5;
+        }
+
+        function addComment(postId) {
+            const commentInput = document.querySelector(`#comments-${postId} .comment-input`);
+            const text = commentInput.value.trim();
+
+            if (!text) {
+                showNotification('Digite um comentário', 'warning');
+                return;
+            }
+
+            const post = database.posts.find(p => p.id === postId);
+            if (!post) return;
+
+            // Criar novo comentário
+            const newComment = {
+                id: database.comments.length + 1,
+                postId: postId,
+                userId: database.currentUser.id,
+                text: text,
+                timestamp: new Date().toISOString(),
+                likes: 0
+            };
+
+            database.comments.push(newComment);
+            post.comments++;
+
+            // Atualizar interface
+            const commentsList = document.querySelector(`#comments-${postId} .comments-list`);
+            const commentUser = database.currentUser;
+
+            const commentElement = document.createElement('div');
+            commentElement.className = 'comment';
+            commentElement.innerHTML = `
+                <img src="${commentUser.avatar}" alt="User" class="comment-avatar">
+                <div class="comment-content">
+                    <div class="comment-header">
+                        <span class="comment-author">${commentUser.name}</span>
+                        <span class="comment-time">Agora mesmo</span>
+                    </div>
+                    <p class="comment-text">${text}</p>
+                    <div class="comment-actions">
+                        <div class="comment-action" onclick="likeComment(${newComment.id})">Curtir</div>
+                        <div class="comment-action" onclick="replyToComment(${newComment.id})">Responder</div>
+                    </div>
+                </div>
+            `;
+
+            commentsList.appendChild(commentElement);
+            commentInput.value = '';
+
+            // Atualizar contador de comentários
+            const commentsCount = document.querySelector(`.post[data-post-id="${postId}"] .post-comments-count`);
+            commentsCount.textContent = `${post.comments} comentários • ${post.shares} compartilhamentos`;
+
+            showNotification('Comentário adicionado', 'success');
+        }
+
+        function handleCommentKeypress(event, postId) {
+            if (event.key === 'Enter') {
+                addComment(postId);
+            }
+        }
+
+        function focusCommentInput(postId) {
+            const commentInput = document.querySelector(`#comments-${postId} .comment-input`);
+            if (commentInput) {
+                commentInput.focus();
+                // Mostrar seção de comentários se estiver oculta
+                const commentsSection = document.getElementById(`comments-${postId}`);
+                if (commentsSection.style.display === 'none') {
+                    commentsSection.style.display = 'block';
+                }
+            }
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            if (commentsSection) {
+                commentsSection.style.display = commentsSection.style.display === 'none' ? 'block' : 'none';
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES PARA AMIZADES
+        // =============================================
+
+        function acceptFriendRequest(friendId) {
+            const request = database.friendRequests.find(f => f.id === friendId);
+            if (request) {
+                // Mover para amigos
+                database.friends.push({
+                    id: request.id,
+                    name: request.name,
+                    avatar: request.avatar,
+                    mutualFriends: request.mutualFriends,
+                    isOnline: true
+                });
+
+                // Remover da lista de solicitações
+                database.friendRequests = database.friendRequests.filter(f => f.id !== friendId);
+
+                // Atualizar interface
+                loadFriendRequests();
+                updateFriendsBadge();
+
+                showNotification(`Agora você é amigo de ${request.name}`, 'success');
+            }
+        }
+
+        function rejectFriendRequest(friendId) {
+            const request = database.friendRequests.find(f => f.id === friendId);
+            if (request) {
+                database.friendRequests = database.friendRequests.filter(f => f.id !== friendId);
+                loadFriendRequests();
+                updateFriendsBadge();
+                showNotification('Solicitação recusada', 'info');
+            }
+        }
+
+        function sendFriendRequest(friendId) {
+            const suggestion = database.friendSuggestions.find(f => f.id === friendId);
+            if (suggestion) {
+                showNotification(`Solicitação enviada para ${suggestion.name}`, 'success');
+                // Na implementação real, enviaria para o servidor
+            }
+        }
+
+        function updateFriendsBadge() {
+            const badge = document.querySelector('.menu-item:nth-child(2) .notification-badge');
+            if (badge) {
+                badge.textContent = database.friendRequests.length;
+                if (database.friendRequests.length === 0) {
+                    badge.style.display = 'none';
+                } else {
+                    badge.style.display = 'flex';
+                }
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES PARA MENSAGENS
+        // =============================================
+
+        function loadConversations() {
+            const container = document.querySelector('.conversation-list');
+            if (!container) return;
+
+            container.innerHTML = database.conversations.map(conv => {
+                const otherUserId = conv.participants.find(id => id !== database.currentUser.id);
+                const otherUser = database.users.find(u => u.id === otherUserId);
+                if (!otherUser) return '';
+
+                return `
+                    <div class="conversation-item ${conv.id === 1 ? 'active' : ''}" onclick="loadMessages(${conv.id})">
+                        <div class="position-relative">
+                            <img src="${otherUser.avatar}" alt="User" class="conversation-avatar">
+                            ${otherUser.isOnline ? '<div class="online-indicator"></div>' : ''}
+                        </div>
+                        <div class="conversation-info">
+                            <div class="conversation-name">${otherUser.name}</div>
+                            <div class="conversation-preview">${conv.lastMessage}</div>
+                        </div>
+                        <div class="conversation-time">${formatTime(conv.timestamp)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function loadMessages(conversationId) {
+            const container = document.getElementById('chat-messages');
+            if (!container) return;
+
+            const messages = database.messages.filter(m => m.conversationId === conversationId);
+            container.innerHTML = messages.map(message => {
+                const isSent = message.senderId === database.currentUser.id;
+                return `
+                    <div class="message ${isSent ? 'sent' : 'received'}">
+                        <div class="message-text">${message.text}</div>
+                        <div class="message-time">${formatTime(message.timestamp)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // Scroll para o final
+            container.scrollTop = container.scrollHeight;
+
+            // Atualizar conversa ativa
+            document.querySelectorAll('.conversation-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`.conversation-item:nth-child(${conversationId})`).classList.add('active');
+        }
+
+        function startNewConversation() {
+            showNotification('Abrindo modal para nova conversa', 'info');
+        }
+
+        // =============================================
+        // FUNÇÕES PARA NOTIFICAÇÕES
+        // =============================================
+
+        function loadNotifications() {
+            const container = document.getElementById('notifications-list');
+            if (!container) return;
+
+            if (database.notifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bell-slash"></i>
+                        <h3>Nenhuma notificação</h3>
+                        <p>Você não tem nenhuma notificação no momento</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = database.notifications.map(notification => {
+                const iconClass = getNotificationIcon(notification.type);
+                const bgClass = getNotificationBgClass(notification.type);
+                
+                return `
+                    <div class="notification-item ${notification.isRead ? '' : 'unread'}">
+                        <div class="notification-icon-container ${bgClass}">
+                            <i class="${iconClass}"></i>
+                        </div>
+                        <div class="notification-content">
+                            <div class="notification-text">${notification.text}</div>
+                            <div class="notification-time">${formatTime(notification.timestamp)}</div>
+                        </div>
+                        <div class="notification-actions">
+                            ${!notification.isRead ? `
+                                <button class="btn btn-sm btn-outline-primary" onclick="markNotificationAsRead(${notification.id})">
+                                    Marcar como lida
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function markNotificationAsRead(notificationId) {
+            const notification = database.notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.isRead = true;
+                loadNotifications();
+                updateNotificationsBadge();
+                showNotification('Notificação marcada como lida', 'success');
+            }
+        }
+
+        function markAllAsRead() {
+            database.notifications.forEach(notification => {
+                notification.isRead = true;
+            });
+            loadNotifications();
+            updateNotificationsBadge();
+            showNotification('Todas as notificações marcadas como lidas', 'success');
+        }
+
+        function updateNotificationsBadge() {
+            const unreadCount = database.notifications.filter(n => !n.isRead).length;
+            const badge = document.getElementById('notifications-badge');
+            if (badge) {
+                badge.textContent = unreadCount;
+                if (unreadCount === 0) {
+                    badge.style.display = 'none';
+                } else {
+                    badge.style.display = 'flex';
+                }
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES PARA OUTRAS PÁGINAS
+        // =============================================
+
+        function loadFriendsPage() {
+            // Implementação similar para outras abas de amigos
+            showFriendsTab('all');
+        }
+
+        function loadGroupsPage() {
+            showGroupsTab('my');
+        }
+
+        function loadMarketplacePage() {
+            showMarketplaceTab('browse');
+        }
+
+        function loadVideosPage() {
+            showVideosTab('feed');
+        }
+
+        function loadMusicPage() {
+            showMusicTab('discover');
+        }
+
+        function loadPhotosPage() {
+            showPhotosTab('my');
+        }
+
+        function loadEventsPage() {
+            showEventsTab('upcoming');
+        }
+
+        function loadProfilePage() {
+            loadProfileData();
+            showProfileTab('posts');
+        }
+
+        function loadProfileData() {
+            // Atualizar informações do perfil com dados do usuário atual
+            document.getElementById('profile-name').textContent = database.currentUser.name;
+            document.getElementById('profile-bio').textContent = database.currentUser.bio;
+            document.getElementById('profile-avatar').src = database.currentUser.avatar;
+            document.getElementById('sidebar-user-name').textContent = database.currentUser.name;
+            document.getElementById('sidebar-user-bio').textContent = database.currentUser.bio;
+            document.getElementById('header-user-avatar').src = database.currentUser.avatar;
+            document.getElementById('create-post-avatar').src = database.currentUser.avatar;
+            document.getElementById('modal-post-avatar').src = database.currentUser.avatar;
+            document.getElementById('sidebar-user-avatar').src = database.currentUser.avatar;
+
+            // Atualizar informações da página "Sobre"
+            document.getElementById('about-name').textContent = database.currentUser.name;
+            document.getElementById('about-work').textContent = database.currentUser.work;
+            document.getElementById('about-education').textContent = database.currentUser.education;
+            document.getElementById('about-city').textContent = database.currentUser.location;
+            document.getElementById('about-from').textContent = database.currentUser.from;
+            document.getElementById('about-relationship').textContent = database.currentUser.relationship;
+            document.getElementById('about-birthday').textContent = database.currentUser.birthday;
+            document.getElementById('about-bio').textContent = database.currentUser.bio;
+
+            // Carregar posts do perfil
+            const userPosts = database.posts.filter(p => p.userId === database.currentUser.id);
+            const postsContainer = document.getElementById('profile-posts-container');
+            if (postsContainer) {
+                postsContainer.innerHTML = '';
+                userPosts.forEach(post => {
+                    const postElement = createPostElement(post, database.currentUser);
+                    postsContainer.appendChild(postElement);
+                });
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES PARA ABAS
+        // =============================================
+
+        function showFriendsTab(tab) {
+            document.querySelectorAll('.friends-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#friends-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`friends-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar conteúdo específico da aba
+            const container = document.getElementById(`${tab}-friends-container`);
+            if (container) {
+                if (tab === 'all') {
+                    container.innerHTML = database.friends.map(friend => createFriendCard(friend)).join('');
+                } else if (tab === 'requests') {
+                    container.innerHTML = database.friendRequests.map(request => createFriendCard(request, 'request')).join('');
+                } else if (tab === 'suggestions') {
+                    container.innerHTML = database.friendSuggestions.map(suggestion => createFriendCard(suggestion, 'suggestion')).join('');
+                }
+            }
+        }
+
+        function showGroupsTab(tab) {
+            document.querySelectorAll('.groups-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#groups-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`groups-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar grupos
+            const container = document.getElementById(`${tab}-groups-container`);
+            if (container) {
+                let groups = [];
+                if (tab === 'my') {
+                    groups = database.groups.filter(g => g.isMember);
+                } else if (tab === 'discover') {
+                    groups = database.groups.filter(g => !g.isMember);
+                } else if (tab === 'managed') {
+                    groups = database.groups.filter(g => g.isAdmin);
+                }
+
+                container.innerHTML = groups.map(group => createGroupCard(group)).join('');
+            }
+        }
+
+        function showMarketplaceTab(tab) {
+            document.querySelectorAll('.marketplace-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#marketplace-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`marketplace-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar itens do marketplace
+            const container = document.getElementById(`${tab}-items-container`);
+            if (container) {
+                container.innerHTML = database.marketplaceItems.map(item => createMarketplaceCard(item)).join('');
+            }
+        }
+
+        function showVideosTab(tab) {
+            document.querySelectorAll('.videos-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#videos-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`videos-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar vídeos
+            const container = document.getElementById(`${tab}-videos-container`);
+            if (container) {
+                container.innerHTML = database.videos.map(video => createVideoCard(video)).join('');
+            }
+        }
+
+        function showMusicTab(tab) {
+            document.querySelectorAll('.music-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#music-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`music-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar músicas
+            const container = document.getElementById(`${tab}-music-container`);
+            if (container) {
+                if (tab === 'discover' || tab === 'my') {
+                    container.innerHTML = database.music.map(song => createMusicCard(song)).join('');
+                }
+            }
+        }
+
+        function showPhotosTab(tab) {
+            document.querySelectorAll('.photos-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#photos-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`photos-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar fotos
+            const container = document.getElementById(`${tab}-photos-container`);
+            if (container) {
+                container.innerHTML = database.photos.map(photo => createPhotoCard(photo)).join('');
+            }
+        }
+
+        function showEventsTab(tab) {
+            document.querySelectorAll('.events-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#events-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`events-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar eventos
+            const container = document.getElementById(`${tab}-events-container`);
+            if (container) {
+                container.innerHTML = database.events.map(event => createEventCard(event)).join('');
+            }
+        }
+
+        function showProfileTab(tab) {
+            document.querySelectorAll('.profile-tab').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('#profile-page .tab').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`profile-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+
+            // Carregar conteúdo específico do perfil
+            const container = document.getElementById(`profile-${tab}-container`);
+            if (container) {
+                if (tab === 'friends') {
+                    container.innerHTML = database.friends.map(friend => createFriendCard(friend)).join('');
+                } else if (tab === 'photos') {
+                    container.innerHTML = database.photos.map(photo => createPhotoCard(photo)).join('');
+                } else if (tab === 'videos') {
+                    container.innerHTML = database.videos.map(video => createVideoCard(video)).join('');
+                } else if (tab === 'groups') {
+                    const userGroups = database.groups.filter(g => g.isMember);
+                    container.innerHTML = userGroups.map(group => createGroupCard(group)).join('');
+                }
+            }
+        }
+
+        function showNotificationsTab(tab) {
+            document.querySelectorAll('#notifications-page .tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtrar notificações baseado na aba
+            let filteredNotifications = database.notifications;
+            if (tab === 'unread') {
+                filteredNotifications = database.notifications.filter(n => !n.isRead);
+            } else if (tab === 'mentions') {
+                filteredNotifications = database.notifications.filter(n => n.type === 'comment' || n.type === 'tag');
+            }
+
+            const container = document.getElementById('notifications-list');
+            if (container) {
+                if (filteredNotifications.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-bell-slash"></i>
+                            <h3>Nenhuma notificação</h3>
+                            <p>Você não tem nenhuma notificação ${tab === 'unread' ? 'não lida' : tab === 'mentions' ? 'de menção' : ''} no momento</p>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = filteredNotifications.map(notification => {
+                        const iconClass = getNotificationIcon(notification.type);
+                        const bgClass = getNotificationBgClass(notification.type);
+                        
+                        return `
+                            <div class="notification-item ${notification.isRead ? '' : 'unread'}">
+                                <div class="notification-icon-container ${bgClass}">
+                                    <i class="${iconClass}"></i>
+                                </div>
+                                <div class="notification-content">
+                                    <div class="notification-text">${notification.text}</div>
+                                    <div class="notification-time">${formatTime(notification.timestamp)}</div>
+                                </div>
+                                <div class="notification-actions">
+                                    ${!notification.isRead ? `
+                                        <button class="btn btn-sm btn-outline-primary" onclick="markNotificationAsRead(${notification.id})">
+                                            Marcar como lida
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            }
+        }
+
+        function showSettingsTab(tab) {
+            document.querySelectorAll('.settings-content').forEach(t => t.style.display = 'none');
+            document.querySelectorAll('.settings-item').forEach(t => t.classList.remove('active'));
+            
+            document.getElementById(`settings-${tab}`).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        // =============================================
+        // FUNÇÕES AUXILIARES
+        // =============================================
+
+        function formatTime(timestamp) {
+            const now = new Date();
+            const postTime = new Date(timestamp);
+            const diffMs = now - postTime;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 1) return 'Agora mesmo';
+            if (diffMins < 60) return `${diffMins} min atrás`;
+            if (diffHours < 24) return `${diffHours} h atrás`;
+            if (diffDays < 7) return `${diffDays} d atrás`;
+            
+            return postTime.toLocaleDateString('pt-BR');
+        }
+
+        function getFeelingText(feeling) {
+            const feelings = {
+                'happy': 'Feliz',
+                'loved': 'Apaixonado',
+                'excited': 'Animado',
+                'blessed': 'Abençoado',
+                'nostalgic': 'Nostálgico',
+                'proud': 'Orgulhoso'
+            };
+            return feelings[feeling] || feeling;
+        }
+
+        function getPrivacyText(privacy) {
+            const privacies = {
+                'public': 'Público',
+                'friends': 'Amigos',
+                'only_me': 'Somente eu'
+            };
+            return privacies[privacy] || privacy;
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                'like': 'fas fa-thumbs-up',
+                'comment': 'fas fa-comment',
+                'friend': 'fas fa-user-plus',
+                'tag': 'fas fa-tag',
+                'share': 'fas fa-share'
+            };
+            return icons[type] || 'fas fa-bell';
+        }
+
+        function getNotificationBgClass(type) {
+            const classes = {
+                'like': 'like',
+                'comment': 'comment',
+                'friend': 'friend',
+                'tag': 'comment',
+                'share': 'like'
+            };
+            return classes[type] || 'like';
+        }
+
+        function createFriendCard(friend, type = 'friend') {
+            let buttons = '';
+            if (type === 'request') {
+                buttons = `
+                    <div class="card-actions">
+                        <button class="btn-card btn-primary" onclick="acceptFriendRequest(${friend.id})">Aceitar</button>
+                        <button class="btn-card btn-secondary" onclick="rejectFriendRequest(${friend.id})">Recusar</button>
+                    </div>
+                `;
+            } else if (type === 'suggestion') {
+                buttons = `
+                    <div class="card-actions">
+                        <button class="btn-card btn-primary" onclick="sendFriendRequest(${friend.id})">Adicionar</button>
+                        <button class="btn-card btn-secondary" onclick="removeSuggestion(${friend.id})">Remover</button>
+                    </div>
+                `;
+            } else {
+                buttons = `
+                    <div class="card-actions">
+                        <button class="btn-card btn-primary" onclick="viewFriendProfile(${friend.id})">Ver Perfil</button>
+                        <button class="btn-card btn-secondary" onclick="removeFriend(${friend.id})">Remover</button>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="card">
+                    <div class="position-relative">
+                        <img src="${friend.avatar}" alt="${friend.name}" class="card-img">
+                        ${friend.isOnline ? '<div class="online-indicator"></div>' : ''}
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${friend.name}</h5>
+                        <p class="card-text">${friend.mutualFriends} amigos em comum</p>
+                        ${buttons}
+                    </div>
+                </div>
+            `;
+        }
+
+        function createGroupCard(group) {
+            return `
+                <div class="card group-card">
+                    <img src="${group.image}" alt="${group.name}" class="card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${group.name}</h5>
+                        <p class="card-text">${group.description}</p>
+                        <p class="card-text"><small>${group.members} membros</small></p>
+                        <div class="card-actions">
+                            ${group.isMember ? `
+                                <button class="btn-card btn-primary" onclick="viewGroup(${group.id})">Ver Grupo</button>
+                                ${group.isAdmin ? '<span class="badge badge-warning">Admin</span>' : ''}
+                            ` : `
+                                <button class="btn-card btn-primary" onclick="joinGroup(${group.id})">Entrar</button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createMarketplaceCard(item) {
+            const seller = database.users.find(u => u.id === item.sellerId);
+            return `
+                <div class="card">
+                    <img src="${item.image}" alt="${item.title}" class="card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${item.title}</h5>
+                        <p class="card-text">${item.description}</p>
+                        <div class="product-price">${item.price}</div>
+                        <div class="product-location">
+                            <i class="fas fa-map-marker-alt"></i> ${item.location}
+                        </div>
+                        ${seller ? `<p class="card-text"><small>Vendido por ${seller.name}</small></p>` : ''}
+                        <div class="card-actions">
+                            <button class="btn-card btn-primary" onclick="viewItem(${item.id})">Ver Detalhes</button>
+                            <button class="btn-card btn-secondary" onclick="saveItem(${item.id})">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createVideoCard(video) {
+            const user = database.users.find(u => u.id === video.userId);
+            return `
+                <div class="card">
+                    <img src="${video.thumbnail}" alt="${video.title}" class="card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${video.title}</h5>
+                        <p class="card-text">${video.description}</p>
+                        ${user ? `<p class="card-text"><small>Por ${user.name}</small></p>` : ''}
+                        <p class="card-text"><small>${video.duration} • ${video.views} visualizações</small></p>
+                        <div class="card-actions">
+                            <button class="btn-card btn-primary" onclick="playVideo(${video.id})">Assistir</button>
+                            <button class="btn-card btn-secondary" onclick="saveVideo(${video.id})">Salvar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createMusicCard(song) {
+            return `
+                <div class="card">
+                    <img src="${song.cover}" alt="${song.title}" class="card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${song.title}</h5>
+                        <p class="card-text">${song.artist}</p>
+                        <p class="card-text"><small>${song.album} • ${song.duration}</small></p>
+                        <div class="card-actions">
+                            <button class="btn-card btn-primary" onclick="playSong(${song.id})">Ouvir</button>
+                            <button class="btn-card btn-secondary" onclick="addToPlaylist(${song.id})">Adicionar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createPhotoCard(photo) {
+            const user = database.users.find(u => u.id === photo.userId);
+            return `
+                <div class="card">
+                    <img src="${photo.image}" alt="${photo.title}" class="card-img">
+                    <div class="card-body">
+                        <h5 class="card-title">${photo.title}</h5>
+                        ${user ? `<p class="card-text"><small>Por ${user.name}</small></p>` : ''}
+                        <div class="card-actions">
+                            <button class="btn-card btn-primary" onclick="viewPhoto(${photo.id})">Ver Foto</button>
+                            <button class="btn-card btn-secondary" onclick="downloadPhoto(${photo.id})">Baixar</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function createEventCard(event) {
+            return `
+                <div class="card">
+                    <div class="position-relative">
+                        <img src="${event.image}" alt="${event.title}" class="card-img">
+                        <div class="event-date">
+                            <div class="event-day">${event.date.split('/')[0]}</div>
+                            <div class="event-month">${getMonthName(event.date.split('/')[1])}</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">${event.title}</h5>
+                        <p class="card-text">${event.description}</p>
+                        <p class="card-text">
+                            <i class="fas fa-calendar"></i> ${event.date} às ${event.time}
+                        </p>
+                        <p class="card-text">
+                            <i class="fas fa-map-marker-alt"></i> ${event.location}
+                        </p>
+                        <p class="card-text"><small>${event.attendees} participantes</small></p>
+                        <div class="card-actions">
+                            <button class="btn-card btn-primary" onclick="viewEvent(${event.id})">Ver Evento</button>
+                            <button class="btn-card ${event.isAttending ? 'btn-secondary' : 'btn-primary'}" 
+                                    onclick="toggleEventAttendance(${event.id})">
+                                ${event.isAttending ? 'Cancelar' : 'Participar'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getMonthName(month) {
+            const months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            return months[parseInt(month) - 1] || month;
+        }
+
+        // =============================================
+        // FUNÇÕES PARA MODAIS E AÇÕES
+        // =============================================
+
+        function showCreateStoryModal() {
+            showNotification('Abrindo modal para criar story', 'info');
+        }
+
+        function showFeelingModal() {
+            const modal = new bootstrap.Modal(document.getElementById('feelingModal'));
+            modal.show();
+        }
+
+        function showCreateGroupModal() {
+            showNotification('Abrindo modal para criar grupo', 'info');
+        }
+
+        function showCreateListingModal() {
+            showNotification('Abrindo modal para criar anúncio', 'info');
+        }
+
+        function showUploadVideoModal() {
+            showNotification('Abrindo modal para enviar vídeo', 'info');
+        }
+
+        function showUploadMusicModal() {
+            showNotification('Abrindo modal para enviar música', 'info');
+        }
+
+        function showUploadPhotoModal() {
+            showNotification('Abrindo modal para enviar foto', 'info');
+        }
+
+        function showCreateEventModal() {
+            showNotification('Abrindo modal para criar evento', 'info');
+        }
+
+        function showEditProfileModal() {
+            showNotification('Abrindo modal para editar perfil', 'info');
+        }
+
+        function changeCoverPhoto() {
+            showNotification('Abrindo seletor de foto de capa', 'info');
+        }
+
+        function changeProfilePhoto() {
+            showNotification('Abrindo seletor de foto de perfil', 'info');
+        }
+
+        // =============================================
+        // FUNÇÕES PARA O PLAYER DE MÚSICA
+        // =============================================
+
+        function playSong(songId) {
+            const song = database.music.find(s => s.id === songId);
+            if (song) {
+                document.getElementById('player-title').textContent = song.title;
+                document.getElementById('player-artist').textContent = song.artist;
+                document.getElementById('player-album').src = song.cover;
+                document.getElementById('music-player').style.display = 'flex';
+                
+                // Simular reprodução
+                appState.isPlaying = true;
+                document.getElementById('play-icon').className = 'fas fa-pause';
+                
+                showNotification(`Reproduzindo: ${song.title}`, 'success');
+            }
+        }
+
+        function togglePlayPause() {
+            appState.isPlaying = !appState.isPlaying;
+            const icon = document.getElementById('play-icon');
+            icon.className = appState.isPlaying ? 'fas fa-pause' : 'fas fa-play';
+            
+            showNotification(appState.isPlaying ? 'Reproduzindo' : 'Pausado', 'info');
+        }
+
+        function toggleShuffle() {
+            appState.isShuffle = !appState.isShuffle;
+            showNotification(appState.isShuffle ? 'Embaralhar ativado' : 'Embaralhar desativado', 'info');
+        }
+
+        function toggleRepeat() {
+            appState.isRepeat = !appState.isRepeat;
+            showNotification(appState.isRepeat ? 'Repetir ativado' : 'Repetir desativado', 'info');
+        }
+
+        function toggleMute() {
+            appState.isMuted = !appState.isMuted;
+            const icon = document.getElementById('volume-icon');
+            icon.className = appState.isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up';
+            showNotification(appState.isMuted ? 'Mudo ativado' : 'Mudo desativado', 'info');
+        }
+
+        function previousTrack() {
+            showNotification('Música anterior', 'info');
+        }
+
+        function nextTrack() {
+            showNotification('Próxima música', 'info');
+        }
+
+        function togglePlaylist() {
+            showNotification('Abrindo/fechando playlist', 'info');
+        }
+
+        function seekMusic(event) {
+            showNotification('Buscando na música', 'info');
+        }
+
+        // =============================================
+        // FUNÇÕES PARA NOTIFICAÇÕES
+        // =============================================
+
+        function showNotification(message, type = 'info') {
+            const toast = document.getElementById('notification-toast');
+            const title = document.getElementById('notification-title');
+            const messageEl = document.getElementById('notification-message');
+            const icon = document.getElementById('notification-icon');
+            
+            // Configurar cores e ícones baseados no tipo
+            let iconClass, bgColor;
+            switch(type) {
+                case 'success':
+                    iconClass = 'fas fa-check';
+                    bgColor = 'var(--success-color)';
+                    title.textContent = 'Sucesso';
+                    break;
+                case 'warning':
+                    iconClass = 'fas fa-exclamation-triangle';
+                    bgColor = 'var(--warning-color)';
+                    title.textContent = 'Aviso';
+                    break;
+                case 'error':
+                    iconClass = 'fas fa-times-circle';
+                    bgColor = 'var(--danger-color)';
+                    title.textContent = 'Erro';
+                    break;
+                default:
+                    iconClass = 'fas fa-info-circle';
+                    bgColor = 'var(--info-color)';
+                    title.textContent = 'Informação';
+            }
+            
+            icon.innerHTML = `<i class="${iconClass}"></i>`;
+            icon.style.backgroundColor = bgColor;
+            messageEl.textContent = message;
+            
+            // Mostrar toast
+            toast.classList.add('show');
+            
+            // Auto-esconder após 3 segundos
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // =============================================
+        // FUNÇÕES PARA DARK MODE
+        // =============================================
+
+        function toggleDarkMode() {
+            appState.darkMode = !appState.darkMode;
+            document.body.classList.toggle('dark-mode', appState.darkMode);
+            
+            const icon = document.getElementById('dark-mode-icon');
+            icon.className = appState.darkMode ? 'fas fa-sun' : 'fas fa-moon';
+            
+            showNotification(appState.darkMode ? 'Modo escuro ativado' : 'Modo claro ativado', 'success');
+            
+            // Salvar preferência
+            localStorage.setItem('rodango-dark-mode', appState.darkMode);
+        }
+
+        // =============================================
+        // FUNÇÕES DE INICIALIZAÇÃO
+        // =============================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar preferências
+            const savedDarkMode = localStorage.getItem('rodango-dark-mode');
+            if (savedDarkMode === 'true') {
+                appState.darkMode = true;
+                document.body.classList.add('dark-mode');
+                document.getElementById('dark-mode-icon').className = 'fas fa-sun';
+            }
+
+            // Configurar eventos do modal de criação de post
+            const mediaFileInput = document.getElementById('media-file');
+            const mediaPreview = document.getElementById('media-preview');
+            const postText = document.getElementById('post-text');
+            const submitPost = document.getElementById('submit-post');
+            
+            mediaFileInput.addEventListener('change', function() {
+                const files = this.files;
+                if (files.length > 0) {
+                    mediaPreview.innerHTML = '';
+                    for (let file of files) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            let mediaElement;
+                            if (file.type.startsWith('image/')) {
+                                mediaElement = `<img src="${e.target.result}" alt="Preview" style="max-width: 100%; margin: 5px;">`;
+                            } else if (file.type.startsWith('video/')) {
+                                mediaElement = `<video controls style="max-width: 100%; margin: 5px;"><source src="${e.target.result}" type="${file.type}">Seu navegador não suporta o elemento de vídeo.</video>`;
+                            } else if (file.type.startsWith('audio/')) {
+                                mediaElement = `<audio controls style="width: 100%; margin: 5px;"><source src="${e.target.result}" type="${file.type}">Seu navegador não suporta o elemento de áudio.</audio>`;
+                            }
+                            
+                            mediaPreview.innerHTML += mediaElement;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                    submitPost.disabled = false;
+                }
+            });
+            
+            postText.addEventListener('input', function() {
+                submitPost.disabled = this.value.trim() === '' && mediaFileInput.files.length === 0;
+            });
+            
+            submitPost.addEventListener('click', function() {
+                const text = postText.value.trim();
+                const files = mediaFileInput.files;
+                
+                if (text || files.length > 0) {
+                    // Criar novo post
+                    const newPost = {
+                        id: database.posts.length + 1,
+                        userId: database.currentUser.id,
+                        text: text,
+                        media: files.length > 0 ? URL.createObjectURL(files[0]) : null, // Simplificado para primeira mídia
+                        likes: 0,
+                        comments: 0,
+                        shares: 0,
+                        timestamp: new Date().toISOString(),
+                        privacy: "public",
+                        feeling: null
+                    };
+                    
+                    database.posts.unshift(newPost);
+                    
+                    // Fechar modal e resetar
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('createPostModal'));
+                    modal.hide();
+                    
+                    postText.value = '';
+                    mediaFileInput.value = '';
+                    mediaPreview.innerHTML = '';
+                    submitPost.disabled = true;
+                    
+                    // Recarregar posts
+                    loadPosts();
+                    
+                    showNotification('Publicação criada com sucesso!', 'success');
+                }
+            });
+            
+            // Configurar evento de fechar notificação
+            document.getElementById('notification-close').addEventListener('click', function() {
+                document.getElementById('notification-toast').classList.remove('show');
+            });
+            
+            // Configurar eventos de sentimentos
+            document.querySelectorAll('.feeling-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const feeling = this.dataset.feeling;
+                    document.getElementById('post-text').value = `Estou me sentindo ${getFeelingText(feeling)}! `;
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('feelingModal'));
+                    modal.hide();
+                });
+            });
+            
+            // Configurar busca global
+            document.getElementById('global-search').addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                if (query.length > 2) {
+                    // Implementar busca em tempo real
+                    console.log('Buscando:', query);
+                }
+            });
+            
+            // Configurar formulários de configurações
+            const settingsForms = [
+                'account-settings-form',
+                'privacy-settings-form',
+                'notifications-settings-form',
+                'language-settings-form',
+                'accessibility-settings-form',
+                'security-settings-form',
+                'payment-settings-form'
+            ];
+            
+            settingsForms.forEach(formId => {
+                const form = document.getElementById(formId);
+                if (form) {
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        showNotification('Configurações salvas com sucesso!', 'success');
+                    });
+                }
+            });
+            
+            // Carregar dados iniciais
+            loadPageData('home');
+            updateFriendsBadge();
+            updateNotificationsBadge();
+            
+            // Mostrar notificação de boas-vindas
+            setTimeout(() => {
+                showNotification('Bem-vindo ao Rodango!', 'success');
+            }, 1000);
+        });
+
+        // =============================================
+        // FUNÇÕES DE SIMULAÇÃO PARA AÇÕES NÃO IMPLEMENTADAS
+        // =============================================
+
+        // Funções placeholder para ações não totalmente implementadas
+        function likeComment(commentId) { showNotification('Curtindo comentário', 'info'); }
+        function replyToComment(commentId) { showNotification('Respondendo ao comentário', 'info'); }
+        function sharePost(postId) { showNotification('Compartilhando publicação', 'info'); }
+        function showPostOptions(postId) { showNotification('Abrindo opções da publicação', 'info'); }
+        function showLikes(postId) { showNotification('Mostrando curtidas', 'info'); }
+        function removeSuggestion(friendId) { showNotification('Removendo sugestão', 'info'); }
+        function viewFriendProfile(friendId) { showNotification('Abrindo perfil do amigo', 'info'); }
+        function removeFriend(friendId) { showNotification('Removendo amigo', 'info'); }
+        function viewGroup(groupId) { showNotification('Abrindo grupo', 'info'); }
+        function joinGroup(groupId) { showNotification('Entrando no grupo', 'info'); }
+        function viewItem(itemId) { showNotification('Abrindo detalhes do item', 'info'); }
+        function saveItem(itemId) { showNotification('Item salvo', 'success'); }
+        function playVideo(videoId) { showNotification('Reproduzindo vídeo', 'info'); }
+        function saveVideo(videoId) { showNotification('Vídeo salvo', 'success'); }
+        function addToPlaylist(songId) { showNotification('Música adicionada à playlist', 'success'); }
+        function viewPhoto(photoId) { showNotification('Abrindo foto', 'info'); }
+        function downloadPhoto(photoId) { showNotification('Foto baixada', 'success'); }
+        function viewEvent(eventId) { showNotification('Abrindo detalhes do evento', 'info'); }
+        function toggleEventAttendance(eventId) { showNotification('Alternando participação no evento', 'info'); }
+        function openMediaModal(url, type) { showNotification('Abrindo mídia em tela cheia', 'info'); }
+    </script>
+</body>
+</html>

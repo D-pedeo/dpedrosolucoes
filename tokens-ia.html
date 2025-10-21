@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokens de IA - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #2980b9;
+            --ai-color: #6e3bce;
+            --facebook-color: #3b5998;
+            --instagram-color: #e1306c;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #219653;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-ai {
+            background-color: var(--ai-color);
+            color: white;
+        }
+
+        .btn-ai:hover {
+            background-color: #5a2fa8;
+            color: white;
+        }
+
+        .btn-facebook {
+            background-color: var(--facebook-color);
+            color: white;
+        }
+
+        .btn-facebook:hover {
+            background-color: #2d4373;
+            color: white;
+        }
+
+        .btn-instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            color: white;
+        }
+
+        .btn-instagram:hover {
+            background: linear-gradient(45deg, #da7c1f, #d25629, #c81f43, #b21a5a, #9e1570);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: none;
+            transition: transform var(--transition-speed);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Dashboard de IA */
+        .ai-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--ai-color), var(--secondary-color));
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-title {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            font-size: 0.9rem;
+        }
+
+        .change-positive {
+            color: var(--success-color);
+        }
+
+        .change-negative {
+            color: var(--danger-color);
+        }
+
+        /* Abas */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.8rem 1.5rem;
+            background: #f8f9fa;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .tab.active {
+            background: var(--ai-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Tabelas */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th {
+            background-color: #f8f9fa;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 2px solid #eee;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .data-table th:hover {
+            background-color: #e9ecef;
+        }
+
+        .data-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: rgba(39, 174, 96, 0.15);
+            color: var(--success-color);
+        }
+
+        .status-paused {
+            background: rgba(241, 196, 15, 0.15);
+            color: var(--warning-color);
+        }
+
+        .status-inactive {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--danger-color);
+        }
+
+        .status-error {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--danger-color);
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: all var(--transition-speed);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ai-color);
+            box-shadow: 0 0 0 3px rgba(110, 59, 206, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Filtros */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            min-width: 200px;
+        }
+
+        /* Cards de API */
+        .api-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .api-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            transition: all var(--transition-speed);
+            border-left: 4px solid var(--ai-color);
+            position: relative;
+        }
+
+        .api-card.facebook {
+            border-left-color: var(--facebook-color);
+        }
+
+        .api-card.instagram {
+            border-left-color: var(--instagram-color);
+        }
+
+        .api-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .api-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            background: linear-gradient(135deg, var(--ai-color), #8a63d2);
+        }
+
+        .api-icon.facebook {
+            background: linear-gradient(135deg, var(--facebook-color), #4c70ba);
+        }
+
+        .api-icon.instagram {
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        }
+
+        .api-title {
+            font-size: 1.2rem;
+            margin-bottom: 0;
+        }
+
+        .api-description {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        /* Tokens */
+        .token-value {
+            background: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            font-family: monospace;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+        }
+
+        .token-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Utilização */
+        .usage-bar {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .usage-progress {
+            height: 100%;
+            border-radius: 5px;
+            transition: width 0.5s ease;
+        }
+
+        .usage-low {
+            background: var(--success-color);
+        }
+
+        .usage-medium {
+            background: var(--warning-color);
+        }
+
+        .usage-high {
+            background: var(--danger-color);
+        }
+
+        /* Alertas */
+        .alert {
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-error {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-left: 4px solid var(--danger-color);
+            color: #c0392b;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background: white;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+            border-left: 4px solid var(--info-color);
+        }
+
+        .toast.success {
+            border-left-color: var(--success-color);
+        }
+
+        .toast.error {
+            border-left-color: var(--danger-color);
+        }
+
+        .toast.warning {
+            border-left-color: var(--warning-color);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Live Updates */
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--secondary-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+            max-width: 300px;
+        }
+
+        .search-box input {
+            padding-left: 2.5rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .ai-dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .api-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                padding-bottom: 0;
+            }
+            
+            .token-value {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .token-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Animações */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Real-time Updates */
+        .update-indicator {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: var(--success-color);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        .refreshing {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho da página -->
+        <div class="header">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="page-title">
+                    <i class="fas fa-key"></i>
+                    Tokens de IA
+                    <span class="live-indicator">
+                        <span class="pulse-dot"></span>
+                        TEMPO REAL
+                    </span>
+                </h1>
+            </div>
+            <div>
+                <button class="btn btn-secondary" id="refreshDataBtn">
+                    <i class="fas fa-sync-alt"></i> Atualizar
+                </button>
+                <button class="btn btn-ai" data-bs-toggle="modal" data-bs-target="#generateTokenModal">
+                    <i class="fas fa-plus"></i> Gerar Novo Token
+                </button>
+            </div>
+        </div>
+
+        <!-- Dashboard de IA -->
+        <div class="ai-dashboard">
+            <div class="metric-card">
+                <div class="metric-value" id="totalTokens">21</div>
+                <div class="metric-title">Tokens Ativos</div>
+                <div class="metric-change change-positive">
+                    <i class="fas fa-arrow-up"></i> <span id="tokensChange">8 desde o último mês</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="apiCalls">28.5K</div>
+                <div class="metric-title">Chamadas de API</div>
+                <div class="metric-change change-positive">
+                    <i class="fas fa-arrow-up"></i> <span id="callsChange">15% desde o último mês</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="tokenUsage">68%</div>
+                <div class="metric-title">Uso Médio de Tokens</div>
+                <div class="metric-change change-negative">
+                    <i class="fas fa-arrow-down"></i> <span id="usageChange">5% desde o último mês</span>
+                </div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-value" id="activeModels">9</div>
+                <div class="metric-title">Modelos de IA Ativos</div>
+                <div class="metric-change change-positive">
+                    <i class="fas fa-arrow-up"></i> <span id="modelsChange">3 desde o último mês</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Abas de Conteúdo -->
+        <div class="tabs">
+            <div class="tab active" data-tab="tokens">Meus Tokens</div>
+            <div class="tab" data-tab="social">Redes Sociais</div>
+            <div class="tab" data-tab="usage">Uso e Estatísticas</div>
+            <div class="tab" data-tab="models">Modelos de IA</div>
+            <div class="tab" data-tab="api">Documentação da API</div>
+        </div>
+
+        <!-- Conteúdo da Aba Tokens -->
+        <div class="tab-content active" id="tokens">
+            <div class="card">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h2 class="mb-0">Gerenciamento de Tokens de API</h2>
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" class="form-control" id="tokenSearch" placeholder="Buscar tokens...">
+                    </div>
+                </div>
+                <p class="text-muted">Gerencie seus tokens de acesso aos serviços de IA</p>
+                
+                <div class="filters">
+                    <div class="filter-group">
+                        <label class="form-label">Status</label>
+                        <select class="form-control" id="statusFilter">
+                            <option value="">Todos</option>
+                            <option value="active">Ativos</option>
+                            <option value="paused">Pausados</option>
+                            <option value="expired">Expirados</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="form-label">Modelo de IA</label>
+                        <select class="form-control" id="modelFilter">
+                            <option value="">Todos</option>
+                            <option value="gpt4">GPT-4</option>
+                            <option value="dall-e">DALL-E</option>
+                            <option value="claude">Claude</option>
+                            <option value="llama">Llama 2</option>
+                            <option value="stable-diffusion">Stable Diffusion</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="form-label">Ordenar por</label>
+                        <select class="form-control" id="sortFilter">
+                            <option value="name">Nome</option>
+                            <option value="created">Data de Criação</option>
+                            <option value="expires">Data de Expiração</option>
+                            <option value="usage">Uso</option>
+                        </select>
+                    </div>
+                    <div class="filter-group" style="justify-content: flex-end;">
+                        <button class="btn btn-secondary" style="margin-top: 1.8rem;" id="applyFiltersBtn">
+                            <i class="fas fa-filter"></i> Aplicar
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th data-sort="name">Nome do Token <i class="fas fa-sort"></i></th>
+                                <th data-sort="key">Chave de API <i class="fas fa-sort"></i></th>
+                                <th data-sort="model">Modelo <i class="fas fa-sort"></i></th>
+                                <th data-sort="created">Criado em <i class="fas fa-sort"></i></th>
+                                <th data-sort="expires">Expira em <i class="fas fa-sort"></i></th>
+                                <th data-sort="limit">Limite Diário <i class="fas fa-sort"></i></th>
+                                <th data-sort="status">Status <i class="fas fa-sort"></i></th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tokensTable">
+                            <!-- Conteúdo preenchido por JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <div id="tableInfo" class="text-muted"></div>
+                    <div class="btn-group">
+                        <button class="btn btn-outline-secondary btn-sm" id="prevPageBtn" disabled>
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="btn btn-outline-secondary btn-sm" id="nextPageBtn">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Tokens de Acesso em Tempo Real</h2>
+                <p class="text-muted">Monitoramento ao vivo do uso dos tokens</p>
+                
+                <div class="api-cards" id="liveTokensContainer">
+                    <!-- Cards serão gerados dinamicamente -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Conteúdo das outras abas permanece similar -->
+        <!-- [O restante do conteúdo das abas permanece igual] -->
+    </div>
+
+    <!-- Modal Gerar Token -->
+    <div class="modal fade" id="generateTokenModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="fas fa-key me-2"></i> Gerar Novo Token</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="generateTokenForm">
+                        <div class="form-group">
+                            <label class="form-label">Nome do Token</label>
+                            <input type="text" class="form-control" id="tokenName" placeholder="Ex: Token para App Mobile" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Plataforma</label>
+                            <select class="form-control" id="platformSelect" required>
+                                <option value="">Selecione uma plataforma</option>
+                                <option value="openai">OpenAI (GPT-4, DALL-E)</option>
+                                <option value="anthropic">Anthropic (Claude)</option>
+                                <option value="meta">Meta (Facebook/Instagram)</option>
+                                <option value="other">Outra plataforma</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Modelo de IA</label>
+                            <select class="form-control" id="modelSelect" required>
+                                <option value="">Selecione um modelo</option>
+                                <option value="gpt4">GPT-4</option>
+                                <option value="dall-e">DALL-E</option>
+                                <option value="claude">Claude</option>
+                                <option value="llama">Llama 2</option>
+                                <option value="stable-diffusion">Stable Diffusion</option>
+                                <option value="facebook">Facebook Graph API</option>
+                                <option value="instagram">Instagram Graph API</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Permissões</label>
+                            <select class="form-control" id="permissionsSelect" required>
+                                <option value="read">Somente Leitura</option>
+                                <option value="write">Leitura e Escrita</option>
+                                <option value="admin">Administrador</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Limite de Tokens por Dia</label>
+                            <input type="number" class="form-control" id="tokenLimit" value="10000" min="1000" max="1000000">
+                        </div>
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="tokenExpiration" checked>
+                            <label class="form-check-label" for="tokenExpiration">Expiração automática (30 dias)</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-ai" id="generateTokenBtn">
+                        <i class="fas fa-key"></i> Gerar Token
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    // =============================================
+    // SISTEMA DE TOKENS EM TEMPO REAL
+    // =============================================
+    class TokenManager {
+        constructor() {
+            this.tokens = this.loadTokens();
+            this.currentPage = 1;
+            this.itemsPerPage = 5;
+            this.currentSort = 'name';
+            this.sortDirection = 'asc';
+            this.liveUpdates = true;
+            this.updateInterval = null;
+            this.init();
+        }
+
+        init() {
+            this.setupEventListeners();
+            this.renderTokensTable();
+            this.renderLiveTokens();
+            this.startLiveUpdates();
+            this.updateMetrics();
+        }
+
+        setupEventListeners() {
+            // Abas
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => this.switchTab(tab.dataset.tab));
+            });
+
+            // Filtros
+            document.getElementById('applyFiltersBtn').addEventListener('click', () => this.applyFilters());
+            document.getElementById('tokenSearch').addEventListener('input', () => this.applyFilters());
+            
+            // Ordenação da tabela
+            document.querySelectorAll('.data-table th[data-sort]').forEach(th => {
+                th.addEventListener('click', () => this.sortTable(th.dataset.sort));
+            });
+
+            // Paginação
+            document.getElementById('prevPageBtn').addEventListener('click', () => this.previousPage());
+            document.getElementById('nextPageBtn').addEventListener('click', () => this.nextPage());
+
+            // Atualização de dados
+            document.getElementById('refreshDataBtn').addEventListener('click', () => this.refreshData());
+
+            // Geração de token
+            document.getElementById('generateTokenBtn').addEventListener('click', () => this.generateNewToken());
+            document.getElementById('platformSelect').addEventListener('change', (e) => this.updateModelOptions(e.target.value));
+        }
+
+        loadTokens() {
+            const saved = localStorage.getItem('ai_tokens');
+            if (saved) {
+                return JSON.parse(saved);
+            }
+            
+            // Dados iniciais
+            return [
+                { 
+                    id: 1, 
+                    name: "GPT-4 App Mobile", 
+                    key: "sk-proj-5Fk3aBc7dE9fG2hI4jK6lM8nO0pQ1rS3tU5vW7xY9z", 
+                    model: "GPT-4", 
+                    created: "2023-10-15", 
+                    expires: "2023-11-15", 
+                    limit: 5000, 
+                    usage: 3250,
+                    status: "active",
+                    platform: "openai",
+                    permissions: "write",
+                    lastUsed: new Date().toISOString()
+                },
+                { 
+                    id: 2,
+                    name: "DALL-E Marketing", 
+                    key: "sk-proj-8Gh2iJ4kL6mN8oP0qR2sT4uV6wX8yZ0aB2cD4eF6gH8", 
+                    model: "DALL-E", 
+                    created: "2023-10-12", 
+                    expires: "2023-11-12", 
+                    limit: 250, 
+                    usage: 87,
+                    status: "active",
+                    platform: "openai",
+                    permissions: "read",
+                    lastUsed: new Date(Date.now() - 3600000).toISOString()
+                },
+                // ... outros tokens
+            ];
+        }
+
+        saveTokens() {
+            localStorage.setItem('ai_tokens', JSON.stringify(this.tokens));
+        }
+
+        startLiveUpdates() {
+            this.updateInterval = setInterval(() => {
+                if (this.liveUpdates) {
+                    this.simulateLiveUsage();
+                    this.renderLiveTokens();
+                    this.updateMetrics();
+                }
+            }, 5000); // Atualizar a cada 5 segundos
+        }
+
+        simulateLiveUsage() {
+            this.tokens.forEach(token => {
+                if (token.status === 'active') {
+                    // Simular aumento de uso
+                    const usageIncrease = Math.floor(Math.random() * 50);
+                    token.usage = Math.min(token.usage + usageIncrease, token.limit);
+                    token.lastUsed = new Date().toISOString();
+                    
+                    // Simular mudança de status ocasional
+                    if (Math.random() < 0.02) { // 2% de chance
+                        token.status = Math.random() < 0.5 ? 'paused' : 'active';
+                    }
+                }
+            });
+            this.saveTokens();
+        }
+
+        renderTokensTable() {
+            const tableBody = document.getElementById('tokensTable');
+            const filteredTokens = this.getFilteredTokens();
+            const paginatedTokens = this.getPaginatedTokens(filteredTokens);
+            
+            tableBody.innerHTML = '';
+            
+            paginatedTokens.forEach(token => {
+                const statusClass = `status-${token.status}`;
+                const statusText = this.getStatusText(token.status);
+                const displayKey = this.maskToken(token.key);
+                const usagePercent = Math.min(100, (token.usage / token.limit) * 100);
+                const usageClass = usagePercent < 50 ? 'usage-low' : usagePercent < 80 ? 'usage-medium' : 'usage-high';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${token.name}</td>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <span>${displayKey}</span>
+                            ${token.lastUsed && new Date() - new Date(token.lastUsed) < 300000 ? 
+                                '<span class="update-indicator" title="Usado recentemente"></span>' : ''}
+                        </div>
+                    </td>
+                    <td>${token.model}</td>
+                    <td>${this.formatDate(token.created)}</td>
+                    <td>${this.formatDate(token.expires)}</td>
+                    <td>
+                        <div class="usage-bar">
+                            <div class="usage-progress ${usageClass}" style="width: ${usagePercent}%"></div>
+                        </div>
+                        <small>${token.usage}/${token.limit} (${Math.round(usagePercent)}%)</small>
+                    </td>
+                    <td>
+                        <div class="status-badge ${statusClass}">
+                            ${statusText}
+                        </div>
+                    </td>
+                    <td>
+                        <button class="btn btn-secondary btn-sm" onclick="tokenManager.copyToClipboard('${token.key}')">
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="btn btn-warning btn-sm" onclick="tokenManager.toggleTokenStatus(${token.id})">
+                            <i class="fas fa-${token.status === 'active' ? 'pause' : 'play'}"></i>
+                        </button>
+                        <button class="btn btn-danger btn-sm" onclick="tokenManager.deleteToken(${token.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            this.updateTableInfo(filteredTokens.length);
+            this.updatePaginationButtons(filteredTokens.length);
+        }
+
+        renderLiveTokens() {
+            const container = document.getElementById('liveTokensContainer');
+            const activeTokens = this.tokens.filter(t => t.status === 'active').slice(0, 3);
+            
+            container.innerHTML = activeTokens.map(token => {
+                const usagePercent = Math.min(100, (token.usage / token.limit) * 100);
+                const usageClass = usagePercent < 50 ? 'usage-low' : usagePercent < 80 ? 'usage-medium' : 'usage-high';
+                const timeSinceLastUse = this.getTimeSinceLastUse(token.lastUsed);
+                
+                return `
+                    <div class="api-card">
+                        <div class="api-header">
+                            <div class="api-icon ${token.platform}">
+                                <i class="fas fa-${this.getPlatformIcon(token.platform)}"></i>
+                            </div>
+                            <div>
+                                <h3 class="api-title">${token.name}</h3>
+                                <small class="text-muted">Último uso: ${timeSinceLastUse}</small>
+                            </div>
+                        </div>
+                        <p class="api-description">Token ativo para ${token.model}</p>
+                        
+                        <div class="token-value">
+                            <span>${this.maskToken(token.key)}</span>
+                            <div class="token-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="tokenManager.copyToClipboard('${token.key}')">
+                                    <i class="fas fa-copy"></i>
+                                </button>
+                                <button class="btn btn-secondary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="usage-bar">
+                            <div class="usage-progress ${usageClass}" style="width: ${usagePercent}%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <small>${Math.round(usagePercent)}% utilizado hoje</small>
+                            <small>${token.usage}/${token.limit} tokens</small>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mt-3">
+                            <div class="status-badge status-active">Ativo</div>
+                            <div class="text-end">
+                                <small class="text-muted">Atualizado agora</small>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        updateMetrics() {
+            const activeTokens = this.tokens.filter(t => t.status === 'active').length;
+            const totalUsage = this.tokens.reduce((sum, token) => sum + token.usage, 0);
+            const totalLimit = this.tokens.reduce((sum, token) => sum + token.limit, 0);
+            const averageUsage = totalLimit > 0 ? Math.round((totalUsage / totalLimit) * 100) : 0;
+            
+            document.getElementById('totalTokens').textContent = activeTokens;
+            document.getElementById('apiCalls').textContent = this.formatNumber(totalUsage);
+            document.getElementById('tokenUsage').textContent = `${averageUsage}%`;
+            
+            // Animar mudanças
+            this.animateValue('totalTokens', activeTokens);
+            this.animateValue('apiCalls', this.formatNumber(totalUsage));
+            this.animateValue('tokenUsage', `${averageUsage}%`);
+        }
+
+        // ... outros métodos (applyFilters, sortTable, paginação, etc.)
+
+        animateValue(elementId, newValue) {
+            const element = document.getElementById(elementId);
+            const currentValue = element.textContent;
+            if (currentValue !== newValue) {
+                element.style.transform = 'scale(1.1)';
+                element.style.color = 'var(--success-color)';
+                setTimeout(() => {
+                    element.textContent = newValue;
+                    element.style.transform = 'scale(1)';
+                    element.style.color = '';
+                }, 300);
+            }
+        }
+
+        copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                this.showToast('Token copiado para a área de transferência!', 'success');
+            });
+        }
+
+        showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${this.getToastIcon(type)}"></i>
+                <span>${message}</span>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        getToastIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-triangle',
+                'warning': 'exclamation-circle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        getPlatformIcon(platform) {
+            const icons = {
+                'openai': 'robot',
+                'anthropic': 'chart-line',
+                'meta': 'users',
+                'facebook': 'facebook-f',
+                'instagram': 'instagram'
+            };
+            return icons[platform] || 'key';
+        }
+
+        maskToken(token) {
+            if (!token) return '';
+            if (token.length <= 8) return token;
+            return token.substring(0, 6) + '•'.repeat(token.length - 10) + token.substring(token.length - 4);
+        }
+
+        getTimeSinceLastUse(lastUsed) {
+            if (!lastUsed) return 'Nunca usado';
+            const diff = new Date() - new Date(lastUsed);
+            const minutes = Math.floor(diff / 60000);
+            if (minutes < 1) return 'Agora mesmo';
+            if (minutes < 60) return `${minutes} min atrás`;
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return `${hours} h atrás`;
+            return `${Math.floor(hours / 24)} dias atrás`;
+        }
+
+        formatNumber(num) {
+            if (num >= 1000000) {
+                return (num / 1000000).toFixed(1) + 'M';
+            }
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('pt-BR');
+        }
+
+        refreshData() {
+            const btn = document.getElementById('refreshDataBtn');
+            const icon = btn.querySelector('i');
+            
+            icon.classList.add('refreshing');
+            btn.disabled = true;
+            
+            // Simular atualização de dados
+            setTimeout(() => {
+                this.simulateLiveUsage();
+                this.renderTokensTable();
+                this.renderLiveTokens();
+                this.updateMetrics();
+                
+                icon.classList.remove('refreshing');
+                btn.disabled = false;
+                this.showToast('Dados atualizados com sucesso!', 'success');
+            }, 1000);
+        }
+
+        generateNewToken() {
+            const name = document.getElementById('tokenName').value;
+            const platform = document.getElementById('platformSelect').value;
+            const model = document.getElementById('modelSelect').value;
+            const permissions = document.getElementById('permissionsSelect').value;
+            const limit = parseInt(document.getElementById('tokenLimit').value);
+            
+            if (!name || !platform || !model) {
+                this.showToast('Preencha todos os campos obrigatórios', 'error');
+                return;
+            }
+            
+            const newToken = {
+                id: Date.now(),
+                name,
+                key: 'sk-' + Math.random().toString(36).substr(2, 32),
+                model,
+                created: new Date().toISOString().split('T')[0],
+                expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                limit,
+                usage: 0,
+                status: 'active',
+                platform,
+                permissions,
+                lastUsed: null
+            };
+            
+            this.tokens.push(newToken);
+            this.saveTokens();
+            this.renderTokensTable();
+            this.renderLiveTokens();
+            this.updateMetrics();
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('generateTokenModal'));
+            modal.hide();
+            
+            this.showToast('Token gerado com sucesso!', 'success');
+            document.getElementById('generateTokenForm').reset();
+        }
+
+        toggleTokenStatus(tokenId) {
+            const token = this.tokens.find(t => t.id === tokenId);
+            if (token) {
+                token.status = token.status === 'active' ? 'paused' : 'active';
+                this.saveTokens();
+                this.renderTokensTable();
+                this.renderLiveTokens();
+                this.showToast(`Token ${token.status === 'active' ? 'ativado' : 'pausado'} com sucesso!`, 'success');
+            }
+        }
+
+        deleteToken(tokenId) {
+            if (confirm('Tem certeza que deseja excluir este token? Esta ação não pode ser desfeita.')) {
+                this.tokens = this.tokens.filter(t => t.id !== tokenId);
+                this.saveTokens();
+                this.renderTokensTable();
+                this.renderLiveTokens();
+                this.updateMetrics();
+                this.showToast('Token excluído com sucesso!', 'success');
+            }
+        }
+    }
+
+    // Inicializar o sistema
+    const tokenManager = new TokenManager();
+
+    // Adicionar métodos que faltam para completar a funcionalidade
+    TokenManager.prototype.getFilteredTokens = function() {
+        const searchTerm = document.getElementById('tokenSearch').value.toLowerCase();
+        const statusFilter = document.getElementById('statusFilter').value;
+        const modelFilter = document.getElementById('modelFilter').value;
+        
+        return this.tokens.filter(token => {
+            const matchesSearch = token.name.toLowerCase().includes(searchTerm) || 
+                                 token.model.toLowerCase().includes(searchTerm);
+            const matchesStatus = !statusFilter || token.status === statusFilter;
+            const matchesModel = !modelFilter || token.model.toLowerCase().includes(modelFilter.toLowerCase());
+            
+            return matchesSearch && matchesStatus && matchesModel;
+        });
+    };
+
+    TokenManager.prototype.getPaginatedTokens = function(tokens) {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+        return tokens.slice(startIndex, startIndex + this.itemsPerPage);
+    };
+
+    TokenManager.prototype.updateTableInfo = function(totalItems) {
+        const startIndex = (this.currentPage - 1) * this.itemsPerPage + 1;
+        const endIndex = Math.min(this.currentPage * this.itemsPerPage, totalItems);
+        document.getElementById('tableInfo').textContent = 
+            `Mostrando ${startIndex}-${endIndex} de ${totalItems} tokens`;
+    };
+
+    TokenManager.prototype.updatePaginationButtons = function(totalItems) {
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        document.getElementById('prevPageBtn').disabled = this.currentPage === 1;
+        document.getElementById('nextPageBtn').disabled = this.currentPage === totalPages || totalPages === 0;
+    };
+
+    TokenManager.prototype.previousPage = function() {
+        if (this.currentPage > 1) {
+            this.currentPage--;
+            this.renderTokensTable();
+        }
+    };
+
+    TokenManager.prototype.nextPage = function() {
+        const totalItems = this.getFilteredTokens().length;
+        const totalPages = Math.ceil(totalItems / this.itemsPerPage);
+        if (this.currentPage < totalPages) {
+            this.currentPage++;
+            this.renderTokensTable();
+        }
+    };
+
+    TokenManager.prototype.applyFilters = function() {
+        this.currentPage = 1;
+        this.renderTokensTable();
+    };
+
+    TokenManager.prototype.sortTable = function(column) {
+        if (this.currentSort === column) {
+            this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.currentSort = column;
+            this.sortDirection = 'asc';
+        }
+        
+        this.tokens.sort((a, b) => {
+            let aValue = a[column];
+            let bValue = b[column];
+            
+            if (column === 'created' || column === 'expires') {
+                aValue = new Date(aValue);
+                bValue = new Date(bValue);
+            }
+            
+            if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+            if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+            return 0;
+        });
+        
+        this.renderTokensTable();
+        
+        // Atualizar ícones de ordenação
+        document.querySelectorAll('.data-table th i').forEach(icon => {
+            icon.className = 'fas fa-sort';
+        });
+        
+        const currentTh = document.querySelector(`.data-table th[data-sort="${column}"] i`);
+        if (currentTh) {
+            currentTh.className = this.sortDirection === 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down';
+        }
+    };
+
+    TokenManager.prototype.switchTab = function(tabId) {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        
+        document.querySelector(`.tab[data-tab="${tabId}"]`).classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+        
+        if (tabId === 'usage') {
+            this.initUsageChart();
+        }
+    };
+
+    TokenManager.prototype.updateModelOptions = function(platform) {
+        const modelSelect = document.getElementById('modelSelect');
+        modelSelect.innerHTML = '<option value="">Selecione um modelo</option>';
+        
+        const options = {
+            'openai': ['GPT-4', 'DALL-E'],
+            'anthropic': ['Claude'],
+            'meta': ['Facebook Graph API', 'Instagram Graph API'],
+            'other': ['Llama 2', 'Stable Diffusion']
+        };
+        
+        if (options[platform]) {
+            options[platform].forEach(model => {
+                modelSelect.innerHTML += `<option value="${model.toLowerCase()}">${model}</option>`;
+            });
+        }
+    };
+
+    TokenManager.prototype.initUsageChart = function() {
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        if (window.usageChart) {
+            window.usageChart.destroy();
+        }
+        
+        window.usageChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 30}, (_, i) => (i + 1).toString()),
+                datasets: [
+                    {
+                        label: 'GPT-4',
+                        data: Array.from({length: 30}, () => Math.floor(Math.random() * 4000) + 1000),
+                        borderColor: '#3498db',
+                        backgroundColor: 'rgba(52, 152, 219, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'DALL-E',
+                        data: Array.from({length: 30}, () => Math.floor(Math.random() * 50) + 10),
+                        borderColor: '#e74c3c',
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Tokens Utilizados'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Dias'
+                        }
+                    }
+                }
+            }
+        });
+    };
+
+    // Inicializar gráfico se estiver na aba de uso
+    document.addEventListener('DOMContentLoaded', function() {
+        if (document.getElementById('usageChart')) {
+            tokenManager.initUsageChart();
+        }
+    });
+    </script>
+</body>
+</html>

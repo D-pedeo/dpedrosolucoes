@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assistente de Código IA - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #1abc9c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .kanawa-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar .menu-item:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        /* Editor de Código */
+        .code-editor {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .editor-header {
+            background: var(--dark-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .editor-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .editor-content {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .code-line {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 2px;
+        }
+
+        .line-number {
+            color: #6e7681;
+            min-width: 40px;
+            text-align: right;
+            padding-right: 10px;
+            user-select: none;
+        }
+
+        .line-content {
+            flex: 1;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f8f9fa;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .user-message {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .assistant-message {
+            background: white;
+            border: 1px solid var(--border-color);
+        }
+
+        .system-message {
+            background: var(--light-color);
+            border: 1px solid var(--border-color);
+            text-align: center;
+            max-width: 100%;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Code Actions */
+        .code-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* API Key Input */
+        .api-key-container {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-key-input {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .content {
+                order: 1;
+            }
+            
+            .kanawa-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .top-icons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .code-actions {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        /* Syntax Highlighting */
+        .keyword { color: #569cd6; }
+        .string { color: #ce9178; }
+        .number { color: #b5cea8; }
+        .comment { color: #6a9955; }
+        .function { color: #dcdcaa; }
+        .variable { color: #9cdcfe; }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--info-color);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Code Suggestions */
+        .suggestions-container {
+            background: #e8f4fd;
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .suggestion-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .suggestion-item:hover {
+            background: #f0f8ff;
+        }
+    </style>
+</head>
+<body>
+    <header class="kanawa-header">
+        <div class="logo">
+            <a href='DPS.html'><img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/></a>
+            <span>D.Pedro Soluções</span>
+        </div>
+        <div class="top-icons">
+            <a href="DPS.html" class="menu-item"><i class="fas fa-home"></i> <span>Dashboard</span></a>
+            <a href="code-assistant.html" class="menu-item active"><i class="fas fa-code"></i> <span>Assistente de Código</span></a>
+            <a href="api-dashboard.html" class="menu-item"><i class="fas fa-plug"></i> <span>APIs</span></a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <a href="DPS.html" class="menu-item"><i class="fas fa-home"></i> Dashboard Principal</a>
+            <a href="code-assistant.html" class="menu-item active"><i class="fas fa-code"></i> Assistente de Código</a>
+            <a href="tokens-ia.html" class="menu-item"><i class="fas fa-robot"></i> Tokens de IA</a>
+            <a href="loja-virtual.html" class="menu-item"><i class="fas fa-shopping-cart"></i> Loja Virtual</a>
+            <a href="notificacoes.html" class="menu-item"><i class="fas fa-bell"></i> Notificações</a>
+            <a href="analise.html" class="menu-item"><i class="fas fa-chart-bar"></i> Análise</a>
+            <a href="api-dashboard.html" class="menu-item"><i class="fas fa-plug"></i> Dashboard APIs</a>
+            <a href="comunicacao.html" class="menu-item"><i class="fas fa-comments"></i> Comunicação</a>
+            <a href="configuracoes.html" class="menu-item"><i class="fas fa-cog"></i> Configurações</a>
+        </aside>
+
+        <main class="content">
+            <div class="page-header">
+                <h1 class="page-title">
+                    <i class="fas fa-robot"></i>
+                    Assistente de Código IA
+                </h1>
+                <div>
+                    <button class="btn btn-outline-secondary" id="clearChatBtn">
+                        <i class="fas fa-trash"></i> Limpar Chat
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuração da API Key -->
+            <div class="api-key-container">
+                <h5><i class="fas fa-key"></i> Configuração da API</h5>
+                <p class="mb-2">Para usar o assistente de código, configure sua chave da API OpenAI:</p>
+                <div class="api-key-input">
+                    <input type="password" class="form-control" id="apiKeyInput" placeholder="Digite sua chave da API OpenAI...">
+                    <button class="btn btn-success" id="saveApiKeyBtn">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    <button class="btn btn-info" id="testApiKeyBtn">
+                        <i class="fas fa-test"></i> Testar
+                    </button>
+                </div>
+                <small class="text-muted">Sua chave é salva localmente no navegador e nunca é enviada para nossos servidores.</small>
+            </div>
+
+            <!-- Ações Rápidas -->
+            <div class="card">
+                <h2><i class="fas fa-bolt"></i> Ações Rápidas</h2>
+                <div class="code-actions">
+                    <button class="btn btn-primary action-btn" id="analyzeCodeBtn">
+                        <i class="fas fa-search"></i> Analisar Código
+                    </button>
+                    <button class="btn btn-success action-btn" id="optimizeCodeBtn">
+                        <i class="fas fa-bolt"></i> Otimizar Performance
+                    </button>
+                    <button class="btn btn-warning action-btn" id="debugCodeBtn">
+                        <i class="fas fa-bug"></i> Debug Automático
+                    </button>
+                    <button class="btn btn-info action-btn" id="generateCodeBtn">
+                        <i class="fas fa-magic"></i> Gerar Código
+                    </button>
+                    <button class="btn btn-danger action-btn" id="securityScanBtn">
+                        <i class="fas fa-shield-alt"></i> Verificar Segurança
+                    </button>
+                    <button class="btn btn-secondary action-btn" id="formatCodeBtn">
+                        <i class="fas fa-indent"></i> Formatar Código
+                    </button>
+                    <button class="btn btn-outline-primary action-btn" id="explainCodeBtn">
+                        <i class="fas fa-question-circle"></i> Explicar Código
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor e Chat -->
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="mb-0"><i class="fas fa-code"></i> Editor de Código</h3>
+                            <div>
+                                <select class="form-select form-select-sm" id="languageSelector">
+                                    <option value="javascript">JavaScript</option>
+                                    <option value="html">HTML</option>
+                                    <option value="css">CSS</option>
+                                    <option value="python">Python</option>
+                                    <option value="java">Java</option>
+                                    <option value="php">PHP</option>
+                                    <option value="sql">SQL</option>
+                                    <option value="cpp">C++</option>
+                                    <option value="rust">Rust</option>
+                                    <option value="go">Go</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="code-editor">
+                                <div class="editor-header">
+                                    <span id="fileName">script.js</span>
+                                    <div class="editor-actions">
+                                        <button class="btn btn-sm btn-success" id="runCodeBtn">
+                                            <i class="fas fa-play"></i> Executar
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" id="saveCodeBtn">
+                                            <i class="fas fa-save"></i> Salvar
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" id="clearCodeBtn">
+                                            <i class="fas fa-eraser"></i> Limpar
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="editor-content">
+                                    <div id="codeArea" contenteditable="true" style="outline: none; min-height: 400px; font-family: 'Courier New', monospace; white-space: pre;">
+// Digite seu código aqui...
+function exemplo() {
+    // Esta é uma função de exemplo
+    const mensagem = "Olá, Mundo!";
+    console.log(mensagem);
+    return mensagem;
+}
+
+// Chamando a função
+exemplo();
+                                    </div>
+                                </div>
+                                <div class="editor-footer" style="background: #2d2d2d; padding: 10px; border-top: 1px solid #444;">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <small style="color: #ccc;">
+                                                <i class="fas fa-code"></i> 
+                                                <span id="lineCount">Linhas: 0</span> | 
+                                                <span id="charCount">Caracteres: 0</span>
+                                            </small>
+                                        </div>
+                                        <div class="col-md-6 text-end">
+                                            <small style="color: #ccc;">
+                                                <span id="aiStatus">IA: Aguardando configuração</span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="mb-0"><i class="fas fa-comments"></i> Chat com Assistente IA</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="chat-messages" id="chatMessages">
+                                <div class="message system-message">
+                                    <strong>Assistente IA:</strong> Olá! Sou seu assistente de código. Para começar, configure sua chave da API OpenAI no campo acima. Posso ajudar a analisar, otimizar, debugar e gerar código.
+                                </div>
+                            </div>
+                            <div class="p-3 border-top">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="chatInput" placeholder="Digite sua pergunta sobre código..." disabled>
+                                    <button class="btn btn-primary" id="sendMessageBtn" disabled>
+                                        <i class="fas fa-paper-plane"></i> Enviar
+                                    </button>
+                                </div>
+                                <div class="mt-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-lightbulb"></i> Dica: Configure a API key para habilitar todas as funcionalidades
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resultados e Análises -->
+            <div class="card mt-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3><i class="fas fa-chart-bar"></i> Análises e Resultados</h3>
+                    <button class="btn btn-sm btn-outline-secondary" id="clearResultsBtn">
+                        <i class="fas fa-trash"></i> Limpar Resultados
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div id="analysisResults">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i> 
+                            Configure sua API key e execute uma análise ou faça uma pergunta para ver os resultados aqui.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sugestões de Código -->
+            <div class="card mt-4" id="suggestionsCard" style="display: none;">
+                <div class="card-header">
+                    <h3><i class="fas fa-lightbulb"></i> Sugestões de Código</h3>
+                </div>
+                <div class="card-body">
+                    <div class="suggestions-container" id="codeSuggestions">
+                        <!-- Sugestões serão carregadas aqui -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Templates de Código -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h3><i class="fas fa-copy"></i> Templates de Código</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="card template-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-globe fa-2x mb-2 text-primary"></i>
+                                    <h6>API REST</h6>
+                                    <button class="btn btn-sm btn-outline-primary" data-template="api-rest">
+                                        Usar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card template-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-database fa-2x mb-2 text-success"></i>
+                                    <h6>CRUD Completo</h6>
+                                    <button class="btn btn-sm btn-outline-success" data-template="crud">
+                                        Usar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card template-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-shield-alt fa-2x mb-2 text-warning"></i>
+                                    <h6>Autenticação</h6>
+                                    <button class="btn btn-sm btn-outline-warning" data-template="auth">
+                                        Usar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card template-card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line fa-2x mb-2 text-info"></i>
+                                    <h6>Componente UI</h6>
+                                    <button class="btn btn-sm btn-outline-info" data-template="component">
+                                        Usar Template
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+// =============================================
+// CONFIGURAÇÃO DO ASSISTENTE DE CÓDIGO ATUALIZADA
+// =============================================
+
+const CODE_ASSISTANT_CONFIG = {
+    openai: {
+        // API Key será fornecida pelo usuário
+        apiKey: '',
+        baseURL: 'https://api.openai.com/v1',
+        model: 'gpt-3.5-turbo',
+        maxTokens: 2000,
+        temperature: 0.7
+    },
+    templates: {
+        // Templates permanecem os mesmos
+        'api-rest': `// Template: API REST Básica
+const express = require('express');
+const app = express();
+app.use(express.json());
+
+// Rotas CRUD
+app.get('/api/items', (req, res) => {
+    res.json({ message: 'Listar itens' });
+});
+
+app.post('/api/items', (req, res) => {
+    res.json({ message: 'Criar item' });
+});
+
+app.put('/api/items/:id', (req, res) => {
+    res.json({ message: 'Atualizar item' });
+});
+
+app.delete('/api/items/:id', (req, res) => {
+    res.json({ message: 'Deletar item' });
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(\`Servidor rodando na porta \${PORT}\`);
+});`,
+
+        'crud': `// Template: CRUD Completo
+class CRUDService {
+    constructor() {
+        this.items = [];
+        this.nextId = 1;
+    }
+
+    // Create
+    create(item) {
+        const newItem = { id: this.nextId++, ...item };
+        this.items.push(newItem);
+        return newItem;
+    }
+
+    // Read
+    readAll() {
+        return this.items;
+    }
+
+    readById(id) {
+        return this.items.find(item => item.id === id);
+    }
+
+    // Update
+    update(id, updatedItem) {
+        const index = this.items.findIndex(item => item.id === id);
+        if (index !== -1) {
+            this.items[index] = { ...this.items[index], ...updatedItem };
+            return this.items[index];
+        }
+        return null;
+    }
+
+    // Delete
+    delete(id) {
+        const index = this.items.findIndex(item => item.id === id);
+        if (index !== -1) {
+            return this.items.splice(index, 1)[0];
+        }
+        return null;
+    }
+}
+
+// Exemplo de uso
+const service = new CRUDService();`,
+
+        'auth': `// Template: Sistema de Autenticação
+class AuthService {
+    constructor() {
+        this.users = new Map();
+        this.sessions = new Map();
+    }
+
+    // Registrar usuário
+    register(username, password) {
+        if (this.users.has(username)) {
+            throw new Error('Usuário já existe');
+        }
+        
+        const user = {
+            username,
+            password: this.hashPassword(password),
+            createdAt: new Date()
+        };
+        
+        this.users.set(username, user);
+        return user;
+    }
+
+    // Login
+    login(username, password) {
+        const user = this.users.get(username);
+        if (!user || user.password !== this.hashPassword(password)) {
+            throw new Error('Credenciais inválidas');
+        }
+
+        const session = {
+            token: this.generateToken(),
+            username,
+            expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 horas
+        };
+
+        this.sessions.set(session.token, session);
+        return session;
+    }
+
+    // Verificar token
+    verifyToken(token) {
+        const session = this.sessions.get(token);
+        if (!session || session.expiresAt < new Date()) {
+            throw new Error('Token inválido ou expirado');
+        }
+        return session;
+    }
+
+    // Métodos auxiliares
+    hashPassword(password) {
+        // Em produção, use bcrypt ou similar
+        return btoa(password);
+    }
+
+    generateToken() {
+        return 'token_' + Math.random().toString(36).substr(2);
+    }
+}`,
+
+        'component': `// Template: Componente React
+import React, { useState, useEffect } from 'react';
+
+const DataTable = ({ data, columns, onEdit, onDelete }) => {
+    const [filteredData, setFilteredData] = useState(data);
+    const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+    const [searchTerm, setSearchTerm] = useState('');
+
+    // Filtragem
+    useEffect(() => {
+        const filtered = data.filter(item =>
+            columns.some(col =>
+                String(item[col.key]).toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        );
+        setFilteredData(filtered);
+    }, [data, searchTerm, columns]);
+
+    // Ordenação
+    const handleSort = (key) => {
+        let direction = 'asc';
+        if (sortConfig.key === key && sortConfig.direction === 'asc') {
+            direction = 'desc';
+        }
+        setSortConfig({ key, direction });
+    };
+
+    const sortedData = React.useMemo(() => {
+        if (!sortConfig.key) return filteredData;
+        
+        return [...filteredData].sort((a, b) => {
+            if (a[sortConfig.key] < b[sortConfig.key]) {
+                return sortConfig.direction === 'asc' ? -1 : 1;
+            }
+            if (a[sortConfig.key] > b[sortConfig.key]) {
+                return sortConfig.direction === 'asc' ? 1 : -1;
+            }
+            return 0;
+        });
+    }, [filteredData, sortConfig]);
+
+    return (
+        <div className="data-table">
+            <input
+                type="text"
+                placeholder="Buscar..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+            />
+            
+            <table>
+                <thead>
+                    <tr>
+                        {columns.map(col => (
+                            <th key={col.key} onClick={() => handleSort(col.key)}>
+                                {col.title}
+                                {sortConfig.key === col.key && (
+                                    <span>{sortConfig.direction === 'asc' ? ' ↑' : ' ↓'}</span>
+                                )}
+                            </th>
+                        ))}
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {sortedData.map(item => (
+                        <tr key={item.id}>
+                            {columns.map(col => (
+                                <td key={col.key}>{item[col.key]}</td>
+                            ))}
+                            <td>
+                                <button onClick={() => onEdit(item)}>Editar</button>
+                                <button onClick={() => onDelete(item.id)}>Excluir</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    );
+};
+
+export default DataTable;`
+    }
+};
+
+// =============================================
+// CLASSE PRINCIPAL DO ASSISTENTE DE CÓDIGO ATUALIZADA
+// =============================================
+
+class CodeAssistant {
+    constructor() {
+        this.conversationHistory = [];
+        this.isProcessing = false;
+        this.currentCode = '';
+        this.currentLanguage = 'javascript';
+        this.apiKey = '';
+        this.isApiConfigured = false;
+        this.init();
+    }
+
+    init() {
+        this.loadApiKey();
+        this.setupEventListeners();
+        this.updateCodeStats();
+        this.loadSavedCode();
+        this.updateUIState();
+    }
+
+    loadApiKey() {
+        const savedKey = localStorage.getItem('openai_api_key');
+        if (savedKey) {
+            this.apiKey = savedKey;
+            this.isApiConfigured = true;
+            document.getElementById('apiKeyInput').value = '••••••••••••••••';
+            this.showToast('API key carregada com sucesso!', 'success');
+        }
+    }
+
+    saveApiKey() {
+        const apiKeyInput = document.getElementById('apiKeyInput');
+        const key = apiKeyInput.value.trim();
+        
+        if (!key) {
+            this.showToast('Por favor, digite uma API key válida.', 'warning');
+            return;
+        }
+
+        if (!key.startsWith('sk-')) {
+            this.showToast('A API key deve começar com "sk-".', 'error');
+            return;
+        }
+
+        this.apiKey = key;
+        localStorage.setItem('openai_api_key', key);
+        this.isApiConfigured = true;
+        this.updateUIState();
+        
+        apiKeyInput.type = 'password';
+        apiKeyInput.value = '••••••••••••••••';
+        
+        this.showToast('API key salva com sucesso!', 'success');
+    }
+
+    async testApiKey() {
+        if (!this.isApiConfigured) {
+            this.showToast('Configure uma API key primeiro.', 'warning');
+            return;
+        }
+
+        this.setAIStatus('Testando API...');
+        
+        try {
+            const response = await fetch('https://api.openai.com/v1/models', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                this.showToast('API key válida! Conexão estabelecida.', 'success');
+                this.setAIStatus('IA: Pronta');
+            } else {
+                throw new Error('API key inválida');
+            }
+        } catch (error) {
+            this.showToast(`Erro na conexão: ${error.message}`, 'error');
+            this.setAIStatus('IA: Erro na API');
+        }
+    }
+
+    updateUIState() {
+        const isEnabled = this.isApiConfigured;
+        
+        // Habilitar/desabilitar controles
+        document.getElementById('chatInput').disabled = !isEnabled;
+        document.getElementById('sendMessageBtn').disabled = !isEnabled;
+        
+        // Atualizar status
+        const status = isEnabled ? 'IA: Pronta' : 'IA: Aguardando configuração';
+        this.setAIStatus(status);
+        
+        // Atualizar placeholder do chat
+        document.getElementById('chatInput').placeholder = isEnabled 
+            ? 'Digite sua pergunta sobre código...' 
+            : 'Configure a API key para habilitar o chat';
+    }
+
+    setupEventListeners() {
+        // Configuração da API
+        document.getElementById('saveApiKeyBtn').addEventListener('click', () => this.saveApiKey());
+        document.getElementById('testApiKeyBtn').addEventListener('click', () => this.testApiKey());
+        
+        // Editor de código
+        const codeArea = document.getElementById('codeArea');
+        if (codeArea) {
+            codeArea.addEventListener('input', () => {
+                this.currentCode = codeArea.textContent;
+                this.updateCodeStats();
+                this.saveCode();
+                this.analyzeForSuggestions();
+            });
+        }
+
+        // Seletor de linguagem
+        const languageSelector = document.getElementById('languageSelector');
+        if (languageSelector) {
+            languageSelector.addEventListener('change', (e) => {
+                this.currentLanguage = e.target.value;
+                this.updateFileName();
+                this.analyzeForSuggestions();
+            });
+        }
+
+        // Botões de ação
+        document.getElementById('analyzeCodeBtn').addEventListener('click', () => this.analyzeCode());
+        document.getElementById('optimizeCodeBtn').addEventListener('click', () => this.optimizeCode());
+        document.getElementById('debugCodeBtn').addEventListener('click', () => this.debugCode());
+        document.getElementById('generateCodeBtn').addEventListener('click', () => this.generateCode());
+        document.getElementById('securityScanBtn').addEventListener('click', () => this.securityScan());
+        document.getElementById('formatCodeBtn').addEventListener('click', () => this.formatCode());
+        document.getElementById('explainCodeBtn').addEventListener('click', () => this.explainCode());
+        document.getElementById('runCodeBtn').addEventListener('click', () => this.runCode());
+        document.getElementById('saveCodeBtn').addEventListener('click', () => this.saveCode());
+        document.getElementById('clearCodeBtn').addEventListener('click', () => this.clearCode());
+
+        // Chat
+        document.getElementById('sendMessageBtn').addEventListener('click', () => this.sendMessage());
+        document.getElementById('chatInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') this.sendMessage();
+        });
+
+        // Limpar
+        document.getElementById('clearChatBtn').addEventListener('click', () => this.clearChat());
+        document.getElementById('clearResultsBtn').addEventListener('click', () => this.clearResults());
+
+        // Templates
+        document.querySelectorAll('[data-template]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const template = e.target.getAttribute('data-template');
+                this.loadTemplate(template);
+            });
+        });
+
+        // API Key input toggle
+        document.getElementById('apiKeyInput').addEventListener('focus', (e) => {
+            if (e.target.value === '••••••••••••••••') {
+                e.target.value = this.apiKey;
+            }
+        });
+    }
+
+    updateCodeStats() {
+        const code = this.currentCode;
+        const lines = code.split('\n').length;
+        const chars = code.length;
+        
+        document.getElementById('lineCount').textContent = `Linhas: ${lines}`;
+        document.getElementById('charCount').textContent = `Caracteres: ${chars}`;
+    }
+
+    updateFileName() {
+        const extensions = {
+            'javascript': 'script.js',
+            'html': 'index.html',
+            'css': 'style.css',
+            'python': 'script.py',
+            'java': 'Main.java',
+            'php': 'script.php',
+            'sql': 'query.sql',
+            'cpp': 'main.cpp',
+            'rust': 'main.rs',
+            'go': 'main.go'
+        };
+        
+        document.getElementById('fileName').textContent = extensions[this.currentLanguage] || 'file.txt';
+    }
+
+    setAIStatus(status) {
+        document.getElementById('aiStatus').textContent = status;
+    }
+
+    showToast(message, type = 'info') {
+        const toastContainer = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast ${type}`;
+        
+        const icons = {
+            'success': 'fas fa-check-circle',
+            'error': 'fas fa-exclamation-circle',
+            'warning': 'fas fa-exclamation-triangle',
+            'info': 'fas fa-info-circle'
+        };
+        
+        toast.innerHTML = `
+            <i class="${icons[type]}"></i>
+            <span>${message}</span>
+        `;
+        
+        toastContainer.appendChild(toast);
+        
+        // Remover após 5 segundos
+        setTimeout(() => {
+            toast.remove();
+        }, 5000);
+    }
+
+    addChatMessage(role, content) {
+        const chatMessages = document.getElementById('chatMessages');
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${role}-message`;
+        messageDiv.innerHTML = content;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async callOpenAI(prompt) {
+        if (!this.isApiConfigured) {
+            throw new Error('API key não configurada. Configure sua chave da OpenAI primeiro.');
+        }
+
+        this.setAIStatus('IA: Processando...');
+        
+        try {
+            const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${this.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: 'gpt-3.5-turbo',
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'Você é um assistente de código especializado. Forneça respostas técnicas detalhadas e úteis para desenvolvedores.'
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    max_tokens: 2000,
+                    temperature: 0.7
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || 'Erro na API OpenAI');
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+            
+        } catch (error) {
+            console.error('Erro na chamada da API:', error);
+            throw error;
+        } finally {
+            this.setAIStatus('IA: Pronta');
+        }
+    }
+
+    async analyzeCode() {
+        if (!this.validateApiAndCode()) return;
+
+        this.setAIStatus('Analisando código...');
+        
+        try {
+            const prompt = `Analise o seguinte código ${this.currentLanguage} e forneça um relatório detalhado:
+
+CÓDIGO:
+${this.currentCode}
+
+Por favor, forneça uma análise com:
+1. Pontuação de qualidade (0-100)
+2. Problemas encontrados
+3. Sugestões de melhoria
+4. Boas práticas aplicadas/missing
+5. Complexidade e performance
+
+Formate a resposta em HTML para exibição.`;
+
+            const analysis = await this.callOpenAI(prompt);
+            this.showAnalysisResults(analysis);
+            this.addChatMessage('assistant', `🔍 **Análise do Código**\n\n${analysis}`);
+            
+        } catch (error) {
+            this.showToast(`Erro na análise: ${error.message}`, 'error');
+        }
+    }
+
+    async optimizeCode() {
+        if (!this.validateApiAndCode()) return;
+
+        this.setAIStatus('Otimizando código...');
+        
+        try {
+            const prompt = `Otimize o seguinte código ${this.currentLanguage} para melhor performance e legibilidade:
+
+CÓDIGO ATUAL:
+${this.currentCode}
+
+Forneça:
+1. Código otimizado
+2. Explicação das otimizações
+3. Ganhos de performance esperados
+4. Trade-offs (se houver)
+
+Formate a resposta em HTML.`;
+
+            const optimization = await this.callOpenAI(prompt);
+            this.showAnalysisResults(optimization);
+            this.addChatMessage('assistant', `⚡ **Código Otimizado**\n\n${optimization}`);
+            
+        } catch (error) {
+            this.showToast(`Erro na otimização: ${error.message}`, 'error');
+        }
+    }
+
+    async debugCode() {
+        if (!this.validateApiAndCode()) return;
+
+        const errorDescription = prompt('Descreva o problema ou erro que está enfrentando:');
+        if (!errorDescription) return;
+
+        this.setAIStatus('Debugando código...');
+        
+        try {
+            const prompt = `Debugue o seguinte código ${this.currentLanguage}:
+
+CÓDIGO:
+${this.currentCode}
+
+PROBLEMA DESCRITO: ${errorDescription}
+
+Forneça:
+1. Identificação do problema
+2. Código corrigido
+3. Explicação da solução
+4. Como prevenir no futuro
+
+Formate a resposta em HTML.`;
+
+            const debugResult = await this.callOpenAI(prompt);
+            this.showAnalysisResults(debugResult);
+            this.addChatMessage('assistant', `🐛 **Debug Concluído**\n\n${debugResult}`);
+            
+        } catch (error) {
+            this.showToast(`Erro no debug: ${error.message}`, 'error');
+        }
+    }
+
+    async generateCode() {
+        if (!this.isApiConfigured) {
+            this.showToast('Configure a API key primeiro.', 'warning');
+            return;
+        }
+
+        const description = prompt('Descreva o código que você gostaria de gerar:');
+        if (!description) return;
+
+        const requirements = prompt('Requisitos específicos (opcional):');
+
+        this.setAIStatus('Gerando código...');
+        
+        try {
+            const prompt = `Gere código ${this.currentLanguage} baseado na seguinte descrição:
+
+DESCRIÇÃO: ${description}
+REQUISITOS: ${requirements}
+LINGUAGEM: ${this.currentLanguage}
+
+Forneça:
+1. Código completo e funcional
+2. Comentários explicativos
+3. Exemplo de uso
+4. Possíveis extensões
+
+Formate o código de forma limpa e organizada.`;
+
+            const generatedCode = await this.callOpenAI(prompt);
+            
+            // Atualizar editor com o código gerado
+            document.getElementById('codeArea').textContent = generatedCode;
+            this.currentCode = generatedCode;
+            this.updateCodeStats();
+            
+            this.addChatMessage('assistant', `✨ **Código Gerado**\n\nCódigo ${this.currentLanguage} gerado com sucesso!`);
+            this.showToast('Código gerado e carregado no editor!', 'success');
+            
+        } catch (error) {
+            this.showToast(`Erro na geração: ${error.message}`, 'error');
+        }
+    }
+
+    async securityScan() {
+        if (!this.validateApiAndCode()) return;
+
+        this.setAIStatus('Verificando segurança...');
+        
+        try {
+            const prompt = `Faça uma verificação de segurança no seguinte código ${this.currentLanguage}:
+
+CÓDIGO:
+${this.currentCode}
+
+Procure por:
+1. Vulnerabilidades comuns
+2. Problemas de sanitização
+3. Vazamento de informações
+4. Más práticas de segurança
+5. Recomendações de correção
+
+Formate a resposta em HTML.`;
+
+            const securityReport = await this.callOpenAI(prompt);
+            this.showAnalysisResults(securityReport);
+            this.addChatMessage('assistant', `🛡️ **Verificação de Segurança**\n\n${securityReport}`);
+            
+        } catch (error) {
+            this.showToast(`Erro na verificação: ${error.message}`, 'error');
+        }
+    }
+
+    async formatCode() {
+        if (!this.validateApiAndCode()) return;
+
+        this.setAIStatus('Formatando código...');
+        
+        try {
+            const prompt = `Formate o seguinte código ${this.currentLanguage} seguindo as melhores práticas de formatação:
+
+CÓDIGO:
+${this.currentCode}
+
+Aplique:
+1. Indentação consistente
+2. Espaçamento adequado
+3. Organização de imports/requires
+4. Quebra de linhas lógicas
+
+Retorne apenas o código formatado, sem explicações adicionais.`;
+
+            const formattedCode = await this.callOpenAI(prompt);
+            
+            document.getElementById('codeArea').textContent = formattedCode;
+            this.currentCode = formattedCode;
+            this.updateCodeStats();
+            
+            this.showToast('Código formatado com sucesso!', 'success');
+            
+        } catch (error) {
+            this.showToast(`Erro na formatação: ${error.message}`, 'error');
+        }
+    }
+
+    async explainCode() {
+        if (!this.validateApiAndCode()) return;
+
+        this.setAIStatus('Explicando código...');
+        
+        try {
+            const prompt = `Explique o seguinte código ${this.currentLanguage} de forma detalhada:
+
+CÓDIGO:
+${this.currentCode}
+
+Forneça:
+1. Funcionalidade geral
+2. Explicação linha por linha
+3. Fluxo de execução
+4. Conceitos importantes utilizados
+5. Possíveis melhorias
+
+Formate a resposta em HTML.`;
+
+            const explanation = await this.callOpenAI(prompt);
+            this.showAnalysisResults(explanation);
+            this.addChatMessage('assistant', `📚 **Explicação do Código**\n\n${explanation}`);
+            
+        } catch (error) {
+            this.showToast(`Erro na explicação: ${error.message}`, 'error');
+        }
+    }
+
+    async analyzeForSuggestions() {
+        // Análise leve para sugestões em tempo real
+        if (!this.isApiConfigured || this.currentCode.length < 50) {
+            document.getElementById('suggestionsCard').style.display = 'none';
+            return;
+        }
+
+        // Debounce para evitar muitas chamadas
+        if (this.suggestionTimeout) {
+            clearTimeout(this.suggestionTimeout);
+        }
+
+        this.suggestionTimeout = setTimeout(async () => {
+            try {
+                const prompt = `Analise rapidamente este código ${this.currentLanguage} e forneça 2-3 sugestões breves de melhoria:
+
+${this.currentCode}
+
+Forneça apenas as sugestões em formato de lista, sem explicações longas.`;
+
+                const suggestions = await this.callOpenAI(prompt);
+                this.showCodeSuggestions(suggestions);
+            } catch (error) {
+                // Silenciosamente falha nas sugestões em tempo real
+            }
+        }, 1000);
+    }
+
+    showCodeSuggestions(suggestions) {
+        const container = document.getElementById('codeSuggestions');
+        const card = document.getElementById('suggestionsCard');
+        
+        container.innerHTML = `
+            <div class="suggestion-item" onclick="this.style.display='none'">
+                <strong>Sugestões de Melhoria:</strong>
+                <div>${suggestions}</div>
+                <small class="text-muted">Clique para fechar</small>
+            </div>
+        `;
+        
+        card.style.display = 'block';
+    }
+
+    validateApiAndCode() {
+        if (!this.isApiConfigured) {
+            this.showToast('Configure a API key primeiro.', 'warning');
+            return false;
+        }
+
+        if (!this.currentCode.trim()) {
+            this.showToast('Por favor, digite algum código.', 'warning');
+            return false;
+        }
+
+        return true;
+    }
+
+    showAnalysisResults(content) {
+        const resultsContainer = document.getElementById('analysisResults');
+        resultsContainer.innerHTML = `
+            <div class="alert alert-success">
+                <i class="fas fa-check-circle"></i> 
+                <strong>Análise Concluída</strong>
+            </div>
+            <div class="mt-3">${content}</div>
+        `;
+    }
+
+    async sendMessage() {
+        if (!this.isApiConfigured) {
+            this.showToast('Configure a API key primeiro.', 'warning');
+            return;
+        }
+
+        const chatInput = document.getElementById('chatInput');
+        const message = chatInput.value.trim();
+        
+        if (!message) {
+            this.showToast('Digite uma mensagem.', 'warning');
+            return;
+        }
+
+        // Adicionar mensagem do usuário
+        this.addChatMessage('user', message);
+        chatInput.value = '';
+
+        this.setAIStatus('IA: Pensando...');
+        
+        try {
+            const prompt = `Pergunta do usuário: ${message}
+
+Código atual (${this.currentLanguage}):
+${this.currentCode}
+
+Responda de forma técnica e útil, considerando o contexto do código.`;
+
+            const response = await this.callOpenAI(prompt);
+            this.addChatMessage('assistant', response);
+            
+        } catch (error) {
+            this.showToast(`Erro no chat: ${error.message}`, 'error');
+            this.addChatMessage('assistant', `Desculpe, ocorreu um erro: ${error.message}`);
+        }
+    }
+
+    runCode() {
+        if (!this.currentCode.trim()) {
+            this.showToast('Não há código para executar.', 'warning');
+            return;
+        }
+
+        try {
+            // Para JavaScript, podemos tentar executar no contexto atual
+            if (this.currentLanguage === 'javascript') {
+                const result = eval(this.currentCode);
+                this.showToast('Código executado com sucesso!', 'success');
+                console.log('Resultado:', result);
+            } else {
+                this.showToast('Execução disponível apenas para JavaScript no momento.', 'info');
+            }
+        } catch (error) {
+            this.showToast(`Erro na execução: ${error.message}`, 'error');
+        }
+    }
+
+    saveCode() {
+        localStorage.setItem('saved_code', this.currentCode);
+        localStorage.setItem('saved_language', this.currentLanguage);
+    }
+
+    loadSavedCode() {
+        const savedCode = localStorage.getItem('saved_code');
+        const savedLanguage = localStorage.getItem('saved_language');
+        
+        if (savedCode) {
+            this.currentCode = savedCode;
+            document.getElementById('codeArea').textContent = savedCode;
+        }
+        
+        if (savedLanguage) {
+            this.currentLanguage = savedLanguage;
+            document.getElementById('languageSelector').value = savedLanguage;
+            this.updateFileName();
+        }
+        
+        this.updateCodeStats();
+    }
+
+    clearCode() {
+        if (confirm('Tem certeza que deseja limpar o código?')) {
+            this.currentCode = '';
+            document.getElementById('codeArea').textContent = '// Digite seu código aqui...';
+            this.updateCodeStats();
+            this.saveCode();
+        }
+    }
+
+    clearChat() {
+        if (confirm('Tem certeza que deseja limpar o histórico do chat?')) {
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="message system-message">
+                    <strong>Assistente IA:</strong> Histórico do chat limpo. Como posso ajudar você hoje?
+                </div>
+            `;
+            this.conversationHistory = [];
+        }
+    }
+
+    clearResults() {
+        document.getElementById('analysisResults').innerHTML = `
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i> 
+                Execute uma análise ou faça uma pergunta para ver os resultados aqui.
+            </div>
+        `;
+    }
+
+    loadTemplate(templateName) {
+        const template = CODE_ASSISTANT_CONFIG.templates[templateName];
+        if (template) {
+            document.getElementById('codeArea').textContent = template;
+            this.currentCode = template;
+            this.updateCodeStats();
+            this.saveCode();
+            this.showToast(`Template "${templateName}" carregado!`, 'success');
+        }
+    }
+}
+
+// Inicializar o assistente quando a página carregar
+document.addEventListener('DOMContentLoaded', () => {
+    window.codeAssistant = new CodeAssistant();
+});
+    </script>
+</body>
+</html>

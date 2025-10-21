@@ -1,0 +1,1304 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Loja de Tecnologia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .navbar {
+            background-color: var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-sale {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .badge-new {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-popular {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-category {
+            color: #777;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            height: 2.8rem;
+            overflow: hidden;
+        }
+        
+        .product-rating {
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .current-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .original-price {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .discount {
+            background-color: #ffeaa7;
+            color: #d35400;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #dde4e6;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .cart-overlay.open {
+            display: block;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-content {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .categories-list li {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .categories-list li:hover, .categories-list li.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #eee;
+            z-index: 1;
+        }
+        
+        .checkout-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+            font-weight: bold;
+            color: #999;
+        }
+        
+        .checkout-step.active {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+
+        .whatsapp-fixed {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .image-search-modal .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .api-selector {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .api-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .api-tab:hover {
+            background: #e9ecef;
+        }
+
+        .api-tab.active:hover {
+            background: var(--primary);
+        }
+
+        .alert-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .image-result {
+            transition: all 0.3s;
+        }
+
+        .image-result:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .select-image-btn {
+            transition: all 0.3s;
+        }
+
+        .selection-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: var(--success);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: none;
+        }
+
+        .image-result.selected .selection-indicator {
+            display: block;
+        }
+
+        .custom-product-search {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .step-number {
+            background: var(--primary);
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .custom-product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .product-preview-card {
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            padding: 1rem;
+            background: white;
+        }
+
+        .icon-with-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Botão WhatsApp Fixo -->
+    <div class="whatsapp-fixed">
+        <button class="btn whatsapp-btn btn-lg" onclick="openCustomProductModal()">
+            <i class="fab fa-whatsapp"></i> 📦 Encomendar Produto
+        </button>
+    </div>
+
+    <!-- Header com Logo -->
+    <div class="header">
+        <div class="container">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="h3 mb-0">D.Pedro Soluções</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#"><i class="fas fa-home me-1"></i>Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-box me-1"></i>Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-list me-1"></i>Categorias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-info-circle me-1"></i>Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-phone me-1"></i>Contato</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group me-2">
+                        <input type="text" id="searchInput" class="form-control" placeholder="🔍 Buscar produtos...">
+                        <button class="btn btn-outline-light" onclick="searchProducts()">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button id="cartButton" class="btn btn-primary position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">🛍️ Soluções em Tecnologia para Empresas</h1>
+            <p class="lead mb-4">💻 Hardware, 🛡️ Software, 🔒 Segurança e 🎯 Consultoria especializada</p>
+            <button class="btn btn-light btn-lg" onclick="scrollToProducts()">
+                <i class="fas fa-arrow-down me-2"></i>Ver Produtos
+            </button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <!-- Busca de Produtos Personalizados -->
+        <div class="custom-product-search">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4 class="mb-2">🔎 Não encontrou o que procura?</h4>
+                    <p class="mb-0">📦 Encomende produtos personalizados! Busque qualquer produto e envie diretamente para nosso WhatsApp.</p>
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-light btn-lg" onclick="openCustomProductModal()">
+                        <i class="fab fa-whatsapp me-2"></i> 📋 Encomendar Agora
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Categorias</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush categories-list">
+                            <li class="list-group-item active" data-category="all">
+                                <i class="fas fa-th-large me-2"></i>Todas as categorias
+                            </li>
+                            <li class="list-group-item" data-category="materialescolar">
+                                <i class="fas fa-pencil-alt me-2"></i>Material Escolar
+                            </li>
+                            <li class="list-group-item" data-category="material_escritorio">
+                                <i class="fas fa-briefcase me-2"></i>Material de Escritório
+                            </li>
+                            <li class="list-group-item" data-category="materialeletrico">
+                                <i class="fas fa-bolt me-2"></i>Material Elétrico
+                            </li>
+                            <li class="list-group-item" data-category="software">
+                                <i class="fas fa-code me-2"></i>Software
+                            </li>
+                            <li class="list-group-item" data-category="hardware">
+                                <i class="fas fa-desktop me-2"></i>Hardware
+                            </li>
+                            <li class="list-group-item" data-category="security">
+                                <i class="fas fa-shield-alt me-2"></i>Segurança
+                            </li>
+                            <li class="list-group-item" data-category="network">
+                                <i class="fas fa-network-wired me-2"></i>Rede
+                            </li>
+                            <li class="list-group-item" data-category="cloud">
+                                <i class="fas fa-cloud me-2"></i>Cloud
+                            </li>
+                            <li class="list-group-item" data-category="consulting">
+                                <i class="fas fa-chart-line me-2"></i>Consultoria
+                            </li>
+                            <li class="list-group-item" data-category="training">
+                                <i class="fas fa-graduation-cap me-2"></i>Treinamento
+                            </li>
+                            <li class="list-group-item" data-category="services">
+                                <i class="fas fa-cogs me-2"></i>Serviços
+                            </li>
+                            <li class="list-group-item" data-category="telefone">
+                                <i class="fas fa-phone me-2"></i>Telefone
+                            </li>
+                            <li class="list-group-item" data-category="acessorios">
+                                <i class="fas fa-headphones me-2"></i>Acessórios de Telefone
+                            </li>
+                            <li class="list-group-item" data-category="impressora">
+                                <i class="fas fa-print me-2"></i>Impressora
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex flex-wrap">
+                        <button class="filter-btn active" data-filter="all">
+                            <i class="fas fa-th-large me-1"></i>Todos
+                        </button>
+                        <button class="filter-btn" data-filter="featured">
+                            <i class="fas fa-star me-1"></i>Destaques
+                        </button>
+                        <button class="filter-btn" data-filter="sale">
+                            <i class="fas fa-tag me-1"></i>Promoções
+                        </button>
+                        <button class="filter-btn" data-filter="new">
+                            <i class="fas fa-newspaper me-1"></i>Novidades
+                        </button>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <label class="me-2"><i class="fas fa-sort me-1"></i>Ordenar por:</label>
+                        <select id="sortSelect" class="form-select form-select-sm">
+                            <option value="popular">🎯 Mais populares</option>
+                            <option value="price-asc">💰 Preço: menor primeiro</option>
+                            <option value="price-desc">💎 Preço: maior primeiro</option>
+                            <option value="name">🔤 Nome A-Z</option>
+                            <option value="newest">🆕 Mais recentes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div id="productsGrid" class="product-grid"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal para Produtos Personalizados ATUALIZADO -->
+    <div class="modal fade" id="customProductModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">📦 Encomendar Produto Personalizado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Não encontrou o produto que procura?</strong> Encomende conosco! Busque qualquer produto e envie diretamente para nosso WhatsApp.
+                    </div>
+
+                    <!-- Passo 1: Buscar Produto -->
+                    <div class="step-indicator">
+                        <div class="step-number">1</div>
+                        <div>
+                            <strong>🔍 Busque o produto desejado</strong>
+                            <small class="d-block text-muted">Digite o nome do produto que você quer encomendar</small>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <input type="text" id="customProductSearch" class="form-control" placeholder="Ex: iPhone 15, Laptop Dell, Samsung Galaxy...">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-primary w-100" onclick="searchCustomProduct()">
+                                <i class="fas fa-search me-2"></i> 🔎 Buscar Produto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Passo 2: Visualizar Imagem -->
+                    <div class="step-indicator">
+                        <div class="step-number">2</div>
+                        <div>
+                            <strong>🖼️ Visualize a imagem do produto</strong>
+                            <small class="d-block text-muted">Selecione uma imagem que represente o produto</small>
+                        </div>
+                    </div>
+
+                    <div id="customProductResults" class="row mb-3">
+                        <div class="col-12 text-center py-4">
+                            <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                            <p>🔍 Busque o produto que deseja encomendar</p>
+                            <p class="text-muted">O sistema buscará automaticamente imagens do produto</p>
+                        </div>
+                    </div>
+
+                    <!-- Passo 3: Informações Adicionais -->
+                    <div class="step-indicator">
+                        <div class="step-number">3</div>
+                        <div>
+                            <strong>📝 Adicione informações</strong>
+                            <small class="d-block text-muted">Forneça detalhes sobre o produto desejado</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">📋 Observações Adicionais</label>
+                        <textarea class="form-control" id="productObservations" rows="3" placeholder="Especificações técnicas, quantidade, prazo de entrega, cor, modelo, etc..."></textarea>
+                    </div>
+
+                    <!-- Passo 4: Dados de Contato -->
+                    <div class="step-indicator">
+                        <div class="step-number">4</div>
+                        <div>
+                            <strong>👤 Seus dados de contato</strong>
+                            <small class="d-block text-muted">Para entrarmos em contato com você</small>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <div class="icon-with-text">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" class="form-control" id="clientName" placeholder="Seu nome completo">
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <div class="icon-with-text">
+                                    <i class="fas fa-phone"></i>
+                                    <input type="tel" class="form-control" id="clientPhone" placeholder="Seu telefone com WhatsApp">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="sendCustomProductRequest()">
+                        <i class="fab fa-whatsapp me-2"></i> 📤 Enviar para WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // =============================================
+    // CONFIGURAÇÃO DAS APIS
+    // =============================================
+    const UNSPLASH_ACCESS_KEY = 'XGGpQnAz9dHPKDtkOYfjjOrFVeIVjhKqEPHdrZI90rc';
+    const UNSPLASH_BASE_URL = 'https://api.unsplash.com';
+
+    // =============================================
+    // DADOS DE PRODUTOS
+    // =============================================
+    const products = [
+        {
+            id: 1,
+            name: "Kit Caderno Universitário 10 Unidades",
+            category: "materialescolar",
+            price: 8990,
+            originalPrice: 12990,
+            image: "https://img.freepik.com/free-vector/school-supplies-set_74855-4780.jpg",
+            rating: 4.5,
+            reviews: 42,
+            badge: "sale",
+            description: "Kit com 10 cadernos universitários de 200 folhas cada",
+            searchTerms: ["notebook", "school supplies", "education", "stationery"]
+        },
+        {
+            id: 2,
+            name: "Caneta Esferográfica Premium - Caixa 50",
+            category: "materialescolar",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/pen-collection_1284-42357.jpg",
+            rating: 4.3,
+            reviews: 28,
+            description: "Caixa com 50 canetas esferográficas de tinta azul",
+            searchTerms: ["pen", "writing", "office supplies"]
+        },
+        {
+            id: 3,
+            name: "Mochila Escolar Antifurto",
+            category: "materialescolar",
+            price: 12990,
+            originalPrice: 17990,
+            image: "https://img.freepik.com/free-vector/backpack-design_1284-10089.jpg",
+            rating: 4.7,
+            reviews: 35,
+            badge: "popular",
+            description: "Mochila escolar com compartimento antifurto e laptop",
+            searchTerms: ["backpack", "school bag", "mochila"]
+        },
+        {
+            id: 4,
+            name: "Grampeador de Mesa Profissional",
+            category: "material_escritorio",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/office-supplies_1284-42356.jpg",
+            rating: 4.5,
+            reviews: 36,
+            description: "Grampeador de mesa profissional com capacidade para 100 grampos",
+            searchTerms: ["stapler", "office", "grampeador"]
+        },
+        {
+            id: 5,
+            name: "Calculadora Financeira 12 Dígitos",
+            category: "material_escritorio",
+            price: 7890,
+            originalPrice: 9990,
+            image: "https://img.freepik.com/free-vector/calculator-concept-illustration_114360-2686.jpg",
+            rating: 4.6,
+            reviews: 42,
+            badge: "sale",
+            description: "Calculadora financeira com display de 12 dígitos",
+            searchTerms: ["calculator", "finance", "math"]
+        }
+    ];
+
+    // =============================================
+    // VARIÁVEIS GLOBAIS
+    // =============================================
+    let cart = [];
+    let currentStep = 1;
+    let customProductSearchTerm = '';
+    let selectedCustomProductImage = '';
+
+    // =============================================
+    // NOVAS FUNCIONALIDADES IMPLEMENTADAS
+    // =============================================
+
+    // Abrir modal de produtos personalizados
+    function openCustomProductModal() {
+        const modal = new bootstrap.Modal(document.getElementById('customProductModal'));
+        modal.show();
+        
+        // Limpar campos ao abrir o modal
+        document.getElementById('customProductSearch').value = '';
+        document.getElementById('productObservations').value = '';
+        document.getElementById('clientName').value = '';
+        document.getElementById('clientPhone').value = '';
+        
+        const resultsContainer = document.getElementById('customProductResults');
+        resultsContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <p>🔍 Busque o produto que deseja encomendar</p>
+                <p class="text-muted">O sistema buscará automaticamente imagens do produto</p>
+            </div>
+        `;
+        
+        selectedCustomProductImage = '';
+    }
+
+    // Buscar produto personalizado COM IMAGENS
+    async function searchCustomProduct() {
+        const searchTerm = document.getElementById('customProductSearch').value.trim();
+        if (!searchTerm) {
+            showNotification('❌ Digite o nome do produto que procura', 'warning');
+            return;
+        }
+
+        customProductSearchTerm = searchTerm;
+        const resultsContainer = document.getElementById('customProductResults');
+
+        // Mostrar loading
+        resultsContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto;"></div>
+                <p class="mt-2">🔍 Buscando "${searchTerm}" e imagens relacionadas...</p>
+            </div>
+        `;
+
+        try {
+            // Buscar imagens do produto
+            const images = await searchUnsplashPhotos(searchTerm);
+            
+            if (images.length === 0) {
+                // Se não encontrou imagens, mostrar opção sem imagem
+                displayCustomProductResults(searchTerm, null);
+            } else {
+                // Mostrar resultados com imagens
+                displayCustomProductResults(searchTerm, images);
+            }
+
+        } catch (error) {
+            console.error('Erro ao buscar produto:', error);
+            // Fallback - mostrar sem imagens
+            displayCustomProductResults(searchTerm, null);
+        }
+    }
+
+    // Exibir resultados de produtos personalizados COM IMAGENS
+    function displayCustomProductResults(searchTerm, images) {
+        const resultsContainer = document.getElementById('customProductResults');
+        
+        if (!images || images.length === 0) {
+            // Sem imagens encontradas
+            resultsContainer.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Produto encontrado, mas sem imagem</strong> - Você pode continuar com a encomenda.
+                    </div>
+                    <div class="product-preview-card">
+                        <div class="text-center py-4">
+                            <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                            <h5>${searchTerm}</h5>
+                            <p class="text-muted">Produto disponível para encomenda</p>
+                            <small class="text-success">
+                                <i class="fas fa-check-circle me-1"></i>
+                                Disponível para cotação
+                            </small>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-outline-secondary w-100" onclick="useDefaultImage('${searchTerm}')">
+                            <i class="fas fa-image me-2"></i> Usar Sem Imagem
+                        </button>
+                    </div>
+                </div>
+            `;
+            selectedCustomProductImage = '';
+        } else {
+            // Com imagens encontradas
+            let imagesHTML = images.slice(0, 4).map((image, index) => `
+                <div class="col-md-6 mb-3">
+                    <div class="card h-100 image-selector-card">
+                        <img src="${image.thumbnail}" class="card-img-top custom-product-image" alt="${searchTerm}" 
+                             style="height: 150px; object-fit: cover; cursor: pointer;"
+                             onclick="selectCustomProductImage('${image.url}', this)">
+                        <div class="card-body text-center">
+                            <button class="btn btn-sm btn-outline-primary w-100" 
+                                    onclick="selectCustomProductImage('${image.url}', this)">
+                                <i class="fas fa-check me-1"></i> Selecionar Esta Imagem
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            resultsContainer.innerHTML = `
+                <div class="col-12">
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <strong>Produto encontrado!</strong> Selecione uma imagem abaixo.
+                    </div>
+                    
+                    <div class="product-preview-card mb-3">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5>${searchTerm}</h5>
+                                <p class="text-muted mb-2">Produto disponível para encomenda</p>
+                                <div class="icon-with-text">
+                                    <i class="fas fa-check text-success"></i>
+                                    <span class="text-success">Disponível para cotação</span>
+                                </div>
+                                <div class="icon-with-text">
+                                    <i class="fas fa-shipping-fast text-info"></i>
+                                    <span class="text-info">Entrega sob consulta</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <div id="selectedImagePreview" class="text-muted">
+                                    <i class="fas fa-image fa-2x mb-2"></i>
+                                    <p class="small">Nenhuma imagem selecionada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h6 class="mb-3">
+                        <i class="fas fa-images me-2"></i>Selecione uma imagem do produto:
+                    </h6>
+                    <div class="row">
+                        ${imagesHTML}
+                    </div>
+                    
+                    <div class="mt-3">
+                        <button class="btn btn-outline-secondary w-100" onclick="useDefaultImage('${searchTerm}')">
+                            <i class="fas fa-times me-2"></i> Continuar Sem Imagem
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // Selecionar imagem para produto personalizado
+    function selectCustomProductImage(imageUrl, element) {
+        // Remover seleção anterior
+        document.querySelectorAll('.image-selector-card').forEach(card => {
+            card.style.borderColor = '#dee2e6';
+        });
+        
+        // Destacar card selecionado
+        element.closest('.image-selector-card').style.borderColor = '#28a745';
+        
+        // Atualizar preview
+        const previewContainer = document.getElementById('selectedImagePreview');
+        previewContainer.innerHTML = `
+            <img src="${imageUrl}" class="custom-product-image" alt="Imagem selecionada" 
+                 style="height: 80px; width: 80px; object-fit: cover; border-radius: 8px;">
+            <p class="small text-success mt-2">
+                <i class="fas fa-check me-1"></i>Imagem selecionada
+            </p>
+        `;
+        
+        selectedCustomProductImage = imageUrl;
+        showNotification('✅ Imagem selecionada para o produto!', 'success');
+    }
+
+    // Usar imagem padrão
+    function useDefaultImage(productName) {
+        selectedCustomProductImage = '';
+        const previewContainer = document.getElementById('selectedImagePreview');
+        previewContainer.innerHTML = `
+            <i class="fas fa-box fa-2x mb-2 text-muted"></i>
+            <p class="small text-muted">Sem imagem</p>
+        `;
+        showNotification('ℹ️ Continuando sem imagem específica', 'info');
+    }
+
+    // Enviar pedido personalizado para WhatsApp COM IMAGEM
+    function sendCustomProductRequest() {
+        const productName = customProductSearchTerm || document.getElementById('customProductSearch').value;
+        const observations = document.getElementById('productObservations').value;
+        const clientName = document.getElementById('clientName').value;
+        const clientPhone = document.getElementById('clientPhone').value;
+
+        if (!productName) {
+            showNotification('❌ Digite o nome do produto que deseja encomendar', 'warning');
+            return;
+        }
+
+        let texto = `*🛍️ PEDIDO DE PRODUTO PERSONALIZADO - D.PEDRO SOLUÇÕES*%0A%0A`;
+        texto += `*📦 PRODUTO SOLICITADO:*%0A`;
+        texto += `${productName}%0A%0A`;
+        
+        if (selectedCustomProductImage) {
+            texto += `*🖼️ IMAGEM DE REFERÊNCIA:*%0A`;
+            texto += `${selectedCustomProductImage}%0A%0A`;
+        }
+        
+        if (observations) {
+            texto += `*📝 OBSERVAÇÕES:*%0A`;
+            texto += `${observations}%0A%0A`;
+        }
+        
+        if (clientName || clientPhone) {
+            texto += `*👤 DADOS DO CLIENTE:*%0A`;
+            if (clientName) texto += `👤 Nome: ${clientName}%0A`;
+            if (clientPhone) texto += `📞 Telefone: ${clientPhone}%0A`;
+            texto += `%0A`;
+        }
+        
+        texto += `*💬 MENSAGEM AUTOMÁTICA:*%0A`;
+        texto += `Olá! Gostaria de encomendar o produto acima. Podem me informar disponibilidade e preço?`;
+
+        const whatsappNumber = "244946299834";
+        const url = `https://wa.me/${whatsappNumber}?text=${texto}`;
+
+        window.open(url, "_blank");
+        
+        // Fechar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('customProductModal'));
+        modal.hide();
+        
+        showNotification('✅ Pedido enviado para WhatsApp! Entraremos em contato em breve.', 'success');
+    }
+
+    // Buscar produtos na loja
+    function searchProducts() {
+        const searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+        
+        if (!searchTerm) {
+            renderProducts(products);
+            return;
+        }
+
+        const filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.description.toLowerCase().includes(searchTerm) ||
+            product.category.toLowerCase().includes(searchTerm)
+        );
+
+        if (filteredProducts.length === 0) {
+            const productsGrid = document.getElementById('productsGrid');
+            productsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h3>❌ Produto não encontrado</h3>
+                    <p>Não encontramos "${searchTerm}" em nosso catálogo.</p>
+                    <div class="mt-4">
+                        <button class="btn btn-primary me-2" onclick="document.getElementById('searchInput').value = ''; searchProducts()">
+                            <i class="fas fa-th-large me-2"></i>Ver Todos os Produtos
+                        </button>
+                        <button class="btn whatsapp-btn" onclick="openCustomProductWithSearch('${searchTerm}')">
+                            <i class="fab fa-whatsapp me-2"></i> 📦 Encomendar este Produto
+                        </button>
+                    </div>
+                </div>
+            `;
+        } else {
+            renderProducts(filteredProducts);
+        }
+    }
+
+    // Abrir modal de encomenda com termo pré-preenchido
+    function openCustomProductWithSearch(searchTerm) {
+        document.getElementById('customProductSearch').value = searchTerm;
+        openCustomProductModal();
+        // Buscar automaticamente
+        setTimeout(() => searchCustomProduct(), 500);
+    }
+
+    // =============================================
+    // FUNÇÕES DE APOIO
+    // =============================================
+
+    // Buscar no Unsplash
+    async function searchUnsplashPhotos(query) {
+        try {
+            const response = await fetch(
+                `${UNSPLASH_BASE_URL}/search/photos?query=${encodeURIComponent(query)}&per_page=4&client_id=${UNSPLASH_ACCESS_KEY}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Erro Unsplash: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            return data.results.map(photo => ({
+                id: photo.id,
+                url: photo.urls.regular,
+                thumbnail: photo.urls.small,
+                title: photo.description || `Foto de ${query}`,
+                author: photo.user.name,
+                source: 'unsplash'
+            }));
+            
+        } catch (error) {
+            console.error('Erro ao buscar no Unsplash:', error);
+            return [];
+        }
+    }
+
+    // Mostrar notificação
+    function showNotification(message, type = 'success') {
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = type === 'error' ? '#e74c3c' : type === 'warning' ? '#f39c12' : type === 'info' ? '#3498db' : '#27ae60';
+        notification.style.color = 'white';
+        notification.style.padding = '1rem 1.5rem';
+        notification.style.borderRadius = '5px';
+        notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+        notification.style.zIndex = '1000';
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s';
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        setTimeout(() => {
+            notification.style.opacity = '1';
+        }, 10);
+
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Scroll para produtos
+    function scrollToProducts() {
+        document.querySelector('.product-grid').scrollIntoView({ 
+            behavior: 'smooth' 
+        });
+    }
+
+    // ... (outras funções existentes: renderProducts, addToCart, etc.)
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', function() {
+        // Busca automática ao pressionar Enter
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchProducts();
+            }
+        });
+
+        document.getElementById('customProductSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchCustomProduct();
+            }
+        });
+    });
+
+    // Adicione aqui as funções restantes do seu código original...
+    // (renderProducts, addToCart, updateCart, etc.)
+    </script>
+</body>
+</html>

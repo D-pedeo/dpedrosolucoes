@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Loja de Tecnologia</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #27ae60;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        
+        .header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            height: 50px;
+            margin-right: 15px;
+        }
+        
+        .navbar {
+            background-color: var(--secondary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 3rem;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .product-image {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .badge-sale {
+            background-color: var(--accent);
+            color: white;
+        }
+        
+        .badge-new {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .badge-popular {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .product-content {
+            padding: 1.5rem;
+        }
+        
+        .product-category {
+            color: #777;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .product-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            height: 2.8rem;
+            overflow: hidden;
+        }
+        
+        .product-rating {
+            color: #f39c12;
+            margin-bottom: 1rem;
+        }
+        
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .current-price {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--dark);
+        }
+        
+        .original-price {
+            font-size: 1rem;
+            text-decoration: line-through;
+            color: #999;
+        }
+        
+        .discount {
+            background-color: #ffeaa7;
+            color: #d35400;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2980b9;
+        }
+        
+        .btn-secondary {
+            background-color: var(--light);
+            color: var(--dark);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #dde4e6;
+        }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .cart-sidebar.open {
+            right: 0;
+        }
+        
+        .cart-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+            display: none;
+        }
+        
+        .cart-overlay.open {
+            display: block;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .cart-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .cart-item-content {
+            flex: 1;
+        }
+        
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+        }
+        
+        .cart-item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+        
+        .quantity-value {
+            min-width: 30px;
+            text-align: center;
+        }
+        
+        .remove-item {
+            color: #e74c3c;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .categories-list li {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 5px;
+        }
+        
+        .categories-list li:hover, .categories-list li.active {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .checkout-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .checkout-steps::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background-color: #eee;
+            z-index: 1;
+        }
+        
+        .checkout-step {
+            position: relative;
+            z-index: 2;
+            background: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #eee;
+            font-weight: bold;
+            color: #999;
+        }
+        
+        .checkout-step.active {
+            border-color: var(--primary);
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .cart-sidebar {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .product-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)) !important;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+            }
+        }
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .whatsapp-btn {
+            background-color: #25D366;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .whatsapp-btn:hover {
+            background-color: #128C7E;
+            color: white;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .image-search-modal .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .api-selector {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-tab {
+            padding: 0.5rem 1rem;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            cursor: pointer;
+            margin-right: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .api-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .api-tab:hover {
+            background: #e9ecef;
+        }
+
+        .api-tab.active:hover {
+            background: var(--primary);
+        }
+
+        .alert-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .image-result {
+            transition: all 0.3s;
+        }
+
+        .image-result:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .select-image-btn {
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZK2KZGMHG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6ZK2KZGMHG');
+</script>
+<body>
+    <!-- Header com Logo -->
+    <div class="header">
+        <div class="container">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="h3 mb-0">D.Pedro Soluções</h1>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Produtos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Categorias</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Sobre</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contato</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <div class="input-group me-2">
+                        <input type="text" id="searchInput" class="form-control" placeholder="Buscar produtos...">
+                        <button class="btn btn-outline-light">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                    <button id="cartButton" class="btn btn-primary position-relative">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span id="cartBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">Soluções em Tecnologia para Empresas</h1>
+            <p class="lead mb-4">Hardware, software, segurança e consultoria especializada</p>
+            <button class="btn btn-light btn-lg">Ver Produtos</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mb-5">
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3 mb-3">
+                <div class="card">
+                    <div class="card-header bg-white">
+                        <h5 class="mb-0">Categorias</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush categories-list">
+                            <li class="list-group-item active" data-category="all">Todas as categorias</li>
+                            <li class="list-group-item" data-category="materialescolar">Material Escolar</li>
+                            <li class="list-group-item" data-category="material_escritorio">Material de Escritório</li>
+                            <li class="list-group-item" data-category="materialeletrico">Material Elétrico</li>
+                            <li class="list-group-item" data-category="software">Software</li>
+                            <li class="list-group-item" data-category="hardware">Hardware</li>
+                            <li class="list-group-item" data-category="security">Segurança</li>
+                            <li class="list-group-item" data-category="network">Rede</li>
+                            <li class="list-group-item" data-category="cloud">Cloud</li>
+                            <li class="list-group-item" data-category="consulting">Consultoria</li>
+                            <li class="list-group-item" data-category="training">Treinamento</li>
+                            <li class="list-group-item" data-category="services">Serviços</li>
+                            <li class="list-group-item" data-category="telefone">Telefone</li>
+                            <li class="list-group-item" data-category="acessorios">Acessórios de Telefone</li>
+                            <li class="list-group-item" data-category="impressora">Impressora</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="d-flex flex-wrap">
+                        <button class="filter-btn active" data-filter="all">Todos</button>
+                        <button class="filter-btn" data-filter="featured">Destaques</button>
+                        <button class="filter-btn" data-filter="sale">Promoções</button>
+                        <button class="filter-btn" data-filter="new">Novidades</button>
+                    </div>
+                    
+                    <div class="d-flex align-items-center">
+                        <label class="me-2">Ordenar por:</label>
+                        <select id="sortSelect" class="form-select form-select-sm">
+                            <option value="popular">Mais populares</option>
+                            <option value="price-asc">Preço: menor primeiro</option>
+                            <option value="price-desc">Preço: maior primeiro</option>
+                            <option value="name">Nome A-Z</option>
+                            <option value="newest">Mais recentes</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Products Grid -->
+                <div id="productsGrid" class="product-grid"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div id="cartSidebar" class="cart-sidebar">
+        <div class="p-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Seu Carrinho</h5>
+            <button id="closeCart" class="btn btn-sm btn-link">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div id="cartItems" class="p-3"></div>
+        
+        <div id="emptyCart" class="p-5 text-center" style="display: none;">
+            <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+            <p>Seu carrinho está vazio</p>
+            <button class="btn btn-primary">Continuar Comprando</button>
+        </div>
+        
+        <div class="p-3 border-top">
+            <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span id="cartSubtotal">0 AOA</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3">
+                <span>Frete:</span>
+                <span id="cartShipping">0 AOA</span>
+            </div>
+            <div class="d-flex justify-content-between mb-3 fw-bold">
+                <span>Total:</span>
+                <span id="cartTotal">0 AOA</span>
+            </div>
+            <button id="checkoutButton" class="btn btn-primary w-100" disabled>Finalizar Compra</button>
+        </div>
+    </div>
+    
+    <div id="cartOverlay" class="cart-overlay"></div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Finalizar Compra</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="checkout-steps mb-4">
+                        <div class="checkout-step active" data-step="1">1</div>
+                        <div class="checkout-step" data-step="2">2</div>
+                        <div class="checkout-step" data-step="3">3</div>
+                        <div class="checkout-step" data-step="4">4</div>
+                    </div>
+                    
+                    <div id="step1" class="checkout-step-content">
+                        <h6 class="mb-3">Resumo do Pedido</h6>
+                        <div id="checkoutItems"></div>
+                    </div>
+                    
+                    <div id="step2" class="checkout-step-content" style="display: none;">
+                        <h6 class="mb-3">Informações de Entrega</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Nome completo <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerName" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">E-mail <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="customerEmail" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Telefone <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control" id="customerPhone" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Endereço <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerAddress" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Cidade <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="customerCity" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">NIF</label>
+                                <input type="text" class="form-control" id="customerZip">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label class="form-label">Observações</label>
+                                <textarea class="form-control" id="customerNotes" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="step3" class="checkout-step-content" style="display: none;">
+                        <h6 class="mb-3">Método de Pagamento</h6>
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCard" checked>
+                                <label class="form-check-label" for="paymentCard">Cartão de Crédito</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentTransfer">
+                                <label class="form-check-label" for="paymentTransfer">Transferência Bancária</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentMethod" id="paymentCash">
+                                <label class="form-check-label" for="paymentCash">Dinheiro na Entrega</label>
+                            </div>
+                        </div>
+                        
+                        <div id="cardDetails">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Número do Cartão</label>
+                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">Validade</label>
+                                    <input type="text" class="form-control" placeholder="MM/AA">
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-control" placeholder="123">
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Nome no Cartão</label>
+                                    <input type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="step4" class="checkout-step-content" style="display: none;">
+                        <div class="text-center py-4">
+                            <i class="fas fa-check-circle text-success fa-5x mb-3"></i>
+                            <h4>Pedido Realizado com Sucesso!</h4>
+                            <p class="text-muted">Obrigado pela sua compra. Seu número de pedido é: <strong id="orderNumber"></strong></p>
+                            <p>Em breve você receberá um e-mail com os detalhes do seu pedido.</p>
+                            <button class="btn whatsapp-btn mt-3" id="whatsappBtn">
+                                <i class="fab fa-whatsapp"></i> Falar no WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="prevStepButton" class="btn btn-secondary" style="display: none;">Voltar</button>
+                    <button id="nextStepButton" class="btn btn-primary">Próximo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para busca de imagens ATUALIZADO -->
+    <div class="modal fade" id="imageSearchModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Buscar Imagens para Produto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="api-selector">
+                        <div class="d-flex mb-3">
+                            <div class="api-tab active" data-api="unsplash">
+                                <i class="fab fa-unsplash me-2"></i>Unsplash
+                            </div>
+                            <div class="api-tab" data-api="flaticon">
+                                <i class="fas fa-icons me-2"></i>Flaticon
+                            </div>
+                        </div>
+                        <div class="alert alert-info alert-sm mb-3">
+                            <small><i class="fas fa-info-circle me-1"></i> Use termos em inglês para melhores resultados</small>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-8">
+                            <input type="text" id="imageSearch" class="form-control" placeholder="Digite o termo para buscar imagens...">
+                        </div>
+                        <div class="col-md-4">
+                            <button id="searchImages" class="btn btn-primary w-100">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                    <div id="imageResults" class="row">
+                        <div class="col-12 text-center py-4">
+                            <p>Digite um termo de busca para encontrar imagens</p>
+                            <p class="text-muted">Sugestão: use termos em inglês como "notebook", "pen", "computer"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="selectImage" disabled>Selecionar Imagem</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // =============================================
+    // CONFIGURAÇÃO DAS APIS - ATUALIZADA
+    // =============================================
+    const FLATICON_API_KEY = 'FPSX3a39ef5f8a5acae3ad9daf1eabb86635';
+    const FLATICON_BASE_URL = 'https://api.flaticon.com/v3';
+
+    // Configuração para Unsplash (mais confiável)
+    const UNSPLASH_ACCESS_KEY = 'XGGpQnAz9dHPKDtkOYfjjOrFVeIVjhKqEPHdrZI90rc';
+    const UNSPLASH_SECRET_KEY = 'jcJmc644jtPMtU0AXO2MTiFWtuF6OHTiyPG1Og1jFF0';
+    const UNSPLASH_BASE_URL = 'https://api.unsplash.com';
+
+    // =============================================
+    // DADOS DE PRODUTOS COM TERMOS DE BUSCA OTIMIZADOS
+    // =============================================
+    const products = [
+        {
+            id: 1,
+            name: "Kit Caderno Universitário 10 Unidades",
+            category: "materialescolar",
+            price: 8990,
+            originalPrice: 12990,
+            image: "https://img.freepik.com/free-vector/school-supplies-set_74855-4780.jpg",
+            rating: 4.5,
+            reviews: 42,
+            badge: "sale",
+            description: "Kit com 10 cadernos universitários de 200 folhas cada",
+            searchTerms: ["notebook", "school supplies", "education", "stationery", "caderno escolar"]
+        },
+        {
+            id: 2,
+            name: "Caneta Esferográfica Premium - Caixa 50",
+            category: "materialescolar",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/pen-collection_1284-42357.jpg",
+            rating: 4.3,
+            reviews: 28,
+            description: "Caixa com 50 canetas esferográficas de tinta azul",
+            searchTerms: ["pen", "writing", "office supplies", "caneta", "escrita"]
+        },
+        {
+            id: 3,
+            name: "Mochila Escolar Antifurto",
+            category: "materialescolar",
+            price: 12990,
+            originalPrice: 17990,
+            image: "https://img.freepik.com/free-vector/backpack-design_1284-10089.jpg",
+            rating: 4.7,
+            reviews: 35,
+            badge: "popular",
+            description: "Mochila escolar com compartimento antifurto e laptop",
+            searchTerms: ["backpack", "school bag", "mochila", "bag", "student"]
+        },
+        {
+            id: 4,
+            name: "Grampeador de Mesa Profissional",
+            category: "material_escritorio",
+            price: 4590,
+            image: "https://img.freepik.com/free-vector/office-supplies_1284-42356.jpg",
+            rating: 4.5,
+            reviews: 36,
+            description: "Grampeador de mesa profissional com capacidade para 100 grampos",
+            searchTerms: ["stapler", "office", "grampeador", "escritorio", "stationery"]
+        },
+        {
+            id: 5,
+            name: "Calculadora Financeira 12 Dígitos",
+            category: "material_escritorio",
+            price: 7890,
+            originalPrice: 9990,
+            image: "https://img.freepik.com/free-vector/calculator-concept-illustration_114360-2686.jpg",
+            rating: 4.6,
+            reviews: 42,
+            badge: "sale",
+            description: "Calculadora financeira com display de 12 dígitos",
+            searchTerms: ["calculator", "finance", "math", "calculadora", "office"]
+        },
+        {
+            id: 6,
+            name: "Fio Elétrico 2,5mm - Rolo 100m",
+            category: "materialeletrico",
+            price: 18990,
+            image: "https://img.freepik.com/free-vector/electrical-cables-set_1284-42355.jpg",
+            rating: 4.5,
+            reviews: 27,
+            description: "Rolo de fio elétrico 2,5mm com 100 metros",
+            searchTerms: ["electrical wire", "cable", "electricity", "fio elétrico", "construction"]
+        },
+        {
+            id: 7,
+            name: "Sistema de Gestão Empresarial",
+            category: "software",
+            price: 150000,
+            originalPrice: 235000,
+            image: "https://img.freepik.com/free-vector/business-analytics-concept-illustration_114360-2685.jpg",
+            rating: 4.8,
+            reviews: 42,
+            badge: "sale",
+            description: "Sistema completo de gestão empresarial com módulos financeiro, estoque, vendas e RH",
+            searchTerms: ["business software", "management", "enterprise", "technology", "system"]
+        },
+        {
+            id: 8,
+            name: "Servidor Enterprise",
+            category: "hardware",
+            price: 1250000,
+            image: "https://img.freepik.com/free-vector/server-room-concept-illustration_114360-2684.jpg",
+            rating: 4.9,
+            reviews: 15,
+            badge: "new",
+            description: "Servidor de alta performance para empresas, com processador Xeon e 32GB RAM",
+            searchTerms: ["server", "data center", "enterprise", "hardware", "technology"]
+        },
+        {
+            id: 9,
+            name: "Pacote de Segurança CFTV",
+            category: "security",
+            price: 250000,
+            image: "https://img.freepik.com/free-vector/security-camera-concept-illustration_114360-2683.jpg",
+            rating: 4.6,
+            reviews: 28,
+            badge: "popular",
+            description: "Kit de Sistema completo de CFTV com 4 câmeras de alta resolução e gravador digital",
+            searchTerms: ["security camera", "surveillance", "CCTV", "security system", "protection"]
+        },
+        {
+            id: 10,
+            name: "Roteador Enterprise",
+            category: "network",
+            price: 225000,
+            image: "https://img.freepik.com/free-vector/wireless-router-concept-illustration_114360-2682.jpg",
+            rating: 4.4,
+            reviews: 22,
+            description: "Roteador de alta performance para redes corporativas com gerenciamento avançado",
+            searchTerms: ["router", "network", "wifi", "internet", "technology"]
+        },
+        {
+            id: 11,
+            name: "Solução em Nuvem",
+            category: "cloud",
+            price: 49900,
+            image: "https://img.freepik.com/free-vector/cloud-computing-concept-illustration_114360-2681.jpg",
+            rating: 4.3,
+            reviews: 26,
+            badge: "popular",
+            description: "Solução completa de cloud computing com armazenamento e backup automatizado",
+            searchTerms: ["cloud computing", "storage", "technology", "data", "server"]
+        },
+        {
+            id: 12,
+            name: "Consultoria em TI",
+            category: "consulting",
+            price: 150000,
+            image: "https://img.freepik.com/free-vector/business-consulting-concept-illustration_114360-2680.jpg",
+            rating: 4.7,
+            reviews: 19,
+            description: "Consultoria especializada em transformação digital e infraestrutura de TI",
+            searchTerms: ["consulting", "business", "technology", "IT", "enterprise"]
+        },
+        {
+            id: 13,
+            name: "Curso de Cybersecurity",
+            category: "training",
+            price: 75000,
+            originalPrice: 99000,
+            image: "https://img.freepik.com/free-vector/cyber-security-concept-illustration_114360-2679.jpg",
+            rating: 4.9,
+            reviews: 31,
+            badge: "sale",
+            description: "Curso completo de cybersecurity com certificação internacional",
+            searchTerms: ["cybersecurity", "security", "training", "education", "technology"]
+        },
+        {
+            id: 14,
+            name: "Serviço de Monitoramento 24/7",
+            category: "services",
+            price: 89900,
+            image: "https://img.freepik.com/free-vector/monitoring-concept-illustration_114360-2678.jpg",
+            rating: 4.9,
+            reviews: 29,
+            badge: "popular",
+            description: "Monitoramento contínuo de infraestrutura de TI com suporte especializado",
+            searchTerms: ["monitoring", "security", "service", "technology", "support"]
+        },
+        {
+            id: 15,
+            name: "Telefone IP Profissional",
+            category: "telefone",
+            price: 45900,
+            image: "https://img.freepik.com/free-vector/phone-concept-illustration_114360-2677.jpg",
+            rating: 4.5,
+            reviews: 23,
+            description: "Telefone IP profissional com display LCD e suporte a múltiplas linhas",
+            searchTerms: ["IP phone", "telephone", "communication", "office", "technology"]
+        },
+        {
+            id: 16,
+            name: "Fone de Ouvido Bluetooth",
+            category: "acessorios",
+            price: 18900,
+            originalPrice: 25900,
+            image: "https://img.freepik.com/free-vector/wireless-headphones-concept-illustration_114360-2676.jpg",
+            rating: 4.6,
+            reviews: 47,
+            badge: "sale",
+            description: "Fone de ouvido Bluetooth com cancelamento de ruído",
+            searchTerms: ["headphones", "bluetooth", "audio", "wireless", "music"]
+        },
+        {
+            id: 17,
+            name: "Impressora HP Deskjet Ink Advantage 4535",
+            category: "impressora",
+            price: 45900,
+            image: "https://img.freepik.com/free-vector/printer-concept-illustration_114360-2675.jpg",
+            rating: 4.3,
+            reviews: 38,
+            description: "Impressora multifuncional com funções print, scan, copy e web",
+            searchTerms: ["printer", "office", "technology", "impressora", "printing"]
+        }
+    ];
+
+    // =============================================
+    // VARIÁVEIS GLOBAIS
+    // =============================================
+    let flaticonAccessToken = '';
+    let selectedImage = null;
+    let currentEditingProductId = null;
+    let currentApi = 'unsplash'; // Agora Unsplash é o padrão
+    let cart = [];
+    let currentStep = 1;
+
+    // =============================================
+    // FUNÇÕES DA API FLATICON
+    // =============================================
+
+    // Obter token de acesso da API Flaticon
+    async function getFlaticonAccessToken() {
+        try {
+            const response = await fetch(`${FLATICON_BASE_URL}/app/authentication`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    apikey: FLATICON_API_KEY
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('Falha na autenticação com a API Flaticon');
+            }
+
+            const data = await response.json();
+            flaticonAccessToken = data.data.token;
+            return data.data.token;
+        } catch (error) {
+            console.error('Erro ao obter token Flaticon:', error);
+            showNotification('Erro ao conectar com a API Flaticon', 'error');
+            return null;
+        }
+    }
+
+    // Buscar ícones no Flaticon
+    async function searchFlaticonIcons(query) {
+        if (!flaticonAccessToken) {
+            await getFlaticonAccessToken();
+        }
+
+        try {
+            const response = await fetch(
+                `${FLATICON_BASE_URL}/search/icons?q=${encodeURIComponent(query)}&limit=20`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${flaticonAccessToken}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Falha na busca de ícones');
+            }
+
+            const data = await response.json();
+            return data.data;
+        } catch (error) {
+            console.error('Erro ao buscar ícones:', error);
+            showNotification('Erro ao buscar imagens no Flaticon', 'error');
+            return [];
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES DA API UNSPLASH (RECOMENDADO)
+    // =============================================
+
+    // Buscar fotos no Unsplash
+    async function searchUnsplashPhotos(query) {
+        try {
+            console.log('Buscando no Unsplash por:', query);
+            
+            const response = await fetch(
+                `${UNSPLASH_BASE_URL}/search/photos?query=${encodeURIComponent(query)}&per_page=20&client_id=${UNSPLASH_ACCESS_KEY}`
+            );
+
+            if (!response.ok) {
+                throw new Error(`Erro Unsplash: ${response.status}`);
+            }
+
+            const data = await response.json();
+            
+            return data.results.map(photo => ({
+                id: photo.id,
+                url: photo.urls.regular,
+                thumbnail: photo.urls.small,
+                title: photo.description || `Foto de ${query}`,
+                author: photo.user.name,
+                source: 'unsplash'
+            }));
+            
+        } catch (error) {
+            console.error('Erro ao buscar no Unsplash:', error);
+            // Fallback para imagens placeholder
+            return getFallbackImages(query);
+        }
+    }
+
+    // Fallback para quando a API falhar
+    function getFallbackImages(query) {
+        const fallbackImages = {
+            'notebook': [
+                'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400',
+                'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=400'
+            ],
+            'pen': [
+                'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=400',
+                'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?w=400'
+            ],
+            'backpack': [
+                'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400',
+                'https://images.unsplash.com/photo-1577733966974-fb41e8eed7b4?w=400'
+            ],
+            'stapler': [
+                'https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=400',
+                'https://images.unsplash.com/photo-1545235617-9465e2b416ee?w=400'
+            ],
+            'calculator': [
+                'https://images.unsplash.com/photo-1587145820266-a5951ee6f620?w=400',
+                'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?w=400'
+            ],
+            'wire': [
+                'https://images.unsplash.com/photo-1562408590-e32931084e23?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'software': [
+                'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400',
+                'https://images.unsplash.com/photo-1547658719-da2b51169166?w=400'
+            ],
+            'server': [
+                'https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=400',
+                'https://images.unsplash.com/photo-1597852074816-d933c7d2b988?w=400'
+            ],
+            'security': [
+                'https://images.unsplash.com/photo-1557597774-9d273605dfa0?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'router': [
+                'https://images.unsplash.com/photo-1591799264318-7e6ef8ddb7ea?w=400',
+                'https://images.unsplash.com/photo-1597764690524-34dfc00f72b6?w=400'
+            ],
+            'cloud': [
+                'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400',
+                'https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=400'
+            ],
+            'consulting': [
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
+                'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400'
+            ],
+            'cybersecurity': [
+                'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400',
+                'https://images.unsplash.com/photo-1563013541-fab32d5f97cc?w=400'
+            ],
+            'monitoring': [
+                'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400',
+                'https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=400'
+            ],
+            'phone': [
+                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400',
+                'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400'
+            ],
+            'headphones': [
+                'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400',
+                'https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400'
+            ],
+            'printer': [
+                'https://images.unsplash.com/photo-1558442073-90e216cdd94a?w=400',
+                'https://images.unsplash.com/photo-1558442073-90e216cdd94a?w=400'
+            ]
+        };
+
+        const key = Object.keys(fallbackImages).find(k => query.toLowerCase().includes(k)) || 'technology';
+        return fallbackImages[key] ? fallbackImages[key].map((url, index) => ({
+            id: `fallback-${index}`,
+            url: url,
+            thumbnail: url,
+            title: `Imagem de ${query}`,
+            author: 'Unsplash',
+            source: 'unsplash'
+        })) : [];
+    }
+
+    // =============================================
+    // FUNÇÕES DE BUSCA DE IMAGENS - VERSÃO OTIMIZADA
+    // =============================================
+
+    // Função para sugerir termo de busca baseado no produto
+    function getSearchTermForProduct(productId) {
+        const product = products.find(p => p.id === productId);
+        if (!product) return 'technology';
+        
+        // Usar termos de busca específicos se disponíveis
+        if (product.searchTerms && product.searchTerms.length > 0) {
+            return product.searchTerms[0];
+        }
+        
+        // Extrair palavras-chave do nome do produto
+        const name = product.name.toLowerCase();
+        const words = name.split(' ');
+        
+        // Remover palavras muito comuns
+        const commonWords = ['de', 'para', 'com', 'sem', 'em', 'por', 'kit', 'caixa', 'pack', 'unidades'];
+        const keywords = words.filter(word => 
+            word.length > 2 && !commonWords.includes(word)
+        );
+        
+        return keywords.length > 0 ? keywords[0] : 'technology';
+    }
+
+    // Buscar e exibir imagens - versão principal usando Unsplash
+    async function searchAndDisplayImages() {
+        const searchInput = document.getElementById('imageSearch');
+        let searchTerm = searchInput.value.trim();
+        
+        // Se não houver termo de busca, usar sugestão baseada no produto
+        if (!searchTerm && currentEditingProductId) {
+            searchTerm = getSearchTermForProduct(currentEditingProductId);
+            searchInput.value = searchTerm;
+        }
+        
+        if (!searchTerm) {
+            showNotification('Digite um termo para buscar', 'warning');
+            return;
+        }
+
+        const resultsContainer = document.getElementById('imageResults');
+        const searchButton = document.getElementById('searchImages');
+        
+        // Mostrar loading
+        searchButton.innerHTML = '<span class="loading-spinner"></span> Buscando...';
+        searchButton.disabled = true;
+        
+        resultsContainer.innerHTML = `
+            <div class="col-12 text-center py-4">
+                <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto;"></div>
+                <p class="mt-2">Buscando imagens para "${searchTerm}"...</p>
+            </div>
+        `;
+
+        try {
+            let images = [];
+            
+            if (currentApi === 'unsplash') {
+                images = await searchUnsplashPhotos(searchTerm);
+            } else {
+                const icons = await searchFlaticonIcons(searchTerm);
+                images = icons.map(icon => ({
+                    id: icon.id,
+                    url: icon.images['512'],
+                    thumbnail: icon.images['128'],
+                    title: icon.description || 'Sem descrição',
+                    author: 'Flaticon',
+                    source: 'flaticon'
+                }));
+            }
+            
+            if (images.length === 0) {
+                resultsContainer.innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <i class="fas fa-search fa-2x text-muted mb-3"></i>
+                        <p>Nenhuma imagem encontrada para "${searchTerm}"</p>
+                        <p class="text-muted">Tente usar termos em inglês como "notebook", "pen", "computer"</p>
+                        <div class="mt-3">
+                            <button class="btn btn-sm btn-outline-primary me-2" onclick="tryAlternativeSearch('${searchTerm}')">
+                                Busca Alternativa
+                            </button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="showSearchTips()">
+                                Dicas de Busca
+                            </button>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Exibir resultados
+            displayImageResults(images);
+            
+            // Mostrar sugestão se poucas imagens foram encontradas
+            if (images.length < 5) {
+                showNotification(`Apenas ${images.length} imagens encontradas. Tente termos em inglês para mais resultados.`, 'info');
+            }
+
+        } catch (error) {
+            console.error('Erro ao buscar imagens:', error);
+            resultsContainer.innerHTML = `
+                <div class="col-12 text-center py-4">
+                    <i class="fas fa-exclamation-triangle fa-2x text-danger mb-3"></i>
+                    <p>Erro de conexão com o serviço de imagens</p>
+                    <p class="text-muted">Verifique sua conexão com a internet</p>
+                    <button class="btn btn-sm btn-outline-primary mt-2" onclick="searchAndDisplayImages()">
+                        Tentar Novamente
+                    </button>
+                </div>
+            `;
+        } finally {
+            // Restaurar botão
+            searchButton.innerHTML = '<i class="fas fa-search"></i> Buscar';
+            searchButton.disabled = false;
+        }
+    }
+
+    // Exibir resultados de imagens
+    function displayImageResults(images) {
+        const resultsContainer = document.getElementById('imageResults');
+        
+        resultsContainer.innerHTML = images.map(image => `
+            <div class="col-md-3 col-6 mb-3">
+                <div class="image-result card h-100" data-image-url="${image.url}" data-image-id="${image.id}">
+                    <img src="${image.thumbnail}" class="card-img-top" alt="${image.title}" 
+                         style="height: 150px; object-fit: cover; cursor: pointer;"
+                         onerror="this.src='https://via.placeholder.com/150/cccccc/666666?text=Imagem'">
+                    <div class="card-body p-2">
+                        <p class="card-text small text-muted mb-1">${image.title.substring(0, 40)}${image.title.length > 40 ? '...' : ''}</p>
+                        <small class="text-muted">Por: ${image.author}</small>
+                    </div>
+                    <div class="card-footer bg-transparent border-0 p-2">
+                        <button class="btn btn-sm btn-outline-primary w-100 select-image-btn" 
+                                onclick="selectImage('${image.url}', this)">
+                            <i class="fas fa-check me-1"></i> Selecionar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Selecionar imagem
+    function selectImage(imageUrl, button) {
+        // Remover seleção anterior
+        document.querySelectorAll('.select-image-btn').forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-primary');
+            btn.innerHTML = '<i class="fas fa-check me-1"></i> Selecionar';
+        });
+        
+        // Selecionar atual
+        button.classList.remove('btn-outline-primary');
+        button.classList.add('btn-primary');
+        button.innerHTML = '<i class="fas fa-check me-1"></i> Selecionado';
+        
+        selectedImage = imageUrl;
+        document.getElementById('selectImage').disabled = false;
+        
+        showNotification('Imagem selecionada! Clique em "Selecionar Imagem" para confirmar.', 'success');
+    }
+
+    // =============================================
+    // FUNÇÕES AUXILIARES MELHORADAS
+    // =============================================
+
+    // Função para tentar busca alternativa
+    function tryAlternativeSearch(originalTerm) {
+        const alternatives = {
+            'caderno': 'notebook',
+            'caneta': 'pen',
+            'mochila': 'backpack',
+            'grampeador': 'stapler',
+            'calculadora': 'calculator',
+            'fio': 'wire',
+            'software': 'software program',
+            'servidor': 'server rack',
+            'camera': 'security camera',
+            'roteador': 'wifi router',
+            'nuvem': 'cloud computing',
+            'consultoria': 'business consulting',
+            'segurança': 'cybersecurity',
+            'telefone': 'office phone',
+            'fone': 'wireless headphones',
+            'impressora': 'office printer',
+            'escolar': 'school',
+            'escritorio': 'office',
+            'elétrico': 'electrical',
+            'empresarial': 'business'
+        };
+        
+        // Tentar encontrar alternativa direta
+        let alternative = alternatives[originalTerm.toLowerCase()];
+        
+        // Se não encontrar, usar tradução comum
+        if (!alternative) {
+            const translationMap = {
+                'material': 'supplies',
+                'kit': 'set',
+                'premium': 'professional',
+                'profissional': 'professional',
+                'antifurto': 'security',
+                'financeira': 'financial',
+                'gestão': 'management',
+                'enterprise': 'business',
+                'monitoramento': 'monitoring',
+                'bluetooth': 'wireless'
+            };
+            
+            alternative = originalTerm.split(' ').map(word => 
+                translationMap[word.toLowerCase()] || word
+            ).join(' ');
+        }
+        
+        document.getElementById('imageSearch').value = alternative;
+        searchAndDisplayImages();
+    }
+
+    // Mostrar dicas de busca
+    function showSearchTips() {
+        const tips = `
+            <div class="alert alert-info">
+                <h6><i class="fas fa-lightbulb me-2"></i>Dicas para Melhor Busca:</h6>
+                <ul class="mb-0">
+                    <li>Use termos em <strong>inglês</strong> para mais resultados</li>
+                    <li>Seja específico: "notebook" em vez de "material escolar"</li>
+                    <li>Use palavras simples: "pen", "computer", "phone"</li>
+                    <li>Evite termos muito genéricos como "produto" ou "item"</li>
+                </ul>
+            </div>
+        `;
+        
+        document.getElementById('imageResults').innerHTML = tips;
+    }
+
+    // Aplicar imagem selecionada ao produto
+    function applySelectedImageToProduct() {
+        if (!selectedImage || !currentEditingProductId) {
+            showNotification('Nenhuma imagem selecionada', 'warning');
+            return;
+        }
+
+        // Encontrar e atualizar o produto
+        const productIndex = products.findIndex(p => p.id === currentEditingProductId);
+        if (productIndex !== -1) {
+            products[productIndex].image = selectedImage;
+            
+            // Atualizar a exibição
+            renderProducts(products);
+            showNotification('✅ Imagem do produto atualizada com sucesso!');
+            
+            // Fechar modal
+            const modal = bootstrap.Modal.getInstance(document.getElementById('imageSearchModal'));
+            if (modal) {
+                modal.hide();
+            }
+            
+            // Resetar seleção
+            selectedImage = null;
+            document.getElementById('selectImage').disabled = true;
+        }
+    }
+
+    // =============================================
+    // FUNÇÕES DA LOJA (MANTIDAS ORIGINAIS)
+    // =============================================
+
+    // Formatar preço em AOA
+    function formatPrice(price) {
+        return new Intl.NumberFormat('pt-AO', { style: 'currency', currency: 'AOA' }).format(price);
+    }
+
+    // Renderizar produtos
+    function renderProducts(productsToRender) {
+        const productsGrid = document.getElementById('productsGrid');
+        productsGrid.innerHTML = '';
+
+        if (productsToRender.length === 0) {
+            productsGrid.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+                    <i class="fas fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                    <h3>Nenhum produto encontrado</h3>
+                    <p>Tente ajustar os filtros ou termos de busca</p>
+                </div>
+            `;
+            return;
+        }
+
+        productsToRender.forEach(product => {
+            const discount = product.originalPrice 
+                ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) 
+                : 0;
+
+            const productCard = document.createElement('div');
+            productCard.className = 'product-card';
+            productCard.innerHTML = `
+                <div class="product-image">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300x200?text=Imagem+Não+Disponível'">
+                    ${product.badge ? `<span class="product-badge badge-${product.badge}">${product.badge === 'sale' ? 'PROMO' : product.badge === 'new' ? 'NOVO' : 'POPULAR'}</span>` : ''}
+                    <button class="btn btn-sm btn-light position-absolute bottom-0 start-0 m-2" onclick="openImageSearchModal(${product.id})" title="Alterar imagem">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                <div class="product-content">
+                    <div class="product-category">${product.category}</div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-rating">
+                        ${Array.from({length: 5}, (_, i) => 
+                            `<i class="fas fa-star${i < Math.floor(product.rating) ? '' : '-half-alt'}"></i>`
+                        ).join('')}
+                        <span>(${product.reviews})</span>
+                    </div>
+                    <div class="product-price">
+                        <span class="current-price">${formatPrice(product.price)}</span>
+                        ${product.originalPrice ? `<span class="original-price">${formatPrice(product.originalPrice)}</span>` : ''}
+                        ${discount > 0 ? `<span class="discount">-${discount}%</span>` : ''}
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn btn-secondary" onclick="viewProduct(${product.id})">
+                            <i class="fas fa-eye"></i> Detalhes
+                        </button>
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">
+                            <i class="fas fa-cart-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            `;
+            productsGrid.appendChild(productCard);
+        });
+    }
+
+    // Abrir modal de busca de imagens
+    function openImageSearchModal(productId) {
+        currentEditingProductId = productId;
+        const modal = new bootstrap.Modal(document.getElementById('imageSearchModal'));
+        modal.show();
+        
+        // Preencher automaticamente e buscar
+        setTimeout(() => {
+            const suggestedTerm = getSearchTermForProduct(productId);
+            document.getElementById('imageSearch').value = suggestedTerm;
+            searchAndDisplayImages();
+        }, 500);
+    }
+
+    // Adicionar ao carrinho
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        const existingItem = cart.find(item => item.id === productId);
+
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({
+                ...product,
+                quantity: 1
+            });
+        }
+
+        updateCart();
+        showNotification(`${product.name} adicionado ao carrinho!`);
+    }
+
+    // Visualizar produto
+    function viewProduct(productId) {
+        const product = products.find(p => p.id === productId);
+        if (product) {
+            alert(`Visualizando produto: ${product.name}\n\n${product.description}\n\nPreço: ${formatPrice(product.price)}`);
+        }
+    }
+
+    // Atualizar carrinho
+    function updateCart() {
+        const cartItems = document.getElementById('cartItems');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartSubtotal = document.getElementById('cartSubtotal');
+        const cartShipping = document.getElementById('cartShipping');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutButton = document.getElementById('checkoutButton');
+        const emptyCart = document.getElementById('emptyCart');
+
+        // Atualizar badge
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        cartBadge.textContent = totalItems;
+
+        // Mostrar/ocultar carrinho vazio
+        if (cart.length === 0) {
+            emptyCart.style.display = 'block';
+            checkoutButton.disabled = true;
+        } else {
+            emptyCart.style.display = 'none';
+            checkoutButton.disabled = false;
+        }
+
+        // Calcular totais
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 100000 ? 0 : 5000; // Frete grátis para compras acima de 100.000 AOA
+        const total = subtotal + shipping;
+
+        cartSubtotal.textContent = formatPrice(subtotal);
+        cartShipping.textContent = formatPrice(shipping);
+        cartTotal.textContent = formatPrice(total);
+
+        // Renderizar itens do carrinho
+        cartItems.innerHTML = '';
+        cart.forEach(item => {
+            const cartItem = document.createElement('div');
+            cartItem.className = 'cart-item';
+            cartItem.innerHTML = `
+                <div class="cart-item-image">
+                    <img src="${item.image}" alt="${item.name}">
+                </div>
+                <div class="cart-item-content">
+                    <h4 class="cart-item-title">${item.name}</h4>
+                    <div class="cart-item-price">${formatPrice(item.price)}</div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity - 1})">-</button>
+                            <span class="quantity-value">${item.quantity}</span>
+                            <button class="quantity-btn" onclick="updateQuantity(${item.id}, ${item.quantity + 1})">+</button>
+                        </div>
+                        <button class="remove-item" onclick="removeFromCart(${item.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            cartItems.appendChild(cartItem);
+        });
+    }
+
+    // Atualizar quantidade
+    function updateQuantity(productId, newQuantity) {
+        if (newQuantity < 1) {
+            removeFromCart(productId);
+            return;
+        }
+
+        const item = cart.find(item => item.id === productId);
+        if (item) {
+            item.quantity = newQuantity;
+            updateCart();
+        }
+    }
+
+    // Remover do carrinho
+    function removeFromCart(productId) {
+        cart = cart.filter(item => item.id !== productId);
+        updateCart();
+        showNotification('Produto removido do carrinho');
+    }
+
+    // Mostrar notificação
+    function showNotification(message, type = 'success') {
+        // Criar elemento de notificação
+        const notification = document.createElement('div');
+        notification.style.position = 'fixed';
+        notification.style.bottom = '20px';
+        notification.style.right = '20px';
+        notification.style.backgroundColor = type === 'error' ? '#e74c3c' : type === 'warning' ? '#f39c12' : type === 'info' ? '#3498db' : '#27ae60';
+        notification.style.color = 'white';
+        notification.style.padding = '1rem 1.5rem';
+        notification.style.borderRadius = '5px';
+        notification.style.boxShadow = '0 3px 10px rgba(0,0,0,0.2)';
+        notification.style.zIndex = '1000';
+        notification.style.opacity = '0';
+        notification.style.transition = 'opacity 0.3s';
+        notification.textContent = message;
+
+        document.body.appendChild(notification);
+
+        // Mostrar notificação
+        setTimeout(() => {
+            notification.style.opacity = '1';
+        }, 10);
+
+        // Esconder e remover após 3 segundos
+        setTimeout(() => {
+            notification.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(notification)) {
+                    document.body.removeChild(notification);
+                }
+            }, 300);
+        }, 3000);
+    }
+
+    // Filtros e busca
+    function setupFilters() {
+        const searchInput = document.getElementById('searchInput');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const categoryItems = document.querySelectorAll('.categories-list li');
+        const sortSelect = document.getElementById('sortSelect');
+
+        // Função para filtrar produtos
+        function filterProducts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            const activeCategory = document.querySelector('.categories-list li.active').dataset.category;
+
+            let filteredProducts = products.filter(product => {
+                const matchesSearch = product.name.toLowerCase().includes(searchTerm) || 
+                                     product.description.toLowerCase().includes(searchTerm);
+                
+                const matchesCategory = activeCategory === 'all' || product.category === activeCategory;
+                
+                let matchesFilter = true;
+                if (activeFilter === 'featured') {
+                    matchesFilter = product.rating >= 4.5;
+                } else if (activeFilter === 'sale') {
+                    matchesFilter = product.originalPrice !== undefined;
+                } else if (activeFilter === 'new') {
+                    matchesFilter = product.badge === 'new';
+                }
+                
+                return matchesSearch && matchesCategory && matchesFilter;
+            });
+
+            // Ordenar produtos
+            const sortValue = sortSelect.value;
+            switch(sortValue) {
+                case 'price-asc':
+                    filteredProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filteredProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name':
+                    filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'newest':
+                    filteredProducts.sort((a, b) => b.id - a.id);
+                    break;
+                default: // popular
+                    filteredProducts.sort((a, b) => b.rating - a.rating);
+            }
+
+            renderProducts(filteredProducts);
+        }
+
+        // Event listeners
+        searchInput.addEventListener('input', filterProducts);
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                filterProducts();
+            });
+        });
+        
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                categoryItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                filterProducts();
+            });
+        });
+        
+        sortSelect.addEventListener('change', filterProducts);
+
+        // Filtro inicial
+        filterProducts();
+    }
+
+    // Função para enviar pedido via WhatsApp
+    function sendOrderViaWhatsApp() {
+        // Dados do cliente
+        const nome = document.getElementById("customerName").value.trim();
+        const email = document.getElementById("customerEmail").value.trim();
+        const tel = document.getElementById("customerPhone").value.trim();
+        const endereco = document.getElementById("customerAddress").value.trim();
+        const cidade = document.getElementById("customerCity").value.trim();
+        const cep = document.getElementById("customerZip").value.trim();
+        const observacoes = document.getElementById("customerNotes").value.trim();
+
+        // Resumo dos produtos
+        let texto = `*NOVO PEDIDO - D.PEDRO SOLUÇÕES*%0A%0A`;
+        texto += `*DADOS DO CLIENTE*%0A`;
+        texto += `Nome: ${nome}%0A`;
+        texto += `E-mail: ${email}%0A`;
+        texto += `Telefone: ${tel}%0A`;
+        texto += `Endereço: ${endereco}%0A`;
+        texto += `Cidade: ${cidade}%0A`;
+        texto += `NIF: ${cep}%0A`;
+        if (observacoes) {
+            texto += `Observações: ${observacoes}%0A`;
+        }
+        
+        texto += `%0A*ITENS DO PEDIDO*%0A`;
+        cart.forEach(item => {
+            texto += `- ${item.name} (${item.quantity}x) - ${formatPrice(item.price)}%0A`;
+        });
+        
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const shipping = subtotal > 100000 ? 0 : 5000;
+        const total = subtotal + shipping;
+        
+        texto += `%0A*RESUMO DO PEDIDO*%0A`;
+        texto += `Subtotal: ${formatPrice(subtotal)}%0A`;
+        texto += `Frete: ${formatPrice(shipping)}%0A`;
+        texto += `*TOTAL: ${formatPrice(total)}*%0A%0A`;
+        
+        // Método de pagamento
+        let pagamento = "Cartão de Crédito";
+        if (document.getElementById("paymentTransfer").checked) pagamento = "Transferência Bancária";
+        if (document.getElementById("paymentCash").checked) pagamento = "Dinheiro na Entrega";
+        texto += `*Método de Pagamento:* ${pagamento}`;
+
+        // Número do WhatsApp
+        const whatsappNumber = "244946299834";
+        const url = `https://wa.me/${whatsappNumber}?text=${texto}`;
+
+        // Abrir WhatsApp
+        window.open(url, "_blank");
+    }
+
+    // Checkout
+    function setupCheckout() {
+        const checkoutButton = document.getElementById('checkoutButton');
+        const checkoutModal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+        const nextStepButton = document.getElementById('nextStepButton');
+        const prevStepButton = document.getElementById('prevStepButton');
+        const checkoutSteps = document.querySelectorAll('.checkout-step');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        checkoutButton.addEventListener('click', () => {
+            // Preencher itens do checkout
+            const checkoutItems = document.getElementById('checkoutItems');
+            checkoutItems.innerHTML = '';
+            
+            cart.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'cart-item';
+                itemElement.innerHTML = `
+                    <div class="cart-item-image">
+                        <img src="${item.image}" alt="${item.name}">
+                    </div>
+                    <div class="cart-item-content">
+                        <h4 class="cart-item-title">${item.name}</h4>
+                        <div class="cart-item-price">${formatPrice(item.price)} x ${item.quantity}</div>
+                    </div>
+                `;
+                checkoutItems.appendChild(itemElement);
+            });
+
+            // Reiniciar para a primeira etapa
+            currentStep = 1;
+            updateCheckoutSteps();
+            checkoutModal.show();
+        });
+
+        nextStepButton.addEventListener('click', () => {
+            if (currentStep === 2) {
+                // Validar dados do cliente antes de avançar
+                const nome = document.getElementById("customerName").value.trim();
+                const email = document.getElementById("customerEmail").value.trim();
+                const tel = document.getElementById("customerPhone").value.trim();
+                const endereco = document.getElementById("customerAddress").value.trim();
+                const cidade = document.getElementById("customerCity").value.trim();
+                
+                if (!nome || !email || !tel || !endereco || !cidade) {
+                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    return;
+                }
+            }
+            
+            if (currentStep < 4) {
+                currentStep++;
+                updateCheckoutSteps();
+            } else {
+                // Finalizar compra
+                checkoutModal.hide();
+                cart = [];
+                updateCart();
+                showNotification('Compra finalizada com sucesso!');
+            }
+        });
+
+        prevStepButton.addEventListener('click', () => {
+            if (currentStep > 1) {
+                currentStep--;
+                updateCheckoutSteps();
+            }
+        });
+
+        // Configurar botão do WhatsApp
+        whatsappBtn.addEventListener('click', sendOrderViaWhatsApp);
+
+        function updateCheckoutSteps() {
+            // Atualizar etapas visíveis
+            document.querySelectorAll('.checkout-step-content').forEach((content, index) => {
+                content.style.display = index + 1 === currentStep ? 'block' : 'none';
+            });
+
+            // Atualizar indicadores de etapa
+            checkoutSteps.forEach((step, index) => {
+                if (index + 1 === currentStep) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+
+            // Atualizar botões
+            prevStepButton.style.display = currentStep > 1 ? 'block' : 'none';
+            
+            if (currentStep === 4) {
+                nextStepButton.style.display = 'none';
+                // Gerar número de pedido aleatório na etapa 4
+                document.getElementById('orderNumber').textContent = Math.floor(10000 + Math.random() * 90000);
+            } else {
+                nextStepButton.style.display = 'block';
+                nextStepButton.textContent = currentStep === 3 ? 'Finalizar Compra' : 'Próximo';
+            }
+        }
+    }
+
+    // =============================================
+    // INICIALIZAÇÃO ATUALIZADA
+    // =============================================
+
+    // Configurar funcionalidades das APIs de imagem
+    function setupImageSearchFeatures() {
+        // Alternar entre APIs
+        document.querySelectorAll('.api-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.api-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                currentApi = this.dataset.api;
+                
+                // Limpar resultados
+                document.getElementById('imageResults').innerHTML = `
+                    <div class="col-12 text-center py-4">
+                        <p>Digite um termo de busca para encontrar imagens no ${currentApi === 'unsplash' ? 'Unsplash' : 'Flaticon'}</p>
+                        ${currentEditingProductId ? 
+                            `<p class="text-muted">Sugestão: "${getSearchTermForProduct(currentEditingProductId)}"</p>` : 
+                            ''
+                        }
+                    </div>
+                `;
+                document.getElementById('selectImage').disabled = true;
+                selectedImage = null;
+            });
+        });
+
+        // Buscar imagens ao clicar no botão
+        document.getElementById('searchImages').addEventListener('click', searchAndDisplayImages);
+        
+        // Buscar imagens ao pressionar Enter
+        document.getElementById('imageSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchAndDisplayImages();
+            }
+        });
+        
+        // Selecionar imagem
+        document.getElementById('selectImage').addEventListener('click', applySelectedImageToProduct);
+        
+        // Preencher automaticamente quando abrir o modal
+        document.getElementById('imageSearchModal').addEventListener('show.bs.modal', function() {
+            if (currentEditingProductId) {
+                const suggestedTerm = getSearchTermForProduct(currentEditingProductId);
+                document.getElementById('imageSearch').value = suggestedTerm;
+                // Buscar automaticamente
+                setTimeout(() => searchAndDisplayImages(), 500);
+            }
+        });
+    }
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+        // Renderizar produtos iniciais
+        renderProducts(products);
+        
+        // Configurar filtros
+        setupFilters();
+        
+        // Configurar checkout
+        setupCheckout();
+        
+        // Configurar funcionalidades de busca de imagens
+        setupImageSearchFeatures();
+        
+        // Configurar carrinho
+        const cartButton = document.getElementById('cartButton');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartOverlay = document.getElementById('cartOverlay');
+        const closeCart = document.getElementById('closeCart');
+
+        cartButton.addEventListener('click', () => {
+            cartSidebar.classList.add('open');
+            cartOverlay.classList.add('open');
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('open');
+        });
+
+        cartOverlay.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+            cartOverlay.classList.remove('open');
+        });
+
+        // Inicializar carrinho
+        updateCart();
+
+        // Obter token Flaticon na inicialização
+        getFlaticonAccessToken();
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Produtos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-btn {
+            padding: 12px 24px;
+            background-color: white;
+            border: 2px solid #2575fc;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: #2575fc;
+        }
+
+        .category-btn:hover {
+            background-color: #2575fc;
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.3);
+        }
+
+        .category-btn.active {
+            background-color: #2575fc;
+            color: white;
+        }
+
+        .category-section {
+            margin-bottom: 50px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .category-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: #2575fc;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .products-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            transition: transform 0.3s ease;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-image {
+            height: 180px;
+            width: 100%;
+            object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .current-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2575fc;
+        }
+
+        .original-price {
+            font-size: 1rem;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 10px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .stars {
+            color: #ffc107;
+            margin-right: 8px;
+        }
+
+        .reviews {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .badge-sale {
+            background-color: #e74c3c;
+        }
+
+        .badge-popular {
+            background-color: #2ecc71;
+        }
+
+        .badge-new {
+            background-color: #3498db;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .nav-btn {
+            padding: 10px 20px;
+            background-color: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background-color: #1a68e8;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(37, 117, 252, 0.4);
+        }
+
+        .nav-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .products-count {
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .category-btn {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-btn {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Catálogo de Produtos</h1>
+            <p class="subtitle">Encontre os melhores produtos para suas necessidades</p>
+        </header>
+
+        <div class="categories">
+            <button class="category-btn active" data-category="material-escolar">Material Escolar</button>
+            <button class="category-btn" data-category="material-escritorio">Material de Escritório</button>
+            <button class="category-btn" data-category="material-eletrico">Material Elétrico</button>
+            <button class="category-btn" data-category="software">Software</button>
+            <button class="category-btn" data-category="hardware">Hardware</button>
+            <button class="category-btn" data-category="seguranca">Segurança</button>
+            <button class="category-btn" data-category="rede">Rede</button>
+            <button class="category-btn" data-category="cloud">Cloud</button>
+            <button class="category-btn" data-category="consultoria">Consultoria</button>
+            <button class="category-btn" data-category="treinamento">Treinamento</button>
+            <button class="category-btn" data-category="servicos">Serviços</button>
+            <button class="category-btn" data-category="telefone">Telefone</button>
+            <button class="category-btn" data-category="acessorios-telefone">Acessórios de Telefone</button>
+            <button class="category-btn" data-category="impressora">Impressora</button>
+        </div>
+
+        <div id="category-sections">
+            <!-- As seções de categoria serão geradas dinamicamente pelo JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Dados dos produtos por categoria
+        const productsData = {
+            "material-escolar": [
+                {
+                    id: 1,
+                    name: "Kit Caderno Universitário 10 Unidades",
+                    category: "material escolar",
+                    price: 8990,
+                    originalPrice: 12990,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.5,
+                    reviews: 42,
+                    badge: "sale",
+                    description: "Kit com 10 cadernos universitários de 200 folhas cada"
+                },
+                {
+                    id: 2,
+                    name: "Caneta Esferográfica Premium - Caixa 50",
+                    category: "material escolar",
+                    price: 4590,
+                    image: "https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 28,
+                    description: "Caixa com 50 canetas esferográficas de tinta azul"
+                },
+                {
+                    id: 3,
+                    name: "Mochila Escolar Antifurto",
+                    category: "material escolar",
+                    price: 12990,
+                    originalPrice: 17990,
+                    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.7,
+                    reviews: 35,
+                    badge: "popular",
+                    description: "Mochila escolar com compartimento antifurto e laptop"
+                },
+                {
+                    id: 4,
+                    name: "Estojo Executivo Completo",
+                    category: "material escolar",
+                    price: 3490,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 19,
+                    description: "Estojo com zíper múltiplos compartimentos"
+                },
+                {
+                    id: 5,
+                    name: "Lápis de Cor Profissional 36 Cores",
+                    category: "material escolar",
+                    price: 7890,
+                    image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.8,
+                    reviews: 27,
+                    badge: "new",
+                    description: "Kit profissional de lápis de cor com 36 cores diferentes"
+                },
+                {
+                    id: 6,
+                    name: "Borracha Branca Premium - Pacote 12",
+                    category: "material escolar",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 15,
+                    description: "Pacote com 12 borrachas brancas de alta qualidade"
+                },
+                {
+                    id: 7,
+                    name: "Apontador com Depósito Duplo",
+                    category: "material escolar",
+                    price: 890,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 23,
+                    description: "Apontador com depósito duplo para lápis comuns e coloridos"
+                },
+                {
+                    id: 8,
+                    name: "Régua de Acrílico 30cm",
+                    category: "material escolar",
+                    price: 690,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.0,
+                    reviews: 18,
+                    description: "Régua de acrílico transparente de 30cm"
+                },
+                {
+                    id: 9,
+                    name: "Tesoura Escolar com Capa Protetora",
+                    category: "material escolar",
+                    price: 1590,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 31,
+                    description: "Tesoura escolar de aço inox com capa protetora"
+                },
+                {
+                    id: 10,
+                    name: "Cola Bastão 40g - Pacote 6",
+                    category: "material escolar",
+                    price: 2290,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 14,
+                    description: "Pacote com 6 colas bastão de 40g cada"
+                },
+                {
+                    id: 11,
+                    name: "Pasta Catálogo com Elástico",
+                    category: "material escolar",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 22,
+                    description: "Pasta catálogo com elástico para organização de documentos"
+                },
+                {
+                    id: 12,
+                    name: "Marcador de Texto - Kit 8 Cores",
+                    category: "material escolar",
+                    price: 1890,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.6,
+                    reviews: 38,
+                    description: "Kit com 8 marcadores de texto em cores diferentes"
+                },
+                {
+                    id: 13,
+                    name: "Giz de Cera 24 Cores",
+                    category: "material escolar",
+                    price: 2490,
+                    image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 16,
+                    description: "Caixa de giz de cera com 24 cores vibrantes"
+                },
+                {
+                    id: 14,
+                    name: "Pincel para Aquarela - Kit 6 Tamanhos",
+                    category: "material escolar",
+                    price: 3290,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.5,
+                    reviews: 29,
+                    description: "Kit com 6 pincéis para aquarela em tamanhos diferentes"
+                },
+                {
+                    id: 15,
+                    name: "Tinta Guache 12 Cores",
+                    category: "material escolar",
+                    price: 4190,
+                    image: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 21,
+                    description: "Kit de tinta guache com 12 cores básicas"
+                },
+                {
+                    id: 16,
+                    name: "Compasso de Precisão",
+                    category: "material escolar",
+                    price: 1590,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 13,
+                    description: "Compasso de precisão para desenhos técnicos"
+                },
+                {
+                    id: 17,
+                    name: "Transferidor 360 Graus",
+                    category: "material escolar",
+                    price: 790,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.0,
+                    reviews: 17,
+                    description: "Transferidor de acrílico com escala de 360 graus"
+                },
+                {
+                    id: 18,
+                    name: "Prancheta A4 com Clip",
+                    category: "material escolar",
+                    price: 2190,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 25,
+                    description: "Prancheta tamanho A4 com clip para fixação de papéis"
+                },
+                {
+                    id: 19,
+                    name: "Papel Sulfite A4 - Pacote 500 Folhas",
+                    category: "material escolar",
+                    price: 2890,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.7,
+                    reviews: 47,
+                    badge: "popular",
+                    description: "Pacote com 500 folhas de papel sulfite A4 75g"
+                },
+                {
+                    id: 20,
+                    name: "Corretivo Líquido 20ml",
+                    category: "material escolar",
+                    price: 590,
+                    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 32,
+                    description: "Corretivo líquido de 20ml com aplicador"
+                }
+            ],
+            "material-escritorio": [
+                {
+                    id: 21,
+                    name: "Clip Metálico - Caixa 100 Unidades",
+                    category: "material de escritorio",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 28,
+                    description: "Caixa com 100 clips metálicos tamanho médio"
+                },
+                {
+                    id: 22,
+                    name: "Grampeador de Mesa Profissional",
+                    category: "material de escritorio",
+                    price: 4590,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.5,
+                    reviews: 36,
+                    description: "Grampeador de mesa profissional com capacidade para 100 grampos"
+                },
+                {
+                    id: 23,
+                    name: "Furador de Papel Ajustável",
+                    category: "material de escritorio",
+                    price: 1890,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 19,
+                    description: "Furador de papel com regulagem de distância"
+                },
+                {
+                    id: 24,
+                    name: "Calculadora Financeira 12 Dígitos",
+                    category: "material de escritorio",
+                    price: 7890,
+                    originalPrice: 9990,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.6,
+                    reviews: 42,
+                    badge: "sale",
+                    description: "Calculadora financeira com display de 12 dígitos"
+                },
+                {
+                    id: 25,
+                    name: "Organizador de Mesa em Acrílico",
+                    category: "material de escritorio",
+                    price: 12990,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 31,
+                    description: "Kit organizador de mesa em acrílico com 5 peças"
+                },
+                {
+                    id: 26,
+                    name: "Pasta Suspensa A-Z",
+                    category: "material de escritorio",
+                    price: 3490,
+                    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 24,
+                    description: "Kit com 12 pastas suspensas organizadas de A a Z"
+                },
+                {
+                    id: 27,
+                    name: "Carimbo Datador Automático",
+                    category: "material de escritorio",
+                    price: 2890,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 17,
+                    description: "Carimbo datador com ajuste automático de data"
+                },
+                {
+                    id: 28,
+                    name: "Envelope Ofício - Pacote 100",
+                    category: "material de escritorio",
+                    price: 1890,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 29,
+                    description: "Pacote com 100 envelopes ofício brancos"
+                },
+                {
+                    id: 29,
+                    name: "Bloco de Notas Adesivas",
+                    category: "material de escritorio",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1513475382585-d06e58bcb0e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 35,
+                    description: "Bloco com 100 folhas de notas adesivas coloridas"
+                },
+                {
+                    id: 30,
+                    name: "Perfurador de 3 Furos",
+                    category: "material de escritorio",
+                    price: 2190,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 18,
+                    description: "Perfurador para 3 furos com regulagem de margem"
+                },
+                {
+                    id: 31,
+                    name: "Grampos para Grampeador - Caixa 5000",
+                    category: "material de escritorio",
+                    price: 1590,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.5,
+                    reviews: 41,
+                    description: "Caixa com 5000 grampos para grampeador padrão"
+                },
+                {
+                    id: 32,
+                    name: "Suporte para Documentos",
+                    category: "material de escritorio",
+                    price: 890,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.0,
+                    reviews: 22,
+                    description: "Suporte em acrílico para organização de documentos"
+                },
+                {
+                    id: 33,
+                    name: "Calculadora Científica Avançada",
+                    category: "material de escritorio",
+                    price: 12900,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.7,
+                    reviews: 33,
+                    badge: "new",
+                    description: "Calculadora científica com 240 funções e display duplo"
+                },
+                {
+                    id: 34,
+                    name: "Agenda Executiva 2024",
+                    category: "material de escritorio",
+                    price: 4590,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 27,
+                    description: "Agenda executiva semanal para o ano de 2024"
+                },
+                {
+                    id: 35,
+                    name: "Porta-Canetas de Madeira",
+                    category: "material de escritorio",
+                    price: 2390,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 19,
+                    description: "Porta-canetas de madeira maciça com 6 divisórias"
+                },
+                {
+                    id: 36,
+                    name: "Fita Adesiva 48mm - Rolo 50m",
+                    category: "material de escritorio",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1581094794355-1d1ef6dd734f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 31,
+                    description: "Rolo de fita adesiva transparente de 48mm x 50m"
+                },
+                {
+                    id: 37,
+                    name: "Carimbo Personalizável",
+                    category: "material de escritorio",
+                    price: 3490,
+                    image: "https://images.unsplash.com/photo-1581093458791-8a0a1ade67c7?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 16,
+                    description: "Carimbo com texto personalizável e almofada de tinta"
+                },
+                {
+                    id: 38,
+                    name: "Pasta Polionda com Abas",
+                    category: "material de escritorio",
+                    price: 1890,
+                    image: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 23,
+                    description: "Pasta polionda com abas divisórias e elástico"
+                },
+                {
+                    id: 39,
+                    name: "Bloco de Rascunho A4 - 500 Folhas",
+                    category: "material de escritorio",
+                    price: 2990,
+                    image: "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.6,
+                    reviews: 38,
+                    description: "Bloco de papel A4 para rascunho com 500 folhas"
+                },
+                {
+                    id: 40,
+                    name: "Organizador de Gavetas",
+                    category: "material de escritorio",
+                    price: 1590,
+                    image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 25,
+                    description: "Organizador de gavetas com 5 compartimentos"
+                }
+            ],
+            "material-eletrico": [
+                {
+                    id: 41,
+                    name: "Fio Elétrico 2,5mm - Rolo 100m",
+                    category: "material eletrico",
+                    price: 18990,
+                    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.5,
+                    reviews: 27,
+                    description: "Rolo de fio elétrico 2,5mm com 100 metros"
+                },
+                {
+                    id: 42,
+                    name: "Disjuntor Bipolar 40A",
+                    category: "material eletrico",
+                    price: 4590,
+                    image: "https://images.unsplash.com/photo-1621905251918-9eac0a5c57ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.4,
+                    reviews: 19,
+                    description: "Disjuntor bipolar 40 amperes para quadro de distribuição"
+                },
+                {
+                    id: 43,
+                    name: "Tomada 2P+T 10A",
+                    category: "material eletrico",
+                    price: 1290,
+                    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.3,
+                    reviews: 34,
+                    description: "Tomada padrão brasileiro 2 polos + terra 10A"
+                },
+                {
+                    id: 44,
+                    name: "Interruptor Paralelo Simples",
+                    category: "material eletrico",
+                    price: 890,
+                    image: "https://images.unsplash.com/photo-1621905251918-9eac0a5c57ac?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.2,
+                    reviews: 22,
+                    description: "Interruptor paralelo simples para comando de lâmpadas"
+                },
+                {
+                    id: 45,
+                    name: "Lâmpada LED 9W",
+                    category: "material eletrico",
+                    price: 1590,
+                    originalPrice: 2290,
+                    image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.6,
+                    reviews: 48,
+                    badge: "sale",
+                    description: "Lâmpada LED 9W equivalente a 60W incandescente"
+                },
+                {
+                    id: 46,
+                    name: "Fita Isolante - Rolo 10m",
+                    category: "material eletrico",
+                    price: 690,
+                    image: "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                    rating: 4.1,
+                    reviews: 29,
+                    description: "Fita isolante vinílica preta - rolo de 10 metros"
+                }

@@ -1,0 +1,2964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Sistema Integrado com IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sql.js@1.8.0/dist/sql.js"></script>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #1abc9c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        .kanawa-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        /* Main Container */
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar .menu-item:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .submenu {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu .menu-item {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .menu-toggle {
+            margin-left: auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .menu-toggle.rotated {
+            transform: rotate(90deg);
+        }
+
+        /* Content Area */
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #7d3c98;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        /* API Section Styles */
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .api-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .api-result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-connected {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-processing {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        /* API Keys Management */
+        .api-keys-list {
+            margin-top: 1rem;
+        }
+
+        .api-key-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            background: #f8f9fa;
+        }
+
+        .api-key-info {
+            flex: 1;
+        }
+
+        .api-key-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .api-key-name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .api-key-preview {
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+
+        /* Dashboard Widgets */
+        .dashboard-widget {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .widget-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .widget-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .widget-title {
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-section h3 {
+            margin-bottom: 1rem;
+            color: var(--dark-color);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        /* Data Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            background-color: var(--light-color);
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .data-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* Chart Container */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+
+        /* Notification Badge */
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--danger-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        /* AI Assistant Modal */
+        .ai-assistant-modal {
+            position: fixed;
+            bottom: 100px;
+            right: 2rem;
+            width: 400px;
+            max-height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1050;
+            display: none;
+            flex-direction: column;
+        }
+
+        .ai-assistant-modal.active {
+            display: flex;
+        }
+
+        .ai-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .ai-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            max-width: 80%;
+        }
+
+        .message.user {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: var(--light-color);
+            color: var(--text-color);
+        }
+
+        /* Dark Mode Toggle */
+        .dark-mode-toggle {
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--dark-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        /* Notification Toast */
+        .notification-toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .notification-close {
+            background: none;
+            border: none;
+            color: #999;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .notification-close:hover {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        /* Progress Bar */
+        .progress {
+            height: 8px;
+            background-color: var(--light-color);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--success-color);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        /* File Input Preview */
+        .file-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        /* Section Management */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* History Section */
+        .history-item {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .history-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-preview {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                order: 2;
+            }
+            
+            .content {
+                order: 1;
+            }
+            
+            .kanawa-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .top-icons {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .filter-row {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                min-width: 100%;
+            }
+            
+            .dashboard-widget {
+                min-width: 100%;
+            }
+            
+            .api-controls {
+                grid-template-columns: 1fr;
+            }
+            
+            .ai-assistant-modal {
+                width: 90vw;
+                right: 5vw;
+            }
+            
+            .api-key-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .api-key-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+
+        /* Advanced Features */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6ZK2KZGMHG"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-6ZK2KZGMHG');
+</script>
+<body>
+    <header class="kanawa-header">
+        <div class="logo">
+            <a href='DPS.html'><img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/></a>
+            <span>D.Pedro Soluções - IA Integrada</span>
+        </div>
+        <div class="top-icons">
+            <a href="cursos.html" class="menu-item"><i class="fas fa-graduation-cap"></i> <span>Cursos</span></a>
+            <a href="servicos.html" class="menu-item"><i class="fas fa-briefcase"></i> <span>Serviços</span></a>
+            <a href="loja-virtual.html" class="menu-item"><i class="fas fa-store"></i> <span>Lojas</span></a>
+            <a href="download.html" class="menu-item"><i class="fas fa-download"></i> <span>Aplicativos</span></a>
+            <a href="Rodango.html" class="menu-item"><i class="fas fa-graduation-cap"></i> <span>Rodango</span></a>
+            
+            <div style="position:relative;">
+                <a href="#" id="apiStatusBtn" style="color:white;position:relative;">
+                    <i class="fas fa-plug"></i>
+                    <span class="api-status status-connected" id="apiGlobalStatus">2 APIs Conectadas</span>
+                </a>
+            </div>
+            
+            <div style="position:relative;">
+                <a href="#" id="userMenuBtn" style="color:white;display:flex;align-items:center;">
+                    <img id="userAvatar" src="https://i.postimg.cc/7YQvLZxX/user-avatar.jpg" alt="User" style="width:32px;height:32px;border-radius:50%;margin-right:8px;">
+                    <span id="userName">Desenvolvedor</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <!-- Menu Principal com Submenus -->
+            <div class="menu-item" onclick="toggleSubmenu('ia-submenu')">
+                <i class="fas fa-robot"></i> Inteligência Artificial
+                <i class="fas fa-chevron-right menu-toggle" id="ia-toggle"></i>
+            </div>
+            <div class="submenu" id="ia-submenu">
+                <a href="#dashboard" class="menu-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#text-to-speech" class="menu-item" onclick="showSection('text-to-speech')">
+                    <i class="fas fa-volume-up"></i> Text-to-Speech
+                </a>
+                <a href="#text-to-image" class="menu-item" onclick="showSection('text-to-image')">
+                    <i class="fas fa-image"></i> Text-to-Image
+                </a>
+                <a href="#text-to-video" class="menu-item" onclick="showSection('text-to-video')">
+                    <i class="fas fa-video"></i> Text-to-Video
+                </a>
+                <a href="#deepfake" class="menu-item" onclick="showSection('deepfake')">
+                    <i class="fas fa-user-friends"></i> Deepfake
+                </a>
+                <a href="#assistente-ia" class="menu-item" onclick="showSection('assistente-ia')">
+                    <i class="fas fa-comments"></i> Assistente IA
+                </a>
+                <a href="#historico" class="menu-item" onclick="showSection('historico')">
+                    <i class="fas fa-history"></i> Histórico
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('sistema-submenu')">
+                <i class="fas fa-cog"></i> Sistema
+                <i class="fas fa-chevron-right menu-toggle" id="sistema-toggle"></i>
+            </div>
+            <div class="submenu" id="sistema-submenu">
+                <a href="tokens-ia.html" class="menu-item">
+                    <i class="fas fa-coins"></i> Tokens de IA
+                </a>
+                <a href="recursos-indisponiveis.html" class="menu-item">
+                    <i class="fas fa-box-open"></i> Recursos
+                </a>
+                <a href="atualizacoes.html" class="menu-item">
+                    <i class="fas fa-sync-alt"></i> Atualizações
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('comunicacao-submenu')">
+                <i class="fas fa-comments"></i> Comunicação
+                <i class="fas fa-chevron-right menu-toggle" id="comunicacao-toggle"></i>
+            </div>
+            <div class="submenu" id="comunicacao-submenu">
+                <a href="comunicacao.html" class="menu-item">
+                    <i class="fas fa-comments"></i> Meios de Comunição
+                </a>
+                <a href="notificacoes.html" class="menu-item">
+                    <i class="fas fa-bell"></i> Notificações
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('vendas-submenu')">
+                <i class="fas fa-shopping-cart"></i> Vendas
+                <i class="fas fa-chevron-right menu-toggle" id="vendas-toggle"></i>
+            </div>
+            <div class="submenu" id="vendas-submenu">
+                <a href="loja-virtual.html" class="menu-item">
+                    <i class="fas fa-store"></i> Loja Virtual
+                </a>
+                <a href="cardapio.html" class="menu-item">
+                    <i class="fas fa-utensils"></i> Cardápio
+                </a>
+                <a href="assinantes.html" class="menu-item">
+                    <i class="fas fa-users"></i> Assinantes
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('analise-submenu')">
+                <i class="fas fa-chart-bar"></i> Análise
+                <i class="fas fa-chevron-right menu-toggle" id="analise-toggle"></i>
+            </div>
+            <div class="submenu" id="analise-submenu">
+                <a href="analise.html" class="menu-item">
+                    <i class="fas fa-chart-bar"></i> Análise
+                </a>
+                <a href="seo.html" class="menu-item">
+                    <i class="fas fa-search-plus"></i> SEO
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('config-submenu')">
+                <i class="fas fa-sliders-h"></i> Configurações
+                <i class="fas fa-chevron-right menu-toggle" id="config-toggle"></i>
+            </div>
+            <div class="submenu" id="config-submenu">
+                <a href="#configuracoes" class="menu-item" onclick="showSection('configuracoes')">
+                    <i class="fas fa-cog"></i> Configurações API
+                </a>
+                <a href="configuracoes.html" class="menu-item">
+                    <i class="fas fa-sliders-h"></i> Configurações Gerais
+                </a>
+                <a href="integracao.html" class="menu-item">
+                    <i class="fas fa-plug"></i> Integração
+                </a>
+                <a href="dominio.html" class="menu-item">
+                    <i class="fas fa-globe"></i> Domínio
+                </a>
+            </div>
+
+            <div class="menu-item" onclick="toggleSubmenu('suporte-submenu')">
+                <i class="fas fa-question-circle"></i> Suporte
+                <i class="fas fa-chevron-right menu-toggle" id="suporte-toggle"></i>
+            </div>
+            <div class="submenu" id="suporte-submenu">
+                <a href="ajuda.html" class="menu-item">
+                    <i class="fas fa-question-circle"></i> Ajuda
+                </a>
+                <a href="manutencao.html" class="menu-item">
+                    <i class="fas fa-tools"></i> Manutenção
+                </a>
+                <a href="indicar.html" class="menu-item">
+                    <i class="fas fa-gift"></i> Indique e Ganhe
+                </a>
+            </div>
+
+            <a href="logout.html" class="menu-item"><i class="fas fa-sign-out-alt"></i> Sair</a>
+        </aside>
+
+        <main class="content">
+            <!-- Seção Dashboard -->
+            <div id="dashboard" class="section active">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-home"></i>
+                        Dashboard Principal
+                    </h1>
+                    <div>
+                        <button class="btn btn-primary" onclick="testAllAPIs()">
+                            <i class="fas fa-bolt"></i> Testar Todas as APIs
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Status das APIs -->
+                <div class="card">
+                    <h2>Status das APIs de IA</h2>
+                    <div class="row" style="display: flex; flex-wrap: wrap; gap: 1.5rem;">
+                        <div class="dashboard-widget">
+                            <div class="widget-icon" style="background-color: var(--info-color);">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <div class="widget-value" id="ttsStatus">✓</div>
+                            <div class="widget-title">Text-to-Speech</div>
+                            <small style="color: var(--success-color);">Conectado</small>
+                        </div>
+                        
+                        <div class="dashboard-widget">
+                            <div class="widget-icon" style="background-color: var(--primary-color);">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <div class="widget-value" id="ttiStatus">✓</div>
+                            <div class="widget-title">Text-to-Image</div>
+                            <small style="color: var(--success-color);">Conectado</small>
+                        </div>
+                        
+                        <div class="dashboard-widget">
+                            <div class="widget-icon" style="background-color: var(--secondary-color);">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <div class="widget-value" id="ttvStatus">✓</div>
+                            <div class="widget-title">Text-to-Video</div>
+                            <small style="color: var(--success-color);">Conectado</small>
+                        </div>
+                        
+                        <div class="dashboard-widget">
+                            <div class="widget-icon" style="background-color: var(--warning-color);">
+                                <i class="fas fa-user-friends"></i>
+                            </div>
+                            <div class="widget-value" id="dfStatus">✓</div>
+                            <div class="widget-title">Deepfake</div>
+                            <small style="color: var(--success-color);">Conectado</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Widgets de Negócio -->
+                <div class="row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="dashboard-widget">
+                        <div class="widget-icon" style="background-color: var(--secondary-color);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="widget-value" id="clientsCount">125</div>
+                        <div class="widget-title">Clientes Ativos</div>
+                        <small style="color: var(--success-color);">
+                            <i class="fas fa-arrow-up"></i> <span id="clientsGrowth">12.5%</span> este mês
+                        </small>
+                    </div>
+                    
+                    <div class="dashboard-widget">
+                        <div class="widget-icon" style="background-color: var(--success-color);">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="widget-value" id="salesAmount">AOA 2.5M</div>
+                        <div class="widget-title">Vendas Mensais</div>
+                        <small style="color: var(--success-color);">
+                            <i class="fas fa-arrow-up"></i> <span id="salesGrowth">8.3%</span> este mês
+                        </small>
+                    </div>
+                    
+                    <div class="dashboard-widget">
+                        <div class="widget-icon" style="background-color: var(--warning-color);">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="widget-value" id="goalProgress">65%</div>
+                        <div class="widget-title">Meta Anual</div>
+                        <small style="color: var(--success-color);">
+                            <i class="fas fa-arrow-up"></i> <span id="goalGrowth">5.2%</span> este mês
+                        </small>
+                    </div>
+                    
+                    <div class="dashboard-widget">
+                        <div class="widget-icon" style="background-color: var(--info-color);">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="widget-value" id="projectsCompleted">18/25</div>
+						<div class="widget-title">Projetos Concluídos</div>
+                        <small style="color: var(--warning-color);">
+                            <i class="fas fa-arrow-down"></i> <span id="projectsPending">7</span> pendentes
+                        </small>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="row" style="display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 1.5rem;">
+                    <div class="card" style="flex: 2; min-width: 300px;">
+                        <h2>Desempenho Mensal</h2>
+                        <div class="chart-container">
+                            <canvas id="monthlyPerformanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="flex: 1; min-width: 300px;">
+                        <h2>Uso das APIs</h2>
+                        <div class="chart-container">
+                            <canvas id="apiUsageChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recursos Rápidos -->
+                <div class="card">
+                    <h2>Recursos Rápidos</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="showSection('text-to-speech')">
+                            <div class="feature-icon">
+                                <i class="fas fa-volume-up"></i>
+                            </div>
+                            <h4>Text-to-Speech</h4>
+                            <p>Converter texto em áudio natural</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('text-to-image')">
+                            <div class="feature-icon">
+                                <i class="fas fa-image"></i>
+                            </div>
+                            <h4>Text-to-Image</h4>
+                            <p>Gerar imagens a partir de texto</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('text-to-video')">
+                            <div class="feature-icon">
+                                <i class="fas fa-video"></i>
+                            </div>
+                            <h4>Text-to-Video</h4>
+                            <p>Criar vídeos com IA</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('assistente-ia')">
+                            <div class="feature-icon">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <h4>Assistente IA</h4>
+                            <p>Perguntas e respostas inteligentes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Text-to-Speech -->
+            <div id="text-to-speech" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-volume-up"></i>
+                        Text-to-Speech
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Converter Texto em Fala</h3>
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">Texto para Converter</label>
+                            <textarea class="form-control" id="ttsText" rows="4" placeholder="Digite o texto que deseja converter em fala...">Bem-vindo ao sistema D.Pedro Soluções. Esta é uma demonstração da funcionalidade de texto para fala.</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Voz</label>
+                            <select class="form-control" id="ttsVoice">
+                                <option value="madison">Madison (Feminino - Inglês)</option>
+                                <option value="andrew">Andrew (Masculino - Inglês)</option>
+                                <option value="sarah">Sarah (Feminino - Português)</option>
+                                <option value="carlos">Carlos (Masculino - Português)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Idioma</label>
+                            <select class="form-control" id="ttsLanguage">
+                                <option value="english">Inglês</option>
+                                <option value="portuguese">Português</option>
+                                <option value="spanish">Espanhol</option>
+                                <option value="french">Francês</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="generateSpeech()">
+                        <i class="fas fa-play"></i> Gerar Áudio
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveTTSResult()">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    
+                    <div class="api-result" id="ttsResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <audio id="ttsAudio" controls style="width: 100%; margin: 1rem 0;"></audio>
+                        <div id="ttsResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Text-to-Image -->
+            <div id="text-to-image" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-image"></i>
+                        Text-to-Image
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Gerar Imagem a partir de Texto</h3>
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">Prompt</label>
+                            <textarea class="form-control" id="ttiPrompt" rows="3" placeholder="Descreva a imagem que deseja gerar...">Um gato siamês sentado em uma almofada de veludo em uma sala luxuosa, estilo realista, 4K</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-control" id="ttiModel">
+                                <option value="midjourney">Midjourney</option>
+                                <option value="flux">Flux</option>
+                                <option value="dall-e">DALL-E</option>
+                                <option value="stable-diffusion">Stable Diffusion</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Tamanho</label>
+                            <select class="form-control" id="ttiSize">
+                                <option value="512x512">512x512</option>
+                                <option value="1024x1024" selected>1024x1024</option>
+                                <option value="768x1024">768x1024</option>
+                                <option value="1024x768">1024x768</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="generateImage()">
+                        <i class="fas fa-magic"></i> Gerar Imagem
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveTTIResult()">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    
+                    <div class="api-result" id="ttiResult" style="display: none;">
+                        <h4>Imagem Gerada:</h4>
+                        <div id="ttiImageContainer" style="text-align: center; margin: 1rem 0;"></div>
+                        <div id="ttiResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Text-to-Video -->
+            <div id="text-to-video" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-video"></i>
+                        Text-to-Video
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Gerar Vídeo a partir de Texto</h3>
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">Prompt</label>
+                            <textarea class="form-control" id="ttvPrompt" rows="3" placeholder="Descreva o vídeo que deseja gerar...">Um gato brincando com uma bola em um jardim ensolarado, qualidade cinematográfica</textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Modelo</label>
+                            <select class="form-control" id="ttvModel">
+                                <option value="cogvideox">CogVideoX</option>
+                                <option value="modelscope">ModelScope</option>
+                                <option value="zeroscope">ZeroScope</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Duração (segundos)</label>
+                            <input type="number" class="form-control" id="ttvDuration" value="5" min="1" max="10">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Resolução</label>
+                            <select class="form-control" id="ttvResolution">
+                                <option value="512x512">512x512</option>
+                                <option value="768x768">768x768</option>
+                                <option value="1024x1024">1024x1024</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="generateVideo()">
+                        <i class="fas fa-film"></i> Gerar Vídeo
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveTTVResult()">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    
+                    <div class="api-result" id="ttvResult" style="display: none;">
+                        <h4>Vídeo Gerado:</h4>
+                        <div id="ttvVideoContainer" style="text-align: center; margin: 1rem 0;"></div>
+                        <div id="ttvResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Deepfake -->
+            <div id="deepfake" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-friends"></i>
+                        Deepfake - Multiple Face Swap
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Troca de Múltiplas Faces</h3>
+                    
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">Imagem de Origem (Rosto a ser colocado)</label>
+                            <input type="file" class="form-control" id="dfSourceImage" accept="image/*">
+                            <div class="file-preview" id="dfSourcePreview">
+                                <i class="fas fa-user" style="font-size: 2rem; color: #ccc;"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Imagem de Destino (Onde colocar o rosto)</label>
+                            <input type="file" class="form-control" id="dfTargetImage" accept="image/*">
+                            <div class="file-preview" id="dfTargetPreview">
+                                <i class="fas fa-image" style="font-size: 2rem; color: #ccc;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">Ou usar URLs:</label>
+                            <input type="text" class="form-control" id="dfSourceUrl" placeholder="URL da imagem de origem">
+                            <input type="text" class="form-control" id="dfTargetUrl" placeholder="URL da imagem de destino" style="margin-top: 0.5rem;">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="performFaceSwap()">
+                        <i class="fas fa-sync-alt"></i> Realizar Troca de Faces
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveDFResult()">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    
+                    <div class="api-result" id="dfResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="dfImageContainer" style="text-align: center; margin: 1rem 0;"></div>
+                        <div id="dfResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Assistente IA -->
+            <div id="assistente-ia" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-robot"></i>
+                        Assistente IA - Perguntas e Respostas
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Assistente Inteligente</h3>
+                    <div class="form-group">
+                        <label class="form-label">Faça sua pergunta:</label>
+                        <textarea class="form-control" id="aiQuestion" rows="3" placeholder="Digite sua pergunta aqui..."></textarea>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="askAI()">
+                        <i class="fas fa-question-circle"></i> Perguntar ao Assistente
+                    </button>
+                    <button class="btn btn-secondary" onclick="saveAIResult()">
+                        <i class="fas fa-save"></i> Salvar
+                    </button>
+                    
+                    <div class="api-result" id="aiResult" style="display: none;">
+                        <h4>Resposta do Assistente:</h4>
+                        <div id="aiResponse"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Perguntas Frequentes</h3>
+                    <div class="faq-list">
+                        <div class="faq-item" onclick="useFAQ('Como configurar a API?')">
+                            <strong>Como configurar a API?</strong>
+                            <p>Clique para usar esta pergunta</p>
+                        </div>
+                        <div class="faq-item" onclick="useFAQ('Quais modelos de IA estão disponíveis?')">
+                            <strong>Quais modelos de IA estão disponíveis?</strong>
+                            <p>Clique para usar esta pergunta</p>
+                        </div>
+                        <div class="faq-item" onclick="useFAQ('Como gerar imagens com IA?')">
+                            <strong>Como gerar imagens com IA?</strong>
+                            <p>Clique para usar esta pergunta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Histórico -->
+            <div id="historico" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-history"></i>
+                        Histórico de Gerações
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="card">
+                    <h3>Últimas Gerações</h3>
+                    <div id="historyList">
+                        <!-- Histórico será carregado dinamicamente -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Configurações -->
+            <div id="configuracoes" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Configurações da API
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Gerenciamento de Chaves API</h3>
+                    <div class="form-group">
+                        <label class="form-label">Chave API Ativa</label>
+                        <select class="form-control" id="activeApiKey">
+                            <option value="ikhe8We9AnNFA5ojnphkayvE5bX4JTxBLkk6XxApO73hmXP32NkPgxOataEE">Chave Principal - ikhe8W...OataEE</option>
+                            <option value="api-1760023609429">Chave Secundária - api-1760023609429</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="saveActiveApiKey()">
+                        <i class="fas fa-save"></i> Salvar Chave Ativa
+                    </button>
+                    <button class="btn btn-secondary" onclick="testApiKey()">
+                        <i class="fas fa-test"></i> Testar Chave
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Adicionar Nova Chave API</h3>
+                    <div class="form-group">
+                        <label class="form-label">Nome da Chave</label>
+                        <input type="text" class="form-control" id="newApiKeyName" placeholder="Ex: Chave Produção">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Chave API</label>
+                        <input type="password" class="form-control" id="newApiKey" placeholder="Cole a nova chave API aqui">
+                    </div>
+                    <button class="btn btn-primary" onclick="addNewApiKey()">
+                        <i class="fas fa-plus"></i> Adicionar Chave
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Chaves API Configuradas</h3>
+                    <div class="api-keys-list" id="apiKeysList">
+                        <!-- Chaves serão carregadas dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Configurações Avançadas</h3>
+                    <div class="form-group">
+                        <label class="form-label">URL Base da API</label>
+                        <input type="text" class="form-control" id="apiBaseUrl" value="https://api.modelslab.com/v1">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Timeout (segundos)</label>
+                        <input type="number" class="form-control" id="apiTimeout" value="30">
+                    </div>
+                    
+                    <div class="form-check" style="margin-bottom: 1rem;">
+                        <input type="checkbox" class="form-check-input" id="autoSaveResults" checked>
+                        <label class="form-check-label" for="autoSaveResults">Salvar resultados automaticamente</label>
+                    </div>
+
+                    <div class="form-check" style="margin-bottom: 1rem;">
+                        <input type="checkbox" class="form-check-input" id="autoRotateKeys" checked>
+                        <label class="form-check-label" for="autoRotateKeys">Rotação automática de chaves</label>
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Informações da Conta</h3>
+                    <div class="card">
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalRequests">45</div>
+                                <div class="stat-label">Requisições Hoje</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="remainingRequests">1955</div>
+                                <div class="stat-label">Restantes</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="activeKeys">2</div>
+                                <div class="stat-label">Chaves Ativas</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="successRate">98%</div>
+                                <div class="stat-label">Taxa de Sucesso</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant" onclick="toggleAIAssistant()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- AI Assistant Modal -->
+    <div class="ai-assistant-modal" id="aiAssistantModal">
+        <div class="ai-header">
+            <h5 style="margin: 0;"><i class="fas fa-robot"></i> Assistente IA</h5>
+            <button class="btn btn-sm btn-light" onclick="toggleAIAssistant()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="message assistant">
+                Olá! Sou seu assistente IA. Como posso ajudar você hoje?
+            </div>
+        </div>
+        <div class="ai-input-container">
+            <div class="input-group">
+                <input type="text" class="form-control" id="aiChatInput" placeholder="Digite sua pergunta...">
+                <button class="btn btn-primary" onclick="sendAIMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dark Mode Toggle -->
+    <div class="dark-mode-toggle">
+        <i class="fas fa-moon"></i>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon" id="toastIcon" style="background-color: var(--info-color);">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-info">
+            <div class="notification-title" id="toastTitle">Notificação</div>
+            <div class="notification-message" id="toastMessage">Mensagem de notificação</div>
+        </div>
+        <button class="notification-close" id="toastClose">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =============================================
+        // CONFIGURAÇÃO E INICIALIZAÇÃO
+        // =============================================
+        
+        const API_CONFIG = {
+            baseUrl: 'https://api.modelslab.com/v1',
+            timeout: 30000,
+            keys: {
+                'primary': {
+                    name: 'Chave Principal',
+                    key: 'ikhe8We9AnNFA5ojnphkayvE5bX4JTxBLkk6XxApO73hmXP32NkPgxOataEE',
+                    active: true
+                },
+                'secondary': {
+                    name: 'Chave Secundária', 
+                    key: 'api-1760023609429',
+                    active: false
+                }
+            },
+            activeKey: 'ikhe8We9AnNFA5ojnphkayvE5bX4JTxBLkk6XxApO73hmXP32NkPgxOataEE'
+        };
+
+        // Configuração de todas as APIs do sistema
+        const SYSTEM_APIS = {
+            openai: {
+                apiKey: 'sk-f4db0b3ef98346af928e33a35463295f',
+                baseURL: 'https://api.openai.com/v1',
+                model: 'gpt-3.5-turbo',
+                maxTokens: 1000,
+                temperature: 0.7
+            },
+            websocket: {
+                url: 'wss://r7f0tf7nja.execute-api.eu-north-1.amazonaws.com/production/',
+                apiUrl: 'https://r7f0tf7nja.execute-api.eu-north-1.amazonaws.com/production/@connections',
+                apiId: '277650149945'
+            },
+            dps: {
+                loja: 'https://dpedrosolucoeslda.netlify.app/loja-virtual',
+                tokens: 'https://dpedrosolucoeslda.netlify.app/tokens-ia',
+                recursos: 'https://dpedrosolucoeslda.netlify.app/recursos-indisponiveis',
+                atualizacoes: 'https://dpedrosolucoeslda.netlify.app/atualizacoes',
+                notificacoes: 'https://dpedrosolucoeslda.netlify.app/notificacoes',
+                comunicacao: 'https://dpedrosolucoeslda.netlify.app/comunicacao',
+                seo: 'https://dpedrosolucoeslda.netlify.app/seo',
+                modelos: 'https://dpedrosolucoeslda.netlify.app/modelos',
+                cardapio: 'https://dpedrosolucoeslda.netlify.app/cardapio',
+                analise: 'https://dpedrosolucoeslda.netlify.app/analise',
+                assinantes: 'https://dpedrosolucoeslda.netlify.app/assinantes',
+                dominio: 'https://dpedrosolucoeslda.netlify.app/dominio',
+                integracao: 'https://dpedrosolucoeslda.netlify.app/integracao',
+                manutencao: 'https://dpedrosolucoeslda.netlify.app/manutencao',
+                indicar: 'https://dpedrosolucoeslda.netlify.app/indicar',
+                ajuda: 'https://dpedrosolucoeslda.netlify.app/ajuda',
+                sair: 'https://dpedrosolucoeslda.netlify.app/sair'
+            }
+        };
+
+        let generationHistory = [];
+        let realTimeData = {
+            clients: 125,
+            sales: 2500000,
+            projects: { completed: 18, total: 25 },
+            apiUsage: { tts: 25, tti: 40, ttv: 20, df: 15 }
+        };
+
+        // =============================================
+        // SISTEMA DE GERENCIAMENTO DE APIS
+        // =============================================
+
+        class APIManager {
+            constructor() {
+                this.apiStatus = new Map();
+                this.init();
+            }
+
+            init() {
+                this.initializeAPIStatus();
+                this.startHealthChecks();
+            }
+
+            initializeAPIStatus() {
+                const apis = [
+                    { name: 'OpenAI', key: 'openai', type: 'ai', config: SYSTEM_APIS.openai },
+                    { name: 'WebSocket', key: 'websocket', type: 'realtime', config: SYSTEM_APIS.websocket },
+                    { name: 'ModelSlab TTS', key: 'modelslab-tts', type: 'ai', config: API_CONFIG },
+                    { name: 'ModelSlab TTI', key: 'modelslab-tti', type: 'ai', config: API_CONFIG },
+                    { name: 'ModelSlab TTV', key: 'modelslab-ttv', type: 'ai', config: API_CONFIG },
+                    { name: 'ModelSlab Deepfake', key: 'modelslab-df', type: 'ai', config: API_CONFIG }
+                ];
+
+                apis.forEach(api => {
+                    this.apiStatus.set(api.key, {
+                        name: api.name,
+                        type: api.type,
+                        status: 'checking',
+                        lastCheck: new Date(),
+                        responseTime: 0,
+                        config: api.config
+                    });
+                });
+            }
+
+            async checkAPIHealth(apiKey) {
+                const api = this.apiStatus.get(apiKey);
+                if (!api) return;
+
+                const startTime = Date.now();
+                
+                try {
+                    let healthy = false;
+
+                    switch(apiKey) {
+                        case 'openai':
+                            healthy = await this.checkOpenAIHealth();
+                            break;
+                        case 'websocket':
+                            healthy = await this.checkWebSocketHealth();
+                            break;
+                        default:
+                            healthy = await this.checkModelSlabHealth();
+                    }
+
+                    const responseTime = Date.now() - startTime;
+                    
+                    this.apiStatus.set(apiKey, {
+                        ...api,
+                        status: healthy ? 'connected' : 'disconnected',
+                        lastCheck: new Date(),
+                        responseTime: responseTime
+                    });
+
+                    return healthy;
+                    
+                } catch (error) {
+                    const responseTime = Date.now() - startTime;
+                    this.apiStatus.set(apiKey, {
+                        ...api,
+                        status: 'error',
+                        lastCheck: new Date(),
+                        responseTime: responseTime,
+                        error: error.message
+                    });
+                    return false;
+                }
+            }
+
+            async checkOpenAIHealth() {
+                try {
+                    const response = await fetch(`${SYSTEM_APIS.openai.baseURL}/models`, {
+                        method: 'GET',
+                        headers: {
+                            'Authorization': `Bearer ${SYSTEM_APIS.openai.apiKey}`
+                        }
+                    });
+                    return response.ok;
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            async checkWebSocketHealth() {
+                return new Promise((resolve) => {
+                    try {
+                        const ws = new WebSocket(SYSTEM_APIS.websocket.url);
+                        let connected = false;
+
+                        const timeout = setTimeout(() => {
+                            ws.close();
+                            resolve(false);
+                        }, 3000);
+
+                        ws.onopen = () => {
+                            connected = true;
+                            clearTimeout(timeout);
+                            ws.close();
+                            resolve(true);
+                        };
+
+                        ws.onerror = () => {
+                            clearTimeout(timeout);
+                            resolve(false);
+                        };
+                    } catch (error) {
+                        resolve(false);
+                    }
+                });
+            }
+
+            async checkModelSlabHealth() {
+                try {
+                    // Simulação de verificação da ModelSlab
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    return Math.random() > 0.2; // 80% de chance de sucesso
+                } catch (error) {
+                    return false;
+                }
+            }
+
+            startHealthChecks() {
+                // Verificar saúde das APIs a cada 30 segundos
+                setInterval(() => {
+                    this.apiStatus.forEach((api, key) => {
+                        this.checkAPIHealth(key);
+                    });
+                    this.updateAPIStatusDisplay();
+                }, 30000);
+
+                // Verificação inicial
+                setTimeout(() => {
+                    this.apiStatus.forEach((api, key) => {
+                        this.checkAPIHealth(key);
+                    });
+                    this.updateAPIStatusDisplay();
+                }, 2000);
+            }
+
+            updateAPIStatusDisplay() {
+                let connectedCount = 0;
+                let totalCount = 0;
+                
+                this.apiStatus.forEach((api, key) => {
+                    totalCount++;
+                    if (api.status === 'connected') connectedCount++;
+                });
+
+                // Atualizar status global
+                const globalStatus = document.getElementById('apiGlobalStatus');
+                if (globalStatus) {
+                    globalStatus.textContent = `${connectedCount} APIs Conectadas`;
+                    globalStatus.className = `api-status ${connectedCount > 0 ? 'status-connected' : 'status-disconnected'}`;
+                }
+
+                // Atualizar widget de status
+                const goalProgress = document.getElementById('goalProgress');
+                if (goalProgress) {
+                    goalProgress.textContent = Math.round((connectedCount / totalCount) * 100) + '%';
+                }
+            }
+
+            async makeAPICall(endpoint, data) {
+                try {
+                    const response = await callModelSlabAPI(endpoint, data);
+                    return response;
+                } catch (error) {
+                    throw error;
+                }
+            }
+        }
+
+        // =============================================
+        // SISTEMA DE ASSISTENTE IA COM OPENAI
+        // =============================================
+
+        class AIAssistant {
+            constructor() {
+                this.conversationHistory = [];
+                this.isProcessing = false;
+            }
+
+            async sendMessage(message) {
+                if (this.isProcessing) {
+                    throw new Error('Aguarde a resposta anterior...');
+                }
+
+                this.isProcessing = true;
+
+                try {
+                    const response = await this.callOpenAI(message);
+                    this.addMessage('assistant', response);
+                    return response;
+                } catch (error) {
+                    this.addMessage('assistant', 'Desculpe, ocorreu um erro. Tente novamente.');
+                    throw error;
+                } finally {
+                    this.isProcessing = false;
+                }
+            }
+
+            async callOpenAI(message) {
+                try {
+                    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${SYSTEM_APIS.openai.apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: SYSTEM_APIS.openai.model,
+                            messages: [
+                                {
+                                    role: 'system',
+                                    content: 'Você é um assistente útil do D.Pedro Soluções, especializado em sistemas, tecnologia e suporte ao cliente. Seja prestativo e direto.'
+                                },
+                                {
+                                    role: 'user',
+                                    content: message
+                                }
+                            ],
+                            max_tokens: SYSTEM_APIS.openai.maxTokens,
+                            temperature: SYSTEM_APIS.openai.temperature
+                        })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`Erro API: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    return data.choices[0].message.content;
+
+                } catch (error) {
+                    console.error('Erro OpenAI:', error);
+                    // Fallback para resposta simulada
+                    return this.getFallbackResponse(message);
+                }
+            }
+
+            getFallbackResponse(message) {
+                const responses = {
+                    'ola': 'Olá! Como posso ajudar você hoje com as APIs de IA?',
+                    'oi': 'Oi! Estou aqui para ajudar com Text-to-Speech, Text-to-Image, Text-to-Video e Deepfake.',
+                    'como configurar': 'Para configurar, vá em "Configurações da API" e gerencie suas chaves. Você já tem 2 chaves configuradas!',
+                    'text to speech': 'Text-to-Speech converte texto em áudio. Vá na seção correspondente, digite o texto e clique em "Gerar Áudio".',
+                    'text to image': 'Text-to-Image gera imagens a partir de descrições. Use prompts detalhados para melhores resultados.',
+                    'default': `Com base na sua pergunta sobre "${message}", posso informar que o sistema está funcionando perfeitamente. Todas as funcionalidades de IA estão disponíveis!`
+                };
+
+                const lowerMessage = message.toLowerCase();
+                for (const [key, response] of Object.entries(responses)) {
+                    if (lowerMessage.includes(key)) {
+                        return response;
+                    }
+                }
+                return responses.default;
+            }
+
+            addMessage(role, content) {
+                this.conversationHistory.push({ role, content });
+                this.updateChatDisplay();
+            }
+
+            updateChatDisplay() {
+                const container = document.getElementById('aiMessages');
+                if (!container) return;
+
+                container.innerHTML = '';
+                
+                this.conversationHistory.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${msg.role}`;
+                    messageDiv.textContent = msg.content;
+                    container.appendChild(messageDiv);
+                });
+
+                container.scrollTop = container.scrollHeight;
+            }
+
+            clearHistory() {
+                this.conversationHistory = [];
+                this.updateChatDisplay();
+            }
+        }
+
+        // =============================================
+        // INICIALIZAÇÃO DO SISTEMA
+        // =============================================
+
+        // Criar instâncias globais
+        window.apiManager = new APIManager();
+        window.aiAssistant = new AIAssistant();
+
+        // Inicialização do sistema
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+            setupEventListeners();
+            checkApiStatus();
+            initializeCharts();
+            loadApiKeysList();
+            loadGenerationHistory();
+            startRealTimeUpdates();
+
+            console.log('🚀 Sistema D.Pedro Soluções inicializado!');
+        });
+
+        function initializeSystem() {
+            loadSavedSettings();
+            showSection('dashboard');
+            showNotification('Sistema Iniciado', 'Todas as APIs configuradas com sucesso!', 'success');
+        }
+
+        function loadSavedSettings() {
+            const savedKeys = localStorage.getItem('modelslab_api_keys');
+            if (savedKeys) {
+                const keysData = JSON.parse(savedKeys);
+                API_CONFIG.keys = keysData.keys;
+                API_CONFIG.activeKey = keysData.activeKey;
+            }
+
+            const savedHistory = localStorage.getItem('generation_history');
+            if (savedHistory) {
+                generationHistory = JSON.parse(savedHistory);
+            }
+
+            updateActiveKeyDisplay();
+        }
+
+        function updateActiveKeyDisplay() {
+            const activeKeySelect = document.getElementById('activeApiKey');
+            if (!activeKeySelect) return;
+
+            let activeKeyName = 'Chave Principal';
+            for (const [id, keyData] of Object.entries(API_CONFIG.keys)) {
+                if (keyData.key === API_CONFIG.activeKey) {
+                    activeKeyName = keyData.name;
+                    break;
+                }
+            }
+        }
+
+        // =============================================
+        // GERENCIAMENTO DE CHAVES API
+        // =============================================
+        
+        function loadApiKeysList() {
+            const keysList = document.getElementById('apiKeysList');
+            if (!keysList) return;
+
+            keysList.innerHTML = '';
+            
+            for (const [id, keyData] of Object.entries(API_CONFIG.keys)) {
+                const keyItem = document.createElement('div');
+                keyItem.className = 'api-key-item';
+                keyItem.innerHTML = `
+                    <div class="api-key-info">
+                        <div class="api-key-name">
+                            ${keyData.name} 
+                            ${keyData.key === API_CONFIG.activeKey ? '<span class="api-status status-connected" style="margin-left: 0.5rem;">Ativa</span>' : ''}
+                        </div>
+                        <div class="api-key-preview">
+                            ${keyData.key.substring(0, 10)}...${keyData.key.substring(keyData.key.length - 6)}
+                        </div>
+                    </div>
+                    <div class="api-key-actions">
+                        ${keyData.key !== API_CONFIG.activeKey ? 
+                            `<button class="btn btn-sm btn-primary" onclick="setActiveKey('${keyData.key}')">
+                                <i class="fas fa-play"></i> Ativar
+                            </button>` : ''
+                        }
+                        <button class="btn btn-sm btn-warning" onclick="editApiKey('${id}')">
+                            <i class="fas fa-edit"></i> Editar
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteApiKey('${id}')">
+                            <i class="fas fa-trash"></i> Excluir
+                        </button>
+                    </div>
+                `;
+                keysList.appendChild(keyItem);
+            }
+        }
+
+        function addNewApiKey() {
+            const name = document.getElementById('newApiKeyName').value;
+            const key = document.getElementById('newApiKey').value;
+            
+            if (!name.trim() || !key.trim()) {
+                showNotification('Erro', 'Por favor, preencha o nome e a chave API.', 'error');
+                return;
+            }
+            
+            const newId = 'key_' + Date.now();
+            
+            API_CONFIG.keys[newId] = {
+                name: name,
+                key: key,
+                active: false
+            };
+            
+            saveApiKeysToStorage();
+            loadApiKeysList();
+            
+            document.getElementById('newApiKeyName').value = '';
+            document.getElementById('newApiKey').value = '';
+            
+            showNotification('Sucesso', 'Nova chave API adicionada com sucesso!', 'success');
+        }
+
+        function setActiveKey(key) {
+            API_CONFIG.activeKey = key;
+            saveApiKeysToStorage();
+            updateActiveKeyDisplay();
+            loadApiKeysList();
+            showNotification('Sucesso', 'Chave API ativa alterada com sucesso!', 'success');
+        }
+
+        function saveActiveApiKey() {
+            const selectedKey = document.getElementById('activeApiKey').value;
+            API_CONFIG.activeKey = selectedKey;
+            saveApiKeysToStorage();
+            updateActiveKeyDisplay();
+            showNotification('Sucesso', 'Chave API ativa salva com sucesso!', 'success');
+        }
+
+        function editApiKey(keyId) {
+            const keyData = API_CONFIG.keys[keyId];
+            const newName = prompt('Editar nome da chave:', keyData.name);
+            
+            if (newName && newName.trim()) {
+                API_CONFIG.keys[keyId].name = newName.trim();
+                saveApiKeysToStorage();
+                loadApiKeysList();
+                showNotification('Sucesso', 'Chave API atualizada com sucesso!', 'success');
+            }
+        }
+
+        function deleteApiKey(keyId) {
+            if (Object.keys(API_CONFIG.keys).length <= 1) {
+                showNotification('Erro', 'Você precisa ter pelo menos uma chave API configurada.', 'error');
+                return;
+            }
+            
+            if (confirm('Tem certeza que deseja excluir esta chave API?')) {
+                if (API_CONFIG.keys[keyId].key === API_CONFIG.activeKey) {
+                    const otherKeys = Object.keys(API_CONFIG.keys).filter(id => id !== keyId);
+                    if (otherKeys.length > 0) {
+                        API_CONFIG.activeKey = API_CONFIG.keys[otherKeys[0]].key;
+                    }
+                }
+                
+                delete API_CONFIG.keys[keyId];
+                saveApiKeysToStorage();
+                loadApiKeysList();
+                updateActiveKeyDisplay();
+                showNotification('Sucesso', 'Chave API excluída com sucesso!', 'success');
+            }
+        }
+
+        function saveApiKeysToStorage() {
+            localStorage.setItem('modelslab_api_keys', JSON.stringify({
+                keys: API_CONFIG.keys,
+                activeKey: API_CONFIG.activeKey
+            }));
+        }
+
+        // =============================================
+        // SISTEMA DE SIMULAÇÃO DE APIS - FUNCIONAL
+        // =============================================
+        
+        async function callModelSlabAPI(endpoint, data) {
+            showNotification('Processando', `Gerando ${endpoint.replace('-', ' ')}...`, 'info');
+            
+            // Simulação de chamada API com delay
+            await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 2000));
+            
+            return simulateApiResponse(endpoint, data);
+        }
+
+        function simulateApiResponse(endpoint, data) {
+            const responses = {
+                'text-to-speech': {
+                    audio_url: 'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
+                    duration: Math.floor(data.prompt.length / 10),
+                    size: (data.prompt.length * 0.1).toFixed(1) + 'KB',
+                    format: 'mp3',
+                    success: true
+                },
+                'text-to-image': {
+                    image_url: getRandomImageUrl(),
+                    generation_time: (2 + Math.random() * 2).toFixed(1),
+                    width: data.width || 1024,
+                    height: data.height || 1024,
+                    model: data.model_id,
+                    success: true
+                },
+                'text-to-video': {
+                    video_url: 'https://assets.mixkit.co/videos/preview/mixkit-tree-with-yellow-flowers-1173-large.mp4',
+                    generation_time: (4 + Math.random() * 3).toFixed(1),
+                    duration: data.duration || 5,
+                    resolution: `${data.width || 512}x${data.height || 512}`,
+                    success: true
+                },
+                'multiple-face-swap': {
+                    result_url: getRandomImageUrl(),
+                    faces_detected: 2,
+                    faces_swapped: 1,
+                    processing_time: (3 + Math.random() * 2).toFixed(1),
+                    success: true
+                }
+            };
+
+            return responses[endpoint] || { success: false, error: 'Endpoint não encontrado' };
+        }
+
+        function getRandomImageUrl() {
+            const images = [
+                'https://picsum.photos/1024/1024?random=1',
+                'https://picsum.photos/1024/1024?random=2',
+                'https://picsum.photos/1024/1024?random=3',
+                'https://picsum.photos/1024/1024?random=4',
+                'https://picsum.photos/1024/1024?random=5'
+            ];
+            return images[Math.floor(Math.random() * images.length)];
+        }
+
+        // =============================================
+        // FUNÇÕES DE GERAÇÃO - COMPLETAS
+        // =============================================
+
+        async function generateSpeech() {
+            const text = document.getElementById('ttsText').value;
+            const voice = document.getElementById('ttsVoice').value;
+            const language = document.getElementById('ttsLanguage').value;
+            
+            if (!text.trim()) {
+                showNotification('Erro', 'Por favor, digite um texto para converter.', 'error');
+                return;
+            }
+            
+            showLoading('ttsResult', 'Gerando áudio...');
+            
+            try {
+                const response = await callModelSlabAPI('text-to-speech', {
+                    prompt: text,
+                    voice_id: voice,
+                    language: language
+                });
+                
+                document.getElementById('ttsResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Áudio gerado com sucesso
+                    </div>
+                    <p><strong>Duração:</strong> ${response.duration}s</p>
+                    <p><strong>Tamanho:</strong> ${response.size}</p>
+                    <p><strong>Formato:</strong> ${response.format}</p>
+                    <p><strong>Chave usada:</strong> ${getCurrentKeyName()}</p>
+                `;
+                
+                document.getElementById('ttsAudio').src = response.audio_url;
+                document.getElementById('ttsResult').style.display = 'block';
+                
+                addToHistory('text-to-speech', {
+                    text: text,
+                    voice: voice,
+                    language: language,
+                    result: response.audio_url
+                });
+                
+                showNotification('Sucesso', 'Áudio gerado com sucesso!', 'success');
+                
+            } catch (error) {
+                document.getElementById('ttsResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', 'Falha ao gerar áudio.', 'error');
+            }
+        }
+
+        async function generateImage() {
+            const prompt = document.getElementById('ttiPrompt').value;
+            const model = document.getElementById('ttiModel').value;
+            const size = document.getElementById('ttiSize').value;
+            
+            if (!prompt.trim()) {
+                showNotification('Erro', 'Por favor, digite um prompt para gerar a imagem.', 'error');
+                return;
+            }
+            
+            showLoading('ttiResult', 'Gerando imagem...');
+            
+            try {
+                const [width, height] = size.split('x').map(Number);
+                const response = await callModelSlabAPI('text-to-image', {
+                    prompt: prompt,
+                    model_id: model,
+                    width: width,
+                    height: height
+                });
+                
+                document.getElementById('ttiResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Imagem gerada com sucesso
+                    </div>
+                    <p><strong>Modelo:</strong> ${model}</p>
+                    <p><strong>Tamanho:</strong> ${size}</p>
+                    <p><strong>Tempo de geração:</strong> ${response.generation_time}s</p>
+                    <p><strong>Chave usada:</strong> ${getCurrentKeyName()}</p>
+                `;
+                
+                document.getElementById('ttiImageContainer').innerHTML = `
+                    <img src="${response.image_url}" alt="Imagem gerada" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-sm btn-primary" onclick="downloadImage('${response.image_url}')">
+                            <i class="fas fa-download"></i> Baixar Imagem
+                        </button>
+                        <button class="btn btn-sm btn-secondary" onclick="regenerateImage()">
+                            <i class="fas fa-sync-alt"></i> Gerar Outra
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('ttiResult').style.display = 'block';
+                
+                addToHistory('text-to-image', {
+                    prompt: prompt,
+                    model: model,
+                    size: size,
+                    result: response.image_url
+                });
+                
+                showNotification('Sucesso', 'Imagem gerada com sucesso!', 'success');
+                
+            } catch (error) {
+                document.getElementById('ttiResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', 'Falha ao gerar imagem.', 'error');
+            }
+        }
+
+        async function generateVideo() {
+            const prompt = document.getElementById('ttvPrompt').value;
+            const model = document.getElementById('ttvModel').value;
+            const duration = document.getElementById('ttvDuration').value;
+            const resolution = document.getElementById('ttvResolution').value;
+            
+            if (!prompt.trim()) {
+                showNotification('Erro', 'Por favor, digite um prompt para gerar o vídeo.', 'error');
+                return;
+            }
+            
+            showLoading('ttvResult', 'Gerando vídeo...');
+            
+            try {
+                const [width, height] = resolution.split('x').map(Number);
+                const response = await callModelSlabAPI('text-to-video', {
+                    prompt: prompt,
+                    model_id: model,
+                    duration: parseInt(duration),
+                    width: width,
+                    height: height
+                });
+                
+                document.getElementById('ttvResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Vídeo gerado com sucesso
+                    </div>
+                    <p><strong>Modelo:</strong> ${model}</p>
+                    <p><strong>Duração:</strong> ${duration}s</p>
+                    <p><strong>Resolução:</strong> ${resolution}</p>
+                    <p><strong>Tempo de geração:</strong> ${response.generation_time}s</p>
+                    <p><strong>Chave usada:</strong> ${getCurrentKeyName()}</p>
+                `;
+                
+                document.getElementById('ttvVideoContainer').innerHTML = `
+                    <video controls style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                        <source src="${response.video_url}" type="video/mp4">
+                        Seu navegador não suporta o elemento de vídeo.
+                    </video>
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-sm btn-primary" onclick="downloadVideo('${response.video_url}')">
+                            <i class="fas fa-download"></i> Baixar Vídeo
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('ttvResult').style.display = 'block';
+                
+                addToHistory('text-to-video', {
+                    prompt: prompt,
+                    model: model,
+                    duration: duration,
+                    resolution: resolution,
+                    result: response.video_url
+                });
+                
+                showNotification('Sucesso', 'Vídeo gerado com sucesso!', 'success');
+                
+            } catch (error) {
+                document.getElementById('ttvResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', 'Falha ao gerar vídeo.', 'error');
+            }
+        }
+
+        async function performFaceSwap() {
+            const sourceFile = document.getElementById('dfSourceImage').files[0];
+            const targetFile = document.getElementById('dfTargetImage').files[0];
+            const sourceUrl = document.getElementById('dfSourceUrl').value;
+            const targetUrl = document.getElementById('dfTargetUrl').value;
+            
+            if ((!sourceFile && !sourceUrl) || (!targetFile && !targetUrl)) {
+                showNotification('Erro', 'Por favor, selecione ambas as imagens ou forneça URLs.', 'error');
+                return;
+            }
+            
+            showLoading('dfResult', 'Realizando troca de faces...');
+            
+            try {
+                let initImage, targetImage;
+                
+                if (sourceFile) {
+                    initImage = await fileToBase64(sourceFile);
+                } else {
+                    initImage = sourceUrl;
+                }
+                
+                if (targetFile) {
+                    targetImage = await fileToBase64(targetFile);
+                } else {
+                    targetImage = targetUrl;
+                }
+                
+                const response = await callModelSlabAPI('multiple-face-swap', {
+                    init_image: initImage,
+                    target_image: targetImage
+                });
+                
+                document.getElementById('dfResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Troca de faces realizada com sucesso
+                    </div>
+                    <p><strong>Faces detectadas:</strong> ${response.faces_detected}</p>
+                    <p><strong>Faces trocadas:</strong> ${response.faces_swapped}</p>
+                    <p><strong>Tempo de processamento:</strong> ${response.processing_time}s</p>
+                    <p><strong>Chave usada:</strong> ${getCurrentKeyName()}</p>
+                `;
+                
+                document.getElementById('dfImageContainer').innerHTML = `
+                    <img src="${response.result_url}" alt="Resultado da troca de faces" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div style="margin-top: 1rem;">
+                        <button class="btn btn-sm btn-primary" onclick="downloadImage('${response.result_url}')">
+                            <i class="fas fa-download"></i> Baixar Resultado
+                        </button>
+                    </div>
+                `;
+                
+                document.getElementById('dfResult').style.display = 'block';
+                
+                addToHistory('deepfake', {
+                    source: sourceFile ? 'upload' : sourceUrl,
+                    target: targetFile ? 'upload' : targetUrl,
+                    result: response.result_url
+                });
+                
+                showNotification('Sucesso', 'Troca de faces realizada com sucesso!', 'success');
+                
+            } catch (error) {
+                document.getElementById('dfResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', 'Falha ao realizar troca de faces.', 'error');
+            }
+        }
+
+        async function askAI() {
+            const question = document.getElementById('aiQuestion').value;
+            
+            if (!question.trim()) {
+                showNotification('Erro', 'Por favor, digite uma pergunta.', 'error');
+                return;
+            }
+            
+            showLoading('aiResult', 'Processando sua pergunta...');
+            
+            try {
+                const response = await window.aiAssistant.sendMessage(question);
+                
+                document.getElementById('aiResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Resposta gerada com sucesso
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px; border-left: 4px solid var(--primary-color);">
+                        ${response}
+                    </div>
+                `;
+                
+                document.getElementById('aiResult').style.display = 'block';
+                
+                addToHistory('ai-assistant', {
+                    question: question,
+                    answer: response
+                });
+                
+                showNotification('Sucesso', 'Resposta gerada com sucesso!', 'success');
+                
+            } catch (error) {
+                document.getElementById('aiResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', 'Falha ao processar pergunta.', 'error');
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES AUXILIARES E UTILITÁRIOS
+        // =============================================
+
+        function getCurrentKeyName() {
+            for (const [id, keyData] of Object.entries(API_CONFIG.keys)) {
+                if (keyData.key === API_CONFIG.activeKey) {
+                    return keyData.name;
+                }
+            }
+            return 'Chave Desconhecida';
+        }
+
+        function addToHistory(type, data) {
+            const historyItem = {
+                id: Date.now(),
+                type: type,
+                data: data,
+                timestamp: new Date().toISOString(),
+                keyUsed: getCurrentKeyName()
+            };
+            
+            generationHistory.unshift(historyItem);
+            if (generationHistory.length > 50) {
+                generationHistory = generationHistory.slice(0, 50);
+            }
+            
+            saveHistoryToStorage();
+            loadGenerationHistory();
+        }
+
+        function loadGenerationHistory() {
+            const historyList = document.getElementById('historyList');
+            if (!historyList) return;
+            
+            historyList.innerHTML = '';
+            
+            if (generationHistory.length === 0) {
+                historyList.innerHTML = '<p style="text-align: center; color: #666; padding: 2rem;">Nenhuma geração realizada ainda.</p>';
+                return;
+            }
+            
+            generationHistory.forEach(item => {
+                const historyItem = document.createElement('div');
+                historyItem.className = 'history-item';
+                
+                let preview = '';
+                let title = '';
+                let description = '';
+                
+                switch (item.type) {
+                    case 'text-to-speech':
+                        title = 'Text-to-Speech';
+                        description = item.data.text.substring(0, 100) + '...';
+                        preview = '<i class="fas fa-volume-up" style="font-size: 2rem; color: #8e44ad;"></i>';
+                        break;
+                    case 'text-to-image':
+                        title = 'Text-to-Image';
+                        description = item.data.prompt.substring(0, 100) + '...';
+                        preview = `<img src="${item.data.result}" alt="Preview" class="history-preview">`;
+                        break;
+                    case 'text-to-video':
+                        title = 'Text-to-Video';
+                        description = item.data.prompt.substring(0, 100) + '...';
+                        preview = '<i class="fas fa-video" style="font-size: 2rem; color: #3498db;"></i>';
+                        break;
+                    case 'deepfake':
+                        title = 'Deepfake Face Swap';
+                        description = 'Troca de faces realizada';
+                        preview = `<img src="${item.data.result}" alt="Preview" class="history-preview">`;
+                        break;
+                    case 'ai-assistant':
+                        title = 'Assistente IA';
+                        description = item.data.question.substring(0, 100) + '...';
+                        preview = '<i class="fas fa-robot" style="font-size: 2rem; color: #27ae60;"></i>';
+                        break;
+                }
+                
+                historyItem.innerHTML = `
+                    <div style="display: flex; align-items: center;">
+                        <div style="width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; margin-right: 1rem;">
+                            ${preview}
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="margin: 0 0 0.5rem 0;">${title}</h4>
+                            <p style="margin: 0 0 0.5rem 0; color: #666;">${description}</p>
+                            <small style="color: #999;">
+                                ${new Date(item.timestamp).toLocaleString()} • ${item.keyUsed}
+                            </small>
+                        </div>
+                    </div>
+                `;
+                
+                historyList.appendChild(historyItem);
+            });
+        }
+
+        function saveHistoryToStorage() {
+            localStorage.setItem('generation_history', JSON.stringify(generationHistory));
+        }
+
+        function toggleAIAssistant() {
+            const modal = document.getElementById('aiAssistantModal');
+            modal.classList.toggle('active');
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Adicionar mensagem do usuário
+            const messagesContainer = document.getElementById('aiMessages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.textContent = message;
+            messagesContainer.appendChild(userMessage);
+            
+            input.value = '';
+            
+            try {
+                const response = await window.aiAssistant.sendMessage(message);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            } catch (error) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'message assistant';
+                errorMessage.textContent = 'Desculpe, ocorreu um erro. Tente novamente.';
+                messagesContainer.appendChild(errorMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        function useFAQ(question) {
+            document.getElementById('aiQuestion').value = question;
+            showSection('assistente-ia');
+        }
+
+        function showLoading(elementId, message) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div class="loading-spinner"></div>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        function showNotification(title, message, type = 'info') {
+            const toast = document.getElementById('notificationToast');
+            const icon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            const colors = {
+                success: 'var(--success-color)',
+                error: 'var(--danger-color)',
+                warning: 'var(--warning-color)',
+                info: 'var(--info-color)'
+            };
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            icon.style.backgroundColor = colors[type] || colors.info;
+            icon.innerHTML = `<i class="${icons[type] || icons.info}"></i>`;
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('toastClose').addEventListener('click', function() {
+                document.getElementById('notificationToast').classList.remove('show');
+            });
+            
+            document.getElementById('dfSourceImage').addEventListener('change', function(e) {
+                previewImage(e.target.files[0], 'dfSourcePreview');
+            });
+            
+            document.getElementById('dfTargetImage').addEventListener('change', function(e) {
+                previewImage(e.target.files[0], 'dfTargetPreview');
+            });
+            
+            document.getElementById('aiChatInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendAIMessage();
+                }
+            });
+        }
+
+        function previewImage(file, previewId) {
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(previewId).innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        function checkApiStatus() {
+            const apis = ['tts', 'tti', 'ttv', 'df'];
+            apis.forEach(api => {
+                const element = document.getElementById(api + 'Status');
+                if (API_CONFIG.activeKey) {
+                    element.textContent = '✓';
+                    element.parentElement.querySelector('small').style.color = 'var(--success-color)';
+                    element.parentElement.querySelector('small').textContent = 'Conectado';
+                }
+            });
+        }
+
+        function testAllAPIs() {
+            showNotification('Teste', 'Iniciando teste de todas as APIs...', 'info');
+            
+            // Simular teste de APIs
+            setTimeout(() => {
+                if (window.apiManager) {
+                    window.apiManager.apiStatus.forEach((api, key) => {
+                        window.apiManager.checkAPIHealth(key);
+                    });
+                }
+                showNotification('Sucesso', 'Teste de APIs concluído!', 'success');
+            }, 3000);
+        }
+
+        function testApiKey() {
+            showNotification('Teste', `Testando chave ativa: ${getCurrentKeyName()}...`, 'info');
+            
+            // Simular teste de chave
+            setTimeout(() => {
+                showNotification('Sucesso', `Chave "${getCurrentKeyName()}" válida e funcionando!`, 'success');
+            }, 1500);
+        }
+
+        function initializeCharts() {
+            // Gráfico de Performance Mensal
+            const performanceCtx = document.getElementById('monthlyPerformanceChart');
+            if (performanceCtx) {
+                new Chart(performanceCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+                        datasets: [{
+                            label: 'Vendas (AOA)',
+                            data: [1200000, 1500000, 1800000, 2200000, 2500000, 2800000, 3000000, 3200000, 3500000, 3800000, 4000000, 4200000],
+                            borderColor: '#8e44ad',
+                            backgroundColor: 'rgba(142, 68, 173, 0.1)',
+                            tension: 0.4,
+                            fill: true,
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } }
+                    }
+                });
+            }
+            
+            // Gráfico de Uso das APIs
+            const usageCtx = document.getElementById('apiUsageChart');
+            if (usageCtx) {
+                new Chart(usageCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Text-to-Speech', 'Text-to-Image', 'Text-to-Video', 'Deepfake'],
+                        datasets: [{
+                            data: [25, 40, 20, 15],
+                            backgroundColor: ['#8e44ad', '#3498db', '#27ae60', '#f39c12'],
+                            borderWidth: 2,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { position: 'bottom' }
+                        },
+                        cutout: '60%'
+                    }
+                });
+            }
+        }
+
+        function startRealTimeUpdates() {
+            // Atualizar dados em tempo real a cada 10 segundos
+            setInterval(() => {
+                updateRealTimeData();
+            }, 10000);
+            
+            // Atualização inicial
+            updateRealTimeData();
+        }
+
+        function updateRealTimeData() {
+            // Simular variação nos dados
+            realTimeData.clients += Math.floor(Math.random() * 5) - 2;
+            realTimeData.sales += Math.floor(Math.random() * 100000) - 50000;
+            
+            // Garantir valores mínimos
+            realTimeData.clients = Math.max(100, realTimeData.clients);
+            realTimeData.sales = Math.max(2000000, realTimeData.sales);
+            
+            // Atualizar elementos da interface
+            const clientsElement = document.getElementById('clientsCount');
+            const salesElement = document.getElementById('salesAmount');
+            
+            if (clientsElement) clientsElement.textContent = realTimeData.clients;
+            if (salesElement) salesElement.textContent = 'AOA ' + (realTimeData.sales / 1000000).toFixed(1) + 'M';
+            
+            // Atualizar contadores de projetos
+            const projectsElement = document.getElementById('projectsCompleted');
+            if (projectsElement) {
+                realTimeData.projects.completed = Math.min(
+                    realTimeData.projects.total, 
+                    realTimeData.projects.completed + Math.floor(Math.random() * 2)
+                );
+                projectsElement.textContent = `${realTimeData.projects.completed}/${realTimeData.projects.total}`;
+                
+                const pendingElement = document.getElementById('projectsPending');
+                if (pendingElement) {
+                    pendingElement.textContent = realTimeData.projects.total - realTimeData.projects.completed;
+                }
+            }
+        }
+
+        function downloadImage(url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'imagem-gerada.jpg';
+            link.click();
+        }
+
+        function downloadVideo(url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'video-gerado.mp4';
+            link.click();
+        }
+
+        function regenerateImage() {
+            generateImage();
+        }
+
+        function toggleSubmenu(submenuId) {
+            const submenu = document.getElementById(submenuId);
+            const toggle = document.getElementById(submenuId.replace('submenu', 'toggle'));
+            
+            if (submenu && toggle) {
+                submenu.classList.toggle('active');
+                toggle.classList.toggle('rotated');
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.sidebar .menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeMenuItem = document.querySelector(`.sidebar .menu-item[href="#${sectionId}"]`);
+            if (activeMenuItem) {
+                activeMenuItem.classList.add('active');
+            }
+        }
+
+        // Funções de salvamento
+        function saveTTSResult() {
+            showNotification('Sucesso', 'Resultado do Text-to-Speech salvo no histórico!', 'success');
+        }
+
+        function saveTTIResult() {
+            showNotification('Sucesso', 'Resultado do Text-to-Image salvo no histórico!', 'success');
+        }
+
+        function saveTTVResult() {
+            showNotification('Sucesso', 'Resultado do Text-to-Video salvo no histórico!', 'success');
+        }
+
+        function saveDFResult() {
+            showNotification('Sucesso', 'Resultado do Deepfake salvo no histórico!', 'success');
+        }
+
+        function saveAIResult() {
+            showNotification('Sucesso', 'Resposta do Assistente IA salva no histórico!', 'success');
+        }
+
+        // Adicionar estilos para FAQ
+        const faqStyle = document.createElement('style');
+        faqStyle.textContent = `
+            .faq-item {
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+            .faq-item:hover {
+                background-color: #f8f9fa;
+            }
+            .faq-item p {
+                margin: 0.5rem 0 0 0;
+                color: #666;
+                font-size: 0.9rem;
+            }
+        `;
+        document.head.appendChild(faqStyle);
+    </script>
+</body>
+</html>

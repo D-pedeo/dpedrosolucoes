@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Completo de Modelos - D.Pedro Soluções</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #2980b9;
+            --border-radius: 10px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 0;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            transition: all var(--transition-speed);
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: #f8f9fa;
+            color: #555;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #229954;
+        }
+
+        .btn-danger {
+            background-color: var(--danger-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-info {
+            background-color: var(--info-color);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background-color: #1c6b9c;
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+            border: none;
+        }
+
+        /* Filtros e busca */
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.75rem 1rem 0.75rem 40px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #777;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        /* Layout de modelos */
+        .models-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .models-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Categorias */
+        .categories-sidebar {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            height: fit-content;
+        }
+
+        .categories-list {
+            list-style: none;
+        }
+
+        .categories-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .categories-list li:last-child {
+            border-bottom: none;
+        }
+
+        .categories-list li:hover {
+            color: var(--secondary-color);
+        }
+
+        .categories-list li.active {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        /* Modelos */
+        .models-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .model-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: transform var(--transition-speed);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .model-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .model-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .model-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .model-card:hover .model-image img {
+            transform: scale(1.05);
+        }
+
+        .model-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-new {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .badge-popular {
+            background: var(--warning-color);
+            color: white;
+        }
+
+        .badge-premium {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .model-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .model-category {
+            font-size: 0.8rem;
+            color: #777;
+            margin-bottom: 0.5rem;
+        }
+
+        .model-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            color: var(--primary-color);
+            flex-grow: 1;
+        }
+
+        .model-description {
+            color: #666;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .model-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .model-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: auto;
+        }
+
+        /* Visualização de modelo */
+        .model-view {
+            display: none;
+        }
+
+        .back-btn {
+            margin-bottom: 2rem;
+        }
+
+        .model-preview {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--box-shadow);
+        }
+
+        .model-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .model-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .detail-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.5rem;
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .tag {
+            padding: 0.3rem 0.6rem;
+            background: #f0f5ff;
+            color: var(--secondary-color);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        /* Customização de modelo */
+        .customization-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .custom-option {
+            margin-bottom: 1rem;
+        }
+
+        .custom-option label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .color-options {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.active {
+            border-color: var(--primary-color);
+        }
+
+        /* Layout de editor */
+        .editor-container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+            .editor-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Painel de controle */
+        .control-panel {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            height: fit-content;
+        }
+
+        .control-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .control-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        /* Área de edição */
+        .editor-area {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            min-height: 600px;
+        }
+
+        .editor-content {
+            min-height: 500px;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: var(--border-radius);
+        }
+
+        .editable {
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            border: 1px dashed transparent;
+            border-radius: 4px;
+            transition: all var(--transition-speed);
+            min-height: 50px;
+        }
+
+        .editable:hover {
+            border-color: #ddd;
+            background-color: #f9f9f9;
+        }
+
+        .editable:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            background-color: #f0f8ff;
+        }
+
+        /* Ações */
+        .actions-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #eee;
+        }
+
+        /* Estilos para o conteúdo editável */
+        .section-title {
+            color: var(--primary-color);
+            margin: 1.5rem 0 0.5rem 0;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+        
+        .content-area {
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-item {
+            margin-bottom: 0.5rem;
+            padding-left: 1.2rem;
+            position: relative;
+        }
+        
+        .section-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+        
+        .media-placeholder {
+            border: 2px dashed #ccc;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        
+        .media-placeholder:hover {
+            border-color: var(--secondary-color);
+            background-color: #f0f8ff;
+        }
+        
+        .media-preview {
+            margin: 1rem 0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .media-preview img, .media-preview video {
+            max-width: 100%;
+            display: block;
+        }
+        
+        .media-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .export-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+        
+        .export-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: all var(--transition-speed);
+        }
+        
+        .export-option:hover {
+            background-color: #f0f8ff;
+            border-color: var(--secondary-color);
+        }
+        
+        .export-option input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Navegação entre seções */
+        .nav-tabs {
+            border-bottom: 2px solid #eee;
+            margin-bottom: 2rem;
+        }
+
+        .nav-tabs .nav-link {
+            border: none;
+            color: #666;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: var(--secondary-color);
+            border-bottom: 3px solid var(--secondary-color);
+            background: transparent;
+        }
+
+        .tab-content {
+            min-height: 500px;
+        }
+
+        /* Assistente de IA */
+        .ai-assistant-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .ai-prompt-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .ai-response {
+            background: white;
+            color: #333;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .toast {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            min-width: 300px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger-color);
+        }
+
+        .toast.warning {
+            border-left: 4px solid var(--warning-color);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--info-color);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Preview do Modelo Finalizado */
+        .model-final-preview {
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            background: white;
+            margin-top: 1rem;
+        }
+
+        .preview-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+        }
+
+        .preview-content {
+            line-height: 1.8;
+        }
+
+        .preview-section {
+            margin-bottom: 2rem;
+        }
+
+        .preview-footer {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+
+        /* API Configuration */
+        .api-config {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .api-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .api-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Cabeçalho da página -->
+        <div class="header">
+            <div class="logo-container">
+                <a href="DPS.html">
+                    <img src="https://i.postimg.cc/fks90nbK/DPS-ICO.jpg" alt="D.Pedro Soluções" class="logo">
+                </a>
+                <h1 class="page-title">
+                    <i class="fas fa-clone"></i>
+                    Sistema Completo de Modelos
+                </h1>
+            </div>
+            <div>
+                <button class="btn btn-secondary" id="backToDashboardBtn">
+                    <i class="fas fa-arrow-left"></i> Dashboard
+                </button>
+                <button class="btn btn-primary" id="uploadBtn">
+                    <i class="fas fa-upload"></i> Enviar Modelo
+                </button>
+            </div>
+        </div>
+
+        <!-- Configuração da API -->
+        <div class="api-config">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5><i class="fas fa-cog"></i> Configuração da API</h5>
+                    <p class="mb-0">Status: 
+                        <span class="api-status disconnected" id="apiStatus">
+                            <i class="fas fa-times-circle"></i> Desconectado
+                        </span>
+                    </p>
+                </div>
+                <button class="btn btn-sm btn-outline-primary" id="configureApiBtn">
+                    <i class="fas fa-plug"></i> Configurar API
+                </button>
+            </div>
+        </div>
+
+        <!-- Navegação entre seções -->
+        <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="models-tab" data-bs-toggle="tab" data-bs-target="#models" type="button" role="tab">
+                    <i class="fas fa-clone"></i> Catálogo de Modelos
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="editor-tab" data-bs-toggle="tab" data-bs-target="#editor" type="button" role="tab">
+                    <i class="fas fa-edit"></i> Editor Avançado
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">
+                    <i class="fas fa-robot"></i> Assistente de IA
+                </button>
+            </li>
+        </ul>
+
+        <!-- Conteúdo das abas -->
+        <div class="tab-content" id="mainTabsContent">
+            <!-- Aba: Catálogo de Modelos -->
+            <div class="tab-pane fade show active" id="models" role="tabpanel">
+                <!-- Filtros e busca -->
+                <div class="card">
+                    <div class="filters-container">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchInput" placeholder="Buscar modelos...">
+                        </div>
+                        <div class="filter-group">
+                            <button class="filter-btn active" data-filter="all">Todos</button>
+                            <button class="filter-btn" data-filter="recent">Recentes</button>
+                            <button class="filter-btn" data-filter="popular">Populares</button>
+                            <button class="filter-btn" data-filter="premium">Premium</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Conteúdo principal -->
+                <div class="models-container">
+                    <!-- Sidebar de categorias -->
+                    <div class="categories-sidebar">
+                        <h3>Categorias</h3>
+                        <ul class="categories-list">
+                            <li class="active" data-category="all">Todos os modelos</li>
+                            <li data-category="documentos">Documentos</li>
+                            <li data-category="apresentacoes">Apresentações</li>
+                            <li data-category="planilhas">Planilhas</li>
+                            <li data-category="contratos">Contratos</li>
+                            <li data-category="marketing">Marketing</li>
+                            <li data-category="propostas">Propostas Comerciais</li>
+                            <li data-category="relatorios">Relatórios</li>
+                            <li data-category="emails">E-mails</li>
+                        </ul>
+
+                        <h3 style="margin-top: 2rem;">Filtrar por tags</h3>
+                        <div class="tags-container">
+                            <span class="tag">Profissional</span>
+                            <span class="tag">Moderno</span>
+                            <span class="tag">Criativo</span>
+                            <span class="tag">Minimalista</span>
+                            <span class="tag">Colorido</span>
+                        </div>
+                    </div>
+
+                    <!-- Grade de modelos -->
+                    <div class="models-grid" id="modelsList">
+                        <!-- Modelos carregados via JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Visualização de modelo -->
+                <div class="model-view" id="modelView">
+                    <button class="btn btn-secondary back-btn" id="backToListBtn">
+                        <i class="fas fa-arrow-left"></i> Voltar para a lista
+                    </button>
+                    
+                    <div class="model-preview">
+                        <div class="model-header">
+                            <div class="model-title">
+                                <h2 id="modelTitle">Nome do Modelo</h2>
+                                <span class="model-category" id="modelCategory">Categoria</span>
+                                <span class="model-code" id="modelCode">Código: </span>
+                            </div>
+                        </div>
+                        
+                        <div class="model-content">
+                            <div id="modelPreviewContent">
+                                <!-- Conteúdo de pré-visualização do modelo -->
+                                <div style="text-align: center; padding: 3rem; background: #f8f9fa; border-radius: var(--border-radius);">
+                                    <i class="fas fa-file-alt" style="font-size: 4rem; color: #ccc; margin-bottom: 1rem;"></i>
+                                    <p>Pré-visualização do modelo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="model-details">
+                        <div class="detail-section">
+                            <h3>Detalhes do Modelo</h3>
+                            <div class="detail-item">
+                                <div class="detail-label">Descrição</div>
+                                <p id="modelDescription">Descrição do modelo.</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Categoria</div>
+                                <p id="modelCategoryText">Categoria</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Tags</div>
+                                <div class="tags-container" id="modelTags">
+                                    <!-- Tags carregadas via JavaScript -->
+                                </div>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Formato</div>
+                                <p id="modelFormat">DOCX, PDF</p>
+                            </div>
+                            
+                            <div class="detail-item">
+                                <div class="detail-label">Tamanho</div>
+                                <p id="modelSize">250 KB</p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-section">
+                            <h3>Personalizar</h3>
+                            <div class="customization-panel" id="customizationPanel">
+                                <!-- Opções de personalização serão carregadas aqui -->
+                            </div>
+                            
+                            <h4>Pré-visualização Personalizada</h4>
+                            <div class="custom-preview" id="customPreview">
+                                Sua personalização aparecerá aqui...
+                            </div>
+                            
+                            <div class="model-actions" style="justify-content: center; margin-top: 1.5rem;">
+                                <button class="btn btn-success" onclick="downloadModel()">
+                                    <i class="fas fa-download"></i> Baixar Modelo Personalizado
+                                </button>
+                                <button class="btn btn-primary" onclick="useTemplate()">
+                                    <i class="fas fa-clone"></i> Usar como Template
+                                </button>
+                                <button class="btn btn-info" onclick="openInEditor()">
+                                    <i class="fas fa-edit"></i> Abrir no Editor
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Editor Avançado -->
+            <div class="tab-pane fade" id="editor" role="tabpanel">
+                <div class="editor-container">
+                    <!-- Painel de controle -->
+                    <div class="control-panel">
+                        <div class="control-section">
+                            <h3>Configurações do Modelo</h3>
+                            <div class="custom-option">
+                                <label for="modelName">Nome do Modelo</label>
+                                <input type="text" class="form-control" id="modelName" value="Relatório Anual Profissional">
+                            </div>
+                            
+                            <div class="custom-option">
+                                <label for="modelCategory">Categoria</label>
+                                <select class="form-control" id="modelCategory">
+                                    <option value="relatorios" selected>Relatórios</option>
+                                    <option value="documentos">Documentos</option>
+                                    <option value="apresentacoes">Apresentações</option>
+                                    <option value="planilhas">Planilhas</option>
+                                    <option value="contratos">Contratos</option>
+                                    <option value="marketing">Marketing</option>
+                                    <option value="propostas">Propostas Comerciais</option>
+                                    <option value="emails">E-mails</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="control-section">
+                            <h3>Personalizar Cores</h3>
+                            <div class="custom-option">
+                                <label>Cor Principal</label>
+                                <div class="color-options">
+                                    <div class="color-option active" style="background-color: #3498db;" data-color="#3498db"></div>
+                                    <div class="color-option" style="background-color: #2c3e50;" data-color="#2c3e50"></div>
+                                    <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+                                    <div class="color-option" style="background-color: #2ecc71;" data-color="#2ecc71"></div>
+                                    <div class="color-option" style="background-color: #9b59b6;" data-color="#9b59b6"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="custom-option">
+                                <label for="fontSelect">Fonte</label>
+                                <select class="form-control" id="fontSelect">
+                                    <option value="Arial">Arial</option>
+                                    <option value="Helvetica">Helvetica</option>
+                                    <option value="Times New Roman" selected>Times New Roman</option>
+                                    <option value="Georgia">Georgia</option>
+                                    <option value="Courier New">Courier New</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="control-section">
+                            <h3>Gerenciar Seções</h3>
+                            <div class="custom-option">
+                                <div id="sectionsList">
+                                    <!-- Seções serão adicionadas dinamicamente -->
+                                </div>
+                                <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="addNewSection()">
+                                    <i class="fas fa-plus"></i> Adicionar Seção
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="control-section">
+                            <h3>Adicionar Mídia</h3>
+                            <div class="custom-option">
+                                <button class="btn btn-info" style="width: 100%;" onclick="addImage()">
+                                    <i class="fas fa-image"></i> Adicionar Imagem
+                                </button>
+                                <button class="btn btn-info" style="width: 100%; margin-top: 10px;" onclick="addVideo()">
+                                    <i class="fas fa-video"></i> Adicionar Vídeo
+                                </button>
+                                <input type="file" id="mediaUpload" accept="image/*,video/*" style="display: none;" onchange="handleMediaUpload(this.files)">
+                            </div>
+                        </div>
+                        
+                        <div class="control-section">
+                            <h3>Exportar Modelo</h3>
+                            <div class="export-options">
+                                <label class="export-option">
+                                    <input type="checkbox" id="exportHTML" checked>
+                                    <span>HTML</span>
+                                </label>
+                                <label class="export-option">
+                                    <input type="checkbox" id="exportCSS" checked>
+                                    <span>CSS</span>
+                                </label>
+                                <label class="export-option">
+                                    <input type="checkbox" id="exportJS" checked>
+                                    <span>JavaScript</span>
+                                </label>
+                            </div>
+                            <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="exportProject()">
+                                <i class="fas fa-download"></i> Exportar Projeto
+                            </button>
+                            <button class="btn btn-primary" style="width: 100%; margin-top: 10px;" onclick="useAsTemplate()">
+                                <i class="fas fa-clone"></i> Usar como Template
+                            </button>
+                            <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="saveToCatalog()">
+                                <i class="fas fa-save"></i> Salvar no Catálogo
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Área de edição -->
+                    <div class="editor-area">
+                        <h2>Editando: <span id="currentModelName">Relatório Anual Profissional</span></h2>
+                        <p class="text-muted">Clique em qualquer texto abaixo para editar o conteúdo diretamente.</p>
+                        
+                        <div class="editor-content" id="editorContent">
+                            <!-- Conteúdo editável -->
+                            <div class="content-area">
+                                <h3 class="section-title" style="color: #3498db;">Introdução</h3>
+                                <div class="editable" contenteditable="true" id="introContent">
+                                    Este é um exemplo de como ficará seu Relatório personalizado. O conteúdo real será preenchido de acordo com suas necessidades.
+                                </div>
+                            </div>
+                            
+                            <div class="content-area">
+                                <h3 class="section-title" style="color: #3498db;">Seções Principais</h3>
+                                <ul id="sectionsContent">
+                                    <li class="section-item editable" contenteditable="true">Seção personalizável 1</li>
+                                    <li class="section-item editable" contenteditable="true">Seção personalizável 2</li>
+                                    <li class="section-item editable" contenteditable="true">Seção personalizável 3</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="content-area">
+                                <h3 class="section-title" style="color: #3498db;">Conclusão</h3>
+                                <div class="editable" contenteditable="true" id="conclusionContent">
+                                    Esta é a seção de conclusão do seu relatório. Você pode editar livremente este conteúdo.
+                                </div>
+                            </div>
+                            
+                            <div class="content-area">
+                                <h3 class="section-title" style="color: #3498db;">Mídia</h3>
+                                <div class="media-placeholder" onclick="document.getElementById('mediaUpload').click()">
+                                    <i class="fas fa-plus-circle" style="font-size: 2rem; color: #ccc; margin-bottom: 1rem;"></i>
+                                    <p>Clique para adicionar uma imagem ou vídeo</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="actions-container">
+                            <button class="btn btn-secondary" onclick="resetEditor()">
+                                <i class="fas fa-undo"></i> Restaurar Original
+                            </button>
+                            <button class="btn btn-primary" onclick="previewModel()">
+                                <i class="fas fa-eye"></i> Visualizar
+                            </button>
+                            <button class="btn btn-success" onclick="saveModel()">
+                                <i class="fas fa-save"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aba: Assistente de IA -->
+            <div class="tab-pane fade" id="ai" role="tabpanel">
+                <div class="ai-assistant-container">
+                    <h2><i class="fas fa-robot"></i> Assistente de IA para Modelos</h2>
+                    <p>Use inteligência artificial para gerar, melhorar ou analisar seus modelos de documentos.</p>
+                    
+                    <div class="ai-prompt-box">
+                        <div class="form-group">
+                            <label for="aiPrompt" class="text-white">Descreva o que você precisa:</label>
+                            <textarea class="form-control" id="aiPrompt" rows="3" placeholder="Ex: Preciso de um modelo de relatório anual para uma empresa de tecnologia..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="aiTone" class="text-white">Tom do conteúdo:</label>
+                            <select class="form-control" id="aiTone">
+                                <option value="formal">Formal</option>
+                                <option value="informal">Informal</option>
+                                <option value="persuasive">Persuasivo</option>
+                                <option value="technical">Técnico</option>
+                                <option value="creative">Criativo</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="aiLength" class="text-white">Extensão:</label>
+                            <select class="form-control" id="aiLength">
+                                <option value="short">Curto (1-2 parágrafos)</option>
+                                <option value="medium" selected>Médio (3-5 parágrafos)</option>
+                                <option value="long">Longo (6+ parágrafos)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-light" onclick="generateWithAI()">
+                            <i class="fas fa-magic"></i> Gerar com IA
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="ai-response" id="aiResponse">
+                    <h4>Resposta da IA:</h4>
+                    <p id="aiResponseText">Sua resposta da IA aparecerá aqui...</p>
+                </div>
+                
+                <div class="card">
+                    <h3>Modelos Sugeridos pela IA</h3>
+                    <div class="models-grid" id="aiSuggestedModels">
+                        <!-- Modelos sugeridos pela IA serão carregados aqui -->
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <h3>Análise de Modelos Existentes</h3>
+                    <p>Faça upload de um modelo existente para receber sugestões de melhoria.</p>
+                    <div class="form-group">
+                        <label for="modelUpload">Selecionar arquivo:</label>
+                        <input type="file" class="form-control" id="modelUpload" accept=".docx,.pdf,.html">
+                    </div>
+                    <button class="btn btn-primary" onclick="analyzeModel()">
+                        <i class="fas fa-chart-line"></i> Analisar Modelo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para upload de modelo -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enviar Novo Modelo</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="modelNameInput">Nome do Modelo</label>
+                        <input type="text" class="form-control" id="modelNameInput" placeholder="Digite o nome do modelo">
+                    </div>
+                    <div class="form-group">
+                        <label for="modelCategoryInput">Categoria</label>
+                        <select class="form-control" id="modelCategoryInput">
+                            <option value="documentos">Documentos</option>
+                            <option value="apresentacoes">Apresentações</option>
+                            <option value="planilhas">Planilhas</option>
+                            <option value="contratos">Contratos</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="propostas">Propostas Comerciais</option>
+                            <option value="relatorios">Relatórios</option>
+                            <option value="emails">E-mails</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelDescriptionInput">Descrição</label>
+                        <textarea class="form-control" id="modelDescriptionInput" rows="3" placeholder="Descreva o modelo"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="modelTagsInput">Tags (separadas por vírgula)</label>
+                        <input type="text" class="form-control" id="modelTagsInput" placeholder="Ex: profissional, moderno, criativo">
+                    </div>
+                    <div class="form-group">
+                        <label for="modelFileInput">Arquivo do Modelo</label>
+                        <input type="file" class="form-control" id="modelFileInput" accept=".docx,.pdf,.html,.css,.js">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="uploadModel()">Enviar Modelo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para configuração da API -->
+    <div class="modal fade" id="apiConfigModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Configuração da API</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="apiKeyInput">Chave da API OpenAI</label>
+                        <input type="password" class="form-control" id="apiKeyInput" placeholder="Digite sua chave da API">
+                        <small class="form-text text-muted">Sua chave é armazenada localmente e nunca é enviada para nossos servidores.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="apiEndpointInput">Endpoint da API</label>
+                        <input type="text" class="form-control" id="apiEndpointInput" value="https://api.openai.com/v1" placeholder="URL do endpoint da API">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="saveApiConfig()">Salvar Configuração</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para visualização do modelo finalizado -->
+    <div class="modal fade" id="finalPreviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Visualização do Modelo Finalizado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="model-final-preview" id="finalPreviewContent">
+                        <!-- Conteúdo do modelo finalizado será carregado aqui -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-success" onclick="downloadFinalModel()">
+                        <i class="fas fa-download"></i> Baixar Modelo
+                    </button>
+                    <button type="button" class="btn btn-primary" onclick="printFinalModel()">
+                        <i class="fas fa-print"></i> Imprimir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // =============================================
+        // CONFIGURAÇÃO E ESTADO DA APLICAÇÃO
+        // =============================================
+
+        const APP_CONFIG = {
+            apiKey: '',
+            apiEndpoint: 'https://api.openai.com/v1',
+            isApiConfigured: false,
+            currentModel: null,
+            currentFilter: 'all',
+            currentCategory: 'all',
+            editorContent: {
+                title: 'Relatório Anual Profissional',
+                category: 'relatorios',
+                sections: [],
+                media: [],
+                style: {
+                    primaryColor: '#3498db',
+                    font: 'Times New Roman'
+                }
+            }
+        };
+
+        // =============================================
+        // DADOS DE EXEMPLO PARA MODELOS
+        // =============================================
+
+        const SAMPLE_MODELS = [
+            {
+                id: 1,
+                name: "Relatório Anual Profissional",
+                category: "relatorios",
+                description: "Modelo completo para relatórios anuais empresariais com gráficos, tabelas e análise de desempenho.",
+                tags: ["profissional", "moderno", "gráficos", "análise"],
+                format: "DOCX, PDF",
+                size: "350 KB",
+                code: "MOD-001",
+                badge: "premium",
+                color: "#3498db",
+                downloads: 1247,
+                rating: 4.8,
+                created: "2023-06-15",
+                content: {
+                    sections: [
+                        {
+                            title: "Introdução",
+                            content: "Este relatório apresenta uma análise completa do desempenho anual da empresa, destacando conquistas, desafios e oportunidades de crescimento."
+                        },
+                        {
+                            title: "Metodologia",
+                            content: "Os dados foram coletados através de sistemas internos, pesquisas de satisfação e indicadores de desempenho padronizados."
+                        },
+                        {
+                            title: "Resultados",
+                            content: "O ano foi marcado por um crescimento de 15% na receita e expansão para 2 novos mercados internacionais."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 2,
+                name: "Apresentação Corporativa",
+                category: "apresentacoes",
+                description: "Slides modernos para apresentações corporativas com design responsivo e elementos visuais impactantes.",
+                tags: ["corporativo", "moderno", "slides", "apresentação"],
+                format: "PPTX, PDF",
+                size: "2.1 MB",
+                code: "MOD-002",
+                badge: "popular",
+                color: "#2c3e50",
+                downloads: 2876,
+                rating: 4.9,
+                created: "2023-07-22",
+                content: {
+                    sections: [
+                        {
+                            title: "Visão Geral",
+                            content: "Apresentação da empresa, missão, visão e valores corporativos."
+                        },
+                        {
+                            title: "Portfólio",
+                            content: "Demonstração dos principais produtos e serviços oferecidos."
+                        },
+                        {
+                            title: "Resultados",
+                            content: "Métricas de desempenho e cases de sucesso."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 3,
+                name: "Contrato de Prestação de Serviços",
+                category: "contratos",
+                description: "Modelo de contrato profissional para prestação de serviços diversos com cláusulas padrão e personalizáveis.",
+                tags: ["legal", "profissional", "contrato", "serviços"],
+                format: "DOCX, PDF",
+                size: "180 KB",
+                code: "MOD-003",
+                badge: "",
+                color: "#e74c3c",
+                downloads: 1892,
+                rating: 4.7,
+                created: "2023-05-10",
+                content: {
+                    sections: [
+                        {
+                            title: "Partes Contratantes",
+                            content: "Identificação completa do contratante e contratado."
+                        },
+                        {
+                            title: "Objeto do Contrato",
+                            content: "Descrição detalhada dos serviços a serem prestados."
+                        },
+                        {
+                            title: "Prazo e Valores",
+                            content: "Cronograma de execução e valores contratuais."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 4,
+                name: "Proposta Comercial",
+                category: "propostas",
+                description: "Modelo de proposta comercial com seções para serviços, preços, prazos e termos de pagamento.",
+                tags: ["comercial", "vendas", "proposta", "negócios"],
+                format: "DOCX, PDF",
+                size: "220 KB",
+                code: "MOD-004",
+                badge: "new",
+                color: "#2ecc71",
+                downloads: 2314,
+                rating: 4.8,
+                created: "2023-08-12",
+                content: {
+                    sections: [
+                        {
+                            title: "Solução Proposta",
+                            content: "Descrição da solução customizada para o cliente."
+                        },
+                        {
+                            title: "Investimento",
+                            content: "Detalhamento de valores, formas de pagamento e condições."
+                        },
+                        {
+                            title: "Benefícios",
+                            content: "Vantagens e diferenciais competitivos da proposta."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 5,
+                name: "Planilha de Orçamento",
+                category: "planilhas",
+                description: "Planilha completa para controle de orçamento pessoal e empresarial com gráficos e relatórios automáticos.",
+                tags: ["finanças", "orçamento", "planilha", "controle"],
+                format: "XLSX, PDF",
+                size: "450 KB",
+                code: "MOD-005",
+                badge: "popular",
+                color: "#9b59b6",
+                downloads: 3452,
+                rating: 4.6,
+                created: "2023-04-05",
+                content: {
+                    sections: [
+                        {
+                            title: "Receitas",
+                            content: "Controle de todas as fontes de receita."
+                        },
+                        {
+                            title: "Despesas",
+                            content: "Categorização e acompanhamento de despesas."
+                        },
+                        {
+                            title: "Resultado",
+                            content: "Análise do saldo e projeções futuras."
+                        }
+                    ]
+                }
+            },
+            {
+                id: 6,
+                name: "Newsletter de Marketing",
+                category: "marketing",
+                description: "Modelo de newsletter para campanhas de email marketing responsivo com alta taxa de conversão.",
+                tags: ["marketing", "email", "newsletter", "conversão"],
+                format: "HTML, CSS",
+                size: "120 KB",
+                code: "MOD-006",
+                badge: "",
+                color: "#f39c12",
+                downloads: 1765,
+                rating: 4.5,
+                created: "2023-07-30",
+                content: {
+                    sections: [
+                        {
+                            title: "Destaque Principal",
+                            content: "Chamada para a oferta ou conteúdo mais importante."
+                        },
+                        {
+                            title: "Conteúdo Secundário",
+                            content: "Informações complementares e de apoio."
+                        },
+                        {
+                            title: "Call to Action",
+                            content: "Incentivo claro para a ação desejada."
+                        }
+                    ]
+                }
+            }
+        ];
+
+        // =============================================
+        // INICIALIZAÇÃO DA APLICAÇÃO
+        // =============================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+        });
+
+        function initializeApp() {
+            loadApiConfig();
+            loadModels();
+            setupEventListeners();
+            updateUIState();
+            showToast('Sistema de Modelos carregado com sucesso!', 'success');
+        }
+
+        // =============================================
+        // CONFIGURAÇÃO DA API
+        // =============================================
+
+        function loadApiConfig() {
+            const savedConfig = localStorage.getItem('apiConfig');
+            if (savedConfig) {
+                const config = JSON.parse(savedConfig);
+                APP_CONFIG.apiKey = config.apiKey;
+                APP_CONFIG.apiEndpoint = config.apiEndpoint;
+                APP_CONFIG.isApiConfigured = true;
+                updateApiStatus(true);
+            }
+        }
+
+        function saveApiConfig() {
+            const apiKey = document.getElementById('apiKeyInput').value.trim();
+            const apiEndpoint = document.getElementById('apiEndpointInput').value.trim();
+
+            if (!apiKey) {
+                showToast('Por favor, digite uma chave da API válida.', 'warning');
+                return;
+            }
+
+            APP_CONFIG.apiKey = apiKey;
+            APP_CONFIG.apiEndpoint = apiEndpoint;
+            APP_CONFIG.isApiConfigured = true;
+
+            const config = {
+                apiKey: apiKey,
+                apiEndpoint: apiEndpoint
+            };
+
+            localStorage.setItem('apiConfig', JSON.stringify(config));
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('apiConfigModal'));
+            modal.hide();
+            
+            updateApiStatus(true);
+            showToast('Configuração da API salva com sucesso!', 'success');
+        }
+
+        function updateApiStatus(connected) {
+            const statusElement = document.getElementById('apiStatus');
+            if (connected) {
+                statusElement.className = 'api-status connected';
+                statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Conectado';
+            } else {
+                statusElement.className = 'api-status disconnected';
+                statusElement.innerHTML = '<i class="fas fa-times-circle"></i> Desconectado';
+            }
+        }
+
+        // =============================================
+        // GERENCIAMENTO DE MODELOS
+        // =============================================
+
+        function loadModels() {
+            const modelsList = document.getElementById('modelsList');
+            modelsList.innerHTML = '';
+
+            SAMPLE_MODELS.forEach(model => {
+                const modelCard = createModelCard(model);
+                modelsList.appendChild(modelCard);
+            });
+        }
+
+        function createModelCard(model) {
+            const modelCard = document.createElement('div');
+            modelCard.className = 'model-card';
+            modelCard.setAttribute('data-id', model.id);
+            modelCard.setAttribute('data-category', model.category);
+            modelCard.setAttribute('data-tags', model.tags.join(','));
+
+            let badgeHTML = '';
+            if (model.badge) {
+                badgeHTML = `<span class="model-badge badge-${model.badge}">${model.badge.toUpperCase()}</span>`;
+            }
+
+            modelCard.innerHTML = `
+                <div class="model-image">
+                    <div style="width: 100%; height: 100%; background: ${model.color}; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-file-alt" style="font-size: 3rem; color: white;"></i>
+                    </div>
+                    ${badgeHTML}
+                </div>
+                <div class="model-content">
+                    <div class="model-category">${getCategoryName(model.category)}</div>
+                    <h3 class="model-title">${model.name}</h3>
+                    <p class="model-description">${model.description}</p>
+                    <div class="model-meta">
+                        <span><i class="fas fa-download"></i> ${model.downloads.toLocaleString()}</span>
+                        <span><i class="fas fa-star"></i> ${model.rating}</span>
+                        <span><i class="fas fa-file"></i> ${model.format}</span>
+                    </div>
+                    <div class="model-actions">
+                        <button class="btn btn-primary" onclick="viewModel(${model.id})">
+                            <i class="fas fa-eye"></i> Visualizar
+                        </button>
+                        <button class="btn btn-secondary" onclick="useModel(${model.id})">
+                            <i class="fas fa-clone"></i> Usar
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            return modelCard;
+        }
+
+        function viewModel(modelId) {
+            const model = SAMPLE_MODELS.find(m => m.id === modelId);
+            if (!model) return;
+
+            APP_CONFIG.currentModel = model;
+            
+            document.getElementById('modelsList').parentElement.style.display = 'none';
+            document.getElementById('modelView').style.display = 'block';
+            
+            // Preencher informações do modelo
+            document.getElementById('modelTitle').textContent = model.name;
+            document.getElementById('modelCategory').textContent = getCategoryName(model.category);
+            document.getElementById('modelCode').textContent = `Código: ${model.code}`;
+            document.getElementById('modelDescription').textContent = model.description;
+            document.getElementById('modelCategoryText').textContent = getCategoryName(model.category);
+            document.getElementById('modelFormat').textContent = model.format;
+            document.getElementById('modelSize').textContent = model.size;
+            
+            // Preencher tags
+            const tagsContainer = document.getElementById('modelTags');
+            tagsContainer.innerHTML = '';
+            model.tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.textContent = tag;
+                tagsContainer.appendChild(tagElement);
+            });
+            
+            // Atualizar painel de personalização
+            updateCustomizationPanel();
+            
+            // Atualizar pré-visualização
+            updatePreview();
+            
+            showToast(`Visualizando modelo: ${model.name}`, 'info');
+        }
+
+        function useModel(modelId) {
+            const model = SAMPLE_MODELS.find(m => m.id === modelId);
+            if (!model) return;
+
+            // Mudar para a aba do editor
+            const editorTab = document.getElementById('editor-tab');
+            const editorTabInstance = new bootstrap.Tab(editorTab);
+            editorTabInstance.show();
+            
+            // Atualizar informações no editor
+            document.getElementById('modelName').value = model.name;
+            document.getElementById('modelCategory').value = model.category;
+            document.getElementById('currentModelName').textContent = model.name;
+            
+            // Carregar conteúdo do modelo no editor
+            loadModelIntoEditor(model);
+            
+            showToast(`Modelo "${model.name}" carregado no editor`, 'success');
+        }
+
+        function loadModelIntoEditor(model) {
+            // Limpar editor atual
+            document.getElementById('introContent').innerHTML = '';
+            document.getElementById('conclusionContent').innerHTML = '';
+            document.getElementById('sectionsContent').innerHTML = '';
+            
+            // Carregar seções do modelo
+            if (model.content && model.content.sections) {
+                model.content.sections.forEach((section, index) => {
+                    if (index === 0) {
+                        // Primeira seção vai para introdução
+                        document.getElementById('introContent').innerHTML = section.content;
+                    } else if (index === model.content.sections.length - 1) {
+                        // Última seção vai para conclusão
+                        document.getElementById('conclusionContent').innerHTML = section.content;
+                    } else {
+                        // Demais seções vão para a lista
+                        const sectionItem = document.createElement('li');
+                        sectionItem.className = 'section-item editable';
+                        sectionItem.contentEditable = true;
+                        sectionItem.textContent = section.content;
+                        document.getElementById('sectionsContent').appendChild(sectionItem);
+                    }
+                });
+            }
+            
+            // Atualizar estado do editor
+            APP_CONFIG.editorContent.title = model.name;
+            APP_CONFIG.editorContent.category = model.category;
+        }
+
+        // =============================================
+        // EDITOR AVANÇADO
+        // =============================================
+
+        function addNewSection() {
+            const sectionsList = document.getElementById('sectionsList');
+            const sectionId = 'section-' + Date.now();
+            
+            const sectionItem = document.createElement('div');
+            sectionItem.className = 'section-item';
+            sectionItem.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <input type="text" class="form-control" value="Nova Seção" style="flex: 1;">
+                    <button class="btn btn-danger" onclick="this.parentElement.parentElement.remove()">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            
+            sectionsList.appendChild(sectionItem);
+            
+            // Adicionar também ao conteúdo editável
+            const sectionsContent = document.getElementById('sectionsContent');
+            const newSection = document.createElement('li');
+            newSection.className = 'section-item editable';
+            newSection.contentEditable = true;
+            newSection.textContent = 'Nova seção personalizável';
+            sectionsContent.appendChild(newSection);
+            
+            showToast('Nova seção adicionada', 'info');
+        }
+
+        function handleMediaUpload(files) {
+            if (files.length > 0) {
+                const file = files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const mediaContainer = document.querySelector('.media-placeholder').parentNode;
+                    const mediaElement = document.createElement('div');
+                    mediaElement.className = 'media-preview';
+                    
+                    if (file.type.startsWith('image/')) {
+                        mediaElement.innerHTML = `
+                            <img src="${e.target.result}" alt="Uploaded media" style="max-width: 100%; border-radius: var(--border-radius);">
+                            <div class="media-actions">
+                                <button class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    } else if (file.type.startsWith('video/')) {
+                        mediaElement.innerHTML = `
+                            <video controls style="width: 100%; border-radius: var(--border-radius);">
+                                <source src="${e.target.result}" type="${file.type}">
+                                Seu navegador não suporta o elemento de vídeo.
+                            </video>
+                            <div class="media-actions">
+                                <button class="btn btn-danger btn-sm" onclick="this.parentElement.parentElement.remove()">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        `;
+                    }
+                    
+                    mediaContainer.insertBefore(mediaElement, document.querySelector('.media-placeholder'));
+                    showToast('Mídia adicionada com sucesso', 'success');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function previewModel() {
+            if (!APP_CONFIG.isApiConfigured) {
+                showToast('Configure a API primeiro para usar a visualização avançada.', 'warning');
+                return;
+            }
+
+            showToast('Gerando visualização do modelo...', 'info');
+            
+            // Simular geração de visualização com IA
+            setTimeout(() => {
+                const finalPreviewContent = generateFinalPreview();
+                document.getElementById('finalPreviewContent').innerHTML = finalPreviewContent;
+                
+                const finalPreviewModal = new bootstrap.Modal(document.getElementById('finalPreviewModal'));
+                finalPreviewModal.show();
+                
+                showToast('Visualização gerada com sucesso!', 'success');
+            }, 2000);
+        }
+
+        function generateFinalPreview() {
+            const title = document.getElementById('modelName').value;
+            const introContent = document.getElementById('introContent').innerHTML;
+            const conclusionContent = document.getElementById('conclusionContent').innerHTML;
+            const sections = Array.from(document.querySelectorAll('#sectionsContent .editable'))
+                .map(item => item.innerHTML);
+            
+            const colorOption = document.querySelector('.control-panel .color-option.active');
+            const primaryColor = colorOption ? colorOption.getAttribute('data-color') : '#3498db';
+            const font = document.getElementById('fontSelect').value;
+
+            return `
+                <div class="preview-header" style="border-bottom-color: ${primaryColor}; font-family: ${font};">
+                    <h1 style="color: ${primaryColor};">${title}</h1>
+                    <p class="text-muted">Modelo gerado em ${new Date().toLocaleDateString('pt-BR')}</p>
+                </div>
+                
+                <div class="preview-content" style="font-family: ${font};">
+                    <div class="preview-section">
+                        <h3 style="color: ${primaryColor};">Introdução</h3>
+                        <div>${introContent}</div>
+                    </div>
+                    
+                    ${sections.map((section, index) => `
+                        <div class="preview-section">
+                            <h3 style="color: ${primaryColor};">Seção ${index + 1}</h3>
+                            <div>${section}</div>
+                        </div>
+                    `).join('')}
+                    
+                    <div class="preview-section">
+                        <h3 style="color: ${primaryColor};">Conclusão</h3>
+                        <div>${conclusionContent}</div>
+                    </div>
+                </div>
+                
+                <div class="preview-footer" style="font-family: ${font};">
+                    <p>Documento gerado pelo Sistema de Modelos D.Pedro Soluções</p>
+                </div>
+            `;
+        }
+
+        // =============================================
+        // ASSISTENTE DE IA
+        // =============================================
+
+        async function generateWithAI() {
+            if (!APP_CONFIG.isApiConfigured) {
+                showToast('Configure a API primeiro para usar o assistente de IA.', 'warning');
+                return;
+            }
+
+            const prompt = document.getElementById('aiPrompt').value;
+            const tone = document.getElementById('aiTone').value;
+            const length = document.getElementById('aiLength').value;
+
+            if (!prompt.trim()) {
+                showToast('Por favor, descreva o que você precisa', 'warning');
+                return;
+            }
+
+            showToast('Gerando conteúdo com IA...', 'info');
+
+            try {
+                // Simulação de chamada à API OpenAI
+                const response = await simulateOpenAICall(prompt, tone, length);
+                document.getElementById('aiResponseText').innerHTML = response;
+                showToast('Conteúdo gerado com sucesso!', 'success');
+                
+                // Sugerir modelos baseados na resposta
+                suggestModelsBasedOnAIResponse(response);
+            } catch (error) {
+                showToast(`Erro na geração: ${error.message}`, 'error');
+            }
+        }
+
+        async function simulateOpenAICall(prompt, tone, length) {
+            // Simulação de chamada à API - em produção, substituir por chamada real
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    const responses = {
+                        formal: `
+                            <h5>Modelo Formal Gerado</h5>
+                            <p>Com base na sua solicitação "${prompt}", apresentamos um modelo estruturado com as seguintes características:</p>
+                            <ul>
+                                <li><strong>Linguagem técnica e precisa</strong></li>
+                                <li><strong>Estrutura lógica e hierárquica</strong></li>
+                                <li><strong>Referências a normas e padrões</strong></li>
+                                <li><strong>Objetividade e clareza</strong></li>
+                            </ul>
+                            <p>Recomendamos a inclusão de dados quantitativos e citações de fontes confiáveis para maior credibilidade.</p>
+                        `,
+                        informal: `
+                            <h5>Modelo Informal Gerado</h5>
+                            <p>Para "${prompt}", desenvolvemos uma abordagem mais descontraída:</p>
+                            <ul>
+                                <li><strong>Linguagem acessível e direta</strong></li>
+                                <li><strong>Tom conversacional</strong></li>
+                                <li><strong>Exemplos do cotidiano</strong></li>
+                                <li><strong>Elementos visuais atrativos</strong></li>
+                            </ul>
+                            <p>Esta abordagem é ideal para engajar públicos mais jovens ou contextos menos formais.</p>
+                        `,
+                        persuasive: `
+                            <h5>Modelo Persuasivo Gerado</h5>
+                            <p>Para persuadir sobre "${promote}", sugerimos:</p>
+                            <ul>
+                                <li><strong>Foco em benefícios e soluções</strong></li>
+                                <li><strong>Dados estatísticos impactantes</strong></li>
+                                <li><strong>Testemunhos e cases de sucesso</strong></li>
+                                <li><strong>Chamadas para ação claras</strong></li>
+                            </ul>
+                            <p>A estrutura problema-solução funciona particularmente bem neste contexto.</p>
+                        `,
+                        technical: `
+                            <h5>Modelo Técnico Gerado</h5>
+                            <p>Para abordagem técnica sobre "${prompt}", recomendamos:</p>
+                            <ul>
+                                <li><strong>Especificações detalhadas</strong></li>
+                                <li><strong>Dados quantitativos precisos</strong></li>
+                                <li><strong>Referências a normas técnicas</strong></li>
+                                <li><strong>Glossário de termos especializados</strong></li>
+                            </ul>
+                            <p>Inclua gráficos, tabelas e diagramas para melhor compreensão dos dados técnicos.</p>
+                        `,
+                        creative: `
+                            <h5>Modelo Criativo Gerado</h5>
+                            <p>Para uma abordagem criativa sobre "${prompt}", desenvolvemos:</p>
+                            <ul>
+                                <li><strong>Metáforas e analogias inovadoras</strong></li>
+                                <li><strong>Estrutura narrativa envolvente</strong></li>
+                                <li><strong>Elementos visuais surpreendentes</strong></li>
+                                <li><strong>Linguagem poética e inspiradora</strong></li>
+                            </ul>
+                            <p>Esta abordagem é ideal para conteúdos artísticos, de marketing ou educacionais inovadores.</p>
+                        `
+                    };
+
+                    resolve(responses[tone] || responses.formal);
+                }, 2000);
+            });
+        }
+
+        function suggestModelsBasedOnAIResponse(response) {
+            const aiSuggestedModels = document.getElementById('aiSuggestedModels');
+            aiSuggestedModels.innerHTML = '';
+
+            // Filtrar modelos relevantes baseados na resposta da IA
+            const relevantModels = SAMPLE_MODELS.filter(model => 
+                response.toLowerCase().includes(model.category) || 
+                model.tags.some(tag => response.toLowerCase().includes(tag))
+            ).slice(0, 3);
+
+            if (relevantModels.length === 0) {
+                aiSuggestedModels.innerHTML = '<p class="text-muted">Nenhum modelo sugerido encontrado.</p>';
+                return;
+            }
+
+            relevantModels.forEach(model => {
+                const modelCard = createModelCard(model);
+                aiSuggestedModels.appendChild(modelCard);
+            });
+        }
+
+        // =============================================
+        // FUNÇÕES UTILITÁRIAS
+        // =============================================
+
+        function setupEventListeners() {
+            // Filtros
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    APP_CONFIG.currentFilter = this.getAttribute('data-filter');
+                    filterModels();
+                });
+            });
+
+            // Categorias
+            document.querySelectorAll('.categories-list li').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelectorAll('.categories-list li').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    APP_CONFIG.currentCategory = this.getAttribute('data-category');
+                    filterModels();
+                });
+            });
+
+            // Busca
+            document.getElementById('searchInput').addEventListener('input', filterModels);
+
+            // Botão de voltar
+            document.getElementById('backToListBtn').addEventListener('click', function() {
+                document.getElementById('modelsList').parentElement.style.display = 'grid';
+                document.getElementById('modelView').style.display = 'none';
+            });
+
+            // Botão de upload
+            document.getElementById('uploadBtn').addEventListener('click', function() {
+                const uploadModal = new bootstrap.Modal(document.getElementById('uploadModal'));
+                uploadModal.show();
+            });
+
+            // Botão de configuração da API
+            document.getElementById('configureApiBtn').addEventListener('click', function() {
+                const apiConfigModal = new bootstrap.Modal(document.getElementById('apiConfigModal'));
+                apiConfigModal.show();
+            });
+
+            // Botão de voltar ao dashboard
+            document.getElementById('backToDashboardBtn').addEventListener('click', function() {
+                window.location.href = 'DPS.html';
+            });
+
+            // Opções de cor
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    updatePreviewColor(this.getAttribute('data-color'));
+                });
+            });
+
+            // Atualizações em tempo real no editor
+            document.getElementById('modelName').addEventListener('input', function() {
+                document.getElementById('currentModelName').textContent = this.value;
+            });
+
+            document.getElementById('fontSelect').addEventListener('change', function() {
+                updatePreviewFont(this.value);
+            });
+        }
+
+        function filterModels() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const models = document.querySelectorAll('.model-card');
+
+            models.forEach(model => {
+                const modelName = model.querySelector('.model-title').textContent.toLowerCase();
+                const modelCategory = model.getAttribute('data-category');
+                const modelTags = model.getAttribute('data-tags').toLowerCase();
+                
+                const matchesSearch = modelName.includes(searchTerm) || modelTags.includes(searchTerm);
+                const matchesCategory = APP_CONFIG.currentCategory === 'all' || modelCategory === APP_CONFIG.currentCategory;
+                
+                if (matchesSearch && matchesCategory) {
+                    model.style.display = 'block';
+                } else {
+                    model.style.display = 'none';
+                }
+            });
+        }
+
+        function updateCustomizationPanel() {
+            if (!APP_CONFIG.currentModel) return;
+            
+            const panel = document.getElementById('customizationPanel');
+            panel.innerHTML = `
+                <div class="custom-option">
+                    <label for="customTitle">Título</label>
+                    <input type="text" class="form-control" id="customTitle" value="${APP_CONFIG.currentModel.name}">
+                </div>
+                <div class="custom-option">
+                    <label for="customSubtitle">Subtítulo</label>
+                    <input type="text" class="form-control" id="customSubtitle" value="Personalize conforme necessário">
+                </div>
+                <div class="custom-option">
+                    <label>Cor do Tema</label>
+                    <div class="color-options">
+                        <div class="color-option active" style="background-color: #3498db;" data-color="#3498db"></div>
+                        <div class="color-option" style="background-color: #2c3e50;" data-color="#2c3e50"></div>
+                        <div class="color-option" style="background-color: #e74c3c;" data-color="#e74c3c"></div>
+                        <div class="color-option" style="background-color: #2ecc71;" data-color="#2ecc71"></div>
+                        <div class="color-option" style="background-color: #9b59b6;" data-color="#9b59b6"></div>
+                    </div>
+                </div>
+                <div class="custom-option">
+                    <label for="customLogo">Logo (URL)</label>
+                    <input type="text" class="form-control" id="customLogo" placeholder="https://exemplo.com/logo.png">
+                </div>
+            `;
+            
+            // Reaplicar event listeners para as opções de cor
+            document.querySelectorAll('#customizationPanel .color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('#customizationPanel .color-option').forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    updatePreview();
+                });
+            });
+            
+            // Adicionar event listeners para os campos de entrada
+            document.getElementById('customTitle').addEventListener('input', updatePreview);
+            document.getElementById('customSubtitle').addEventListener('input', updatePreview);
+            document.getElementById('customLogo').addEventListener('input', updatePreview);
+        }
+
+        function updatePreview() {
+            if (!APP_CONFIG.currentModel) return;
+            
+            const title = document.getElementById('customTitle')?.value || APP_CONFIG.currentModel.name;
+            const subtitle = document.getElementById('customSubtitle')?.value || "Personalize conforme necessário";
+            const logoUrl = document.getElementById('customLogo')?.value || "";
+            const colorOption = document.querySelector('#customizationPanel .color-option.active');
+            const color = colorOption ? colorOption.getAttribute('data-color') : '#3498db';
+            
+            const preview = document.getElementById('customPreview');
+            preview.innerHTML = `
+                <div style="text-align: center; padding: 2rem; background: white; border-radius: var(--border-radius);">
+                    ${logoUrl ? `<img src="${logoUrl}" style="max-height: 60px; margin-bottom: 1rem;" alt="Logo">` : ''}
+                    <h2 style="color: ${color}; margin-bottom: 0.5rem;">${title}</h2>
+                    <p style="color: #666; margin-bottom: 1.5rem;">${subtitle}</p>
+                    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
+                        <div style="width: 100px; height: 100px; background: ${color}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-chart-bar" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                        <div style="width: 100px; height: 100px; background: ${color}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-table" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                        <div style="width: 100px; height: 100px; background: ${color}; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-image" style="font-size: 2rem; color: white;"></i>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updatePreviewColor(color) {
+            document.querySelectorAll('.section-title').forEach(title => {
+                title.style.color = color;
+            });
+            
+            document.querySelectorAll('.section-item:before').forEach(item => {
+                item.style.color = color;
+            });
+        }
+
+        function updatePreviewFont(font) {
+            document.getElementById('editorContent').style.fontFamily = font;
+        }
+
+        function updateUIState() {
+            // Atualizar estado baseado na configuração da API
+            if (APP_CONFIG.isApiConfigured) {
+                document.getElementById('configureApiBtn').classList.remove('btn-outline-primary');
+                document.getElementById('configureApiBtn').classList.add('btn-success');
+                document.getElementById('configureApiBtn').innerHTML = '<i class="fas fa-check"></i> API Configurada';
+            }
+        }
+
+        function getCategoryName(category) {
+            const categories = {
+                'documentos': 'Documentos',
+                'apresentacoes': 'Apresentações',
+                'planilhas': 'Planilhas',
+                'contratos': 'Contratos',
+                'marketing': 'Marketing',
+                'propostas': 'Propostas Comerciais',
+                'relatorios': 'Relatórios',
+                'emails': 'E-mails'
+            };
+            
+            return categories[category] || category;
+        }
+
+        function showToast(message, type = 'info') {
+            const toastContainer = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            
+            const icons = {
+                'success': 'fas fa-check-circle',
+                'error': 'fas fa-exclamation-circle',
+                'warning': 'fas fa-exclamation-triangle',
+                'info': 'fas fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <i class="${icons[type]}" style="color: ${getToastColor(type)};"></i>
+                <div>${message}</div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Remover após 5 segundos
+            setTimeout(() => {
+                toast.remove();
+            }, 5000);
+        }
+
+        function getToastColor(type) {
+            const colors = {
+                'success': '#27ae60',
+                'error': '#e74c3c',
+                'warning': '#f39c12',
+                'info': '#3498db'
+            };
+            
+            return colors[type] || '#3498db';
+        }
+
+        // =============================================
+        // FUNÇÕES DE AÇÃO
+        // =============================================
+
+        function downloadModel() {
+            if (!APP_CONFIG.currentModel) return;
+            showToast(`Baixando modelo: ${APP_CONFIG.currentModel.name}`, 'success');
+            // Simulação de download
+            setTimeout(() => {
+                showToast('Download concluído com sucesso!', 'success');
+            }, 1500);
+        }
+
+        function useTemplate() {
+            if (!APP_CONFIG.currentModel) return;
+            // Mudar para a aba do editor
+            const editorTab = document.getElementById('editor-tab');
+            const editorTabInstance = new bootstrap.Tab(editorTab);
+            editorTabInstance.show();
+            
+            showToast(`Modelo "${APP_CONFIG.currentModel.name}" carregado como template`, 'info');
+        }
+
+        function openInEditor() {
+            if (!APP_CONFIG.currentModel) return;
+            // Mudar para a aba do editor
+            const editorTab = document.getElementById('editor-tab');
+            const editorTabInstance = new bootstrap.Tab(editorTab);
+            editorTabInstance.show();
+            
+            showToast(`Abrindo "${APP_CONFIG.currentModel.name}" no editor`, 'info');
+        }
+
+        function resetEditor() {
+            if (confirm('Tem certeza que deseja restaurar o modelo original? Todas as alterações serão perdidas.')) {
+                document.getElementById('introContent').innerHTML = 'Este é um exemplo de como ficará seu Relatório personalizado. O conteúdo real será preenchido de acordo com suas necessidades.';
+                document.getElementById('conclusionContent').innerHTML = 'Esta é a seção de conclusão do seu relatório. Você pode editar livremente este conteúdo.';
+                
+                const sectionsContent = document.getElementById('sectionsContent');
+                sectionsContent.innerHTML = `
+                    <li class="section-item editable" contenteditable="true">Seção personalizável 1</li>
+                    <li class="section-item editable" contenteditable="true">Seção personalizável 2</li>
+                    <li class="section-item editable" contenteditable="true">Seção personalizável 3</li>
+                `;
+                
+                // Remover mídias adicionadas
+                document.querySelectorAll('.media-preview').forEach(preview => preview.remove());
+                
+                showToast('Editor restaurado para o estado original', 'info');
+            }
+        }
+
+        function saveModel() {
+            showToast('Modelo salvo com sucesso!', 'success');
+        }
+
+        function exportProject() {
+            const includeHTML = document.getElementById('exportHTML').checked;
+            const includeCSS = document.getElementById('exportCSS').checked;
+            const includeJS = document.getElementById('exportJS').checked;
+            
+            let message = 'Exportando projeto com:';
+            if (includeHTML) message += ' HTML';
+            if (includeCSS) message += ' CSS';
+            if (includeJS) message += ' JavaScript';
+            
+            showToast(message, 'info');
+            
+            // Simulação de exportação
+            setTimeout(() => {
+                showToast('Projeto exportado com sucesso!', 'success');
+            }, 2000);
+        }
+
+        function useAsTemplate() {
+            showToast('Modelo salvo como template para uso futuro', 'success');
+        }
+
+        function saveToCatalog() {
+            showToast('Modelo salvo no catálogo com sucesso!', 'success');
+        }
+
+        function analyzeModel() {
+            const fileInput = document.getElementById('modelUpload');
+            
+            if (!fileInput.files.length) {
+                showToast('Por favor, selecione um arquivo para análise', 'warning');
+                return;
+            }
+            
+            showToast('Analisando modelo...', 'info');
+            
+            // Simulação de análise
+            setTimeout(() => {
+                document.getElementById('aiResponseText').innerHTML = `
+                    <h5>Análise do Modelo:</h5>
+                    <ul>
+                        <li><strong>Estrutura:</strong> Bem organizada, mas poderia beneficiar de mais seções visuais</li>
+                        <li><strong>Linguagem:</strong> Clara e objetiva, adequada ao público-alvo</li>
+                        <li><strong>Design:</strong> Layout limpo, mas cores poderiam ser mais vibrantes</li>
+                        <li><strong>Sugestões:</strong> 
+                            <ul>
+                                <li>Adicionar mais elementos visuais (gráficos, ícones)</li>
+                                <li>Incluir resumo executivo no início</li>
+                                <li>Utilizar mais espaços em branco para melhor legibilidade</li>
+                            </ul>
+                        </li>
+                    </ul>
+                `;
+                showToast('Análise concluída!', 'success');
+            }, 3000);
+        }
+
+        function uploadModel() {
+            const name = document.getElementById('modelNameInput').value;
+            const category = document.getElementById('modelCategoryInput').value;
+            const description = document.getElementById('modelDescriptionInput').value;
+            const tags = document.getElementById('modelTagsInput').value;
+            const file = document.getElementById('modelFileInput').files[0];
+            
+            if (!name || !description || !file) {
+                showToast('Por favor, preencha todos os campos obrigatórios', 'warning');
+                return;
+            }
+            
+            // Fechar modal
+            const uploadModal = bootstrap.Modal.getInstance(document.getElementById('uploadModal'));
+            uploadModal.hide();
+            
+            // Simular upload
+            showToast('Enviando modelo...', 'info');
+            
+            setTimeout(() => {
+                showToast('Modelo enviado com sucesso!', 'success');
+                
+                // Limpar formulário
+                document.getElementById('modelNameInput').value = '';
+                document.getElementById('modelDescriptionInput').value = '';
+                document.getElementById('modelTagsInput').value = '';
+                document.getElementById('modelFileInput').value = '';
+                
+                // Em uma implementação real, aqui adicionaríamos o novo modelo à lista
+            }, 2000);
+        }
+
+        function downloadFinalModel() {
+            showToast('Preparando download do modelo finalizado...', 'info');
+            setTimeout(() => {
+                showToast('Download concluído com sucesso!', 'success');
+            }, 1500);
+        }
+
+        function printFinalModel() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

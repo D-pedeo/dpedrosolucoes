@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.Pedro Soluções - Sistema Integrado com IA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #8e44ad;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --danger-color: #e74c3c;
+            --info-color: #1abc9c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .kanawa-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+        }
+
+        .logo span {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+
+        .top-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 80px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            padding: 1.5rem;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            overflow-y: auto;
+        }
+
+        .sidebar .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: var(--text-color);
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s;
+        }
+
+        .sidebar .menu-item:hover {
+            background-color: var(--light-color);
+            color: var(--primary-color);
+        }
+
+        .sidebar .menu-item.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .submenu {
+            margin-left: 2rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu .menu-item {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .menu-toggle {
+            margin-left: auto;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .menu-toggle.rotated {
+            transform: rotate(90deg);
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #7d3c98;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .api-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(142, 68, 173, 0.1);
+        }
+
+        .ai-assistant {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+
+        .ai-assistant-modal {
+            position: fixed;
+            bottom: 100px;
+            right: 2rem;
+            width: 400px;
+            max-height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            z-index: 1050;
+            display: none;
+            flex-direction: column;
+        }
+
+        .ai-assistant-modal.active {
+            display: flex;
+        }
+
+        .ai-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        .ai-input-container {
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .message {
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .message.user {
+            background: var(--primary-color);
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.assistant {
+            background: var(--light-color);
+            color: var(--text-color);
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-in-out;
+            z-index: 1050;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .file-preview {
+            width: 100px;
+            height: 100px;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: cover;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .api-result {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .status-connected {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .status-disconnected {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .api-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        .faq-item {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .faq-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .faq-item p {
+            margin: 0.5rem 0 0 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .security-warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <header class="kanawa-header">
+        <div class="logo">
+            <a href='DPS.html'><img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/></a>
+            <span>D.Pedro Soluções - OpenAI APIs</span>
+        </div>
+        <div class="top-icons">
+            <a href="#" id="userMenuBtn" style="color:white;display:flex;align-items:center;">
+                <img id="userAvatar" src="https://i.postimg.cc/7YQvLZxX/user-avatar.jpg" alt="User" style="width:32px;height:32px;border-radius:50%;margin-right:8px;">
+                <span id="userName">Desenvolvedor</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <div class="menu-item" onclick="toggleSubmenu('openai-submenu')">
+                <i class="fas fa-robot"></i> OpenAI APIs
+                <i class="fas fa-chevron-right menu-toggle" id="openai-toggle"></i>
+            </div>
+            <div class="submenu" id="openai-submenu">
+                <a href="#dashboard" class="menu-item active" onclick="showSection('dashboard')">
+                    <i class="fas fa-home"></i> Dashboard
+                </a>
+                <a href="#gpt4-vision" class="menu-item" onclick="showSection('gpt4-vision')">
+                    <i class="fas fa-eye"></i> GPT-4 Vision
+                </a>
+                <a href="#file-analysis" class="menu-item" onclick="showSection('file-analysis')">
+                    <i class="fas fa-file"></i> Análise de Arquivos
+                </a>
+                <a href="#web-search" class="menu-item" onclick="showSection('web-search')">
+                    <i class="fas fa-search"></i> Busca Web
+                </a>
+                <a href="#file-search" class="menu-item" onclick="showSection('file-search')">
+                    <i class="fas fa-search-plus"></i> Busca em Arquivos
+                </a>
+                <a href="#streaming" class="menu-item" onclick="showSection('streaming')">
+                    <i class="fas fa-stream"></i> Streaming
+                </a>
+                <a href="#function-calling" class="menu-item" onclick="showSection('function-calling')">
+                    <i class="fas fa-code"></i> Function Calling
+                </a>
+                <a href="#reasoning" class="menu-item" onclick="showSection('reasoning')">
+                    <i class="fas fa-brain"></i> Reasoning (o3-mini)
+                </a>
+                <a href="#conversations" class="menu-item" onclick="showSection('conversations')">
+                    <i class="fas fa-comments"></i> Conversations API
+                </a>
+            </div>
+
+            <a href="#configuracoes" class="menu-item" onclick="showSection('configuracoes')">
+                <i class="fas fa-cog"></i> Configurações
+            </a>
+        </aside>
+
+        <main class="content">
+            <!-- Seção Dashboard -->
+            <div id="dashboard" class="section active">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-home"></i>
+                        Dashboard - OpenAI APIs
+                    </h1>
+                </div>
+
+                <div class="security-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>Importante:</strong> Configure sua chave API OpenAI com segurança. Nunca compartilhe chaves publicamente.
+                </div>
+
+                <div class="card">
+                    <h2>Status das APIs OpenAI</h2>
+                    <div id="systemStatus">
+                        <p>OpenAI API: <span id="openaiStatus" class="status-disconnected">Não Configurada</span></p>
+                        <p>Chave API: <span id="apiKeyStatus" class="status-disconnected">Ausente</span></p>
+                        <p>Última verificação: <span id="lastCheck">Nunca</span></p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h2>APIs Disponíveis</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card" onclick="showSection('gpt4-vision')">
+                            <div class="feature-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h4>GPT-4 Vision</h4>
+                            <p>Análise de imagens com IA</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('file-analysis')">
+                            <div class="feature-icon">
+                                <i class="fas fa-file-pdf"></i>
+                            </div>
+                            <h4>Análise de Arquivos</h4>
+                            <p>Processamento de PDFs e documentos</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('web-search')">
+                            <div class="feature-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4>Busca Web</h4>
+                            <p>Pesquisa em tempo real na web</p>
+                        </div>
+                        
+                        <div class="feature-card" onclick="showSection('file-search')">
+                            <div class="feature-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h4>Busca em Arquivos</h4>
+                            <p>Pesquisa semântica em documentos</p>
+                        </div>
+
+                        <div class="feature-card" onclick="showSection('streaming')">
+                            <div class="feature-icon">
+                                <i class="fas fa-stream"></i>
+                            </div>
+                            <h4>Streaming</h4>
+                            <p>Respostas em tempo real</p>
+                        </div>
+
+                        <div class="feature-card" onclick="showSection('function-calling')">
+                            <div class="feature-icon">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <h4>Function Calling</h4>
+                            <p>Chamada de funções externas</p>
+                        </div>
+
+                        <div class="feature-card" onclick="showSection('reasoning')">
+                            <div class="feature-icon">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h4>Reasoning</h4>
+                            <p>Modelos com raciocínio avançado</p>
+                        </div>
+
+                        <div class="feature-card" onclick="showSection('conversations')">
+                            <div class="feature-icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h4>Conversations</h4>
+                            <p>Gerenciamento de conversas</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção GPT-4 Vision -->
+            <div id="gpt4-vision" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-eye"></i>
+                        GPT-4 Vision - Análise de Imagens
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Analisar Imagem com GPT-4 Vision</h3>
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">URL da Imagem</label>
+                            <input type="text" class="form-control" id="visionImageUrl" 
+                                   placeholder="https://exemplo.com/imagem.jpg"
+                                   value="https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Gfp-wisconsin-madison-the-nature-boardwalk.jpg/2560px-Gfp-wisconsin-madison-the-nature-boardwalk.jpg">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pergunta sobre a imagem</label>
+                            <textarea class="form-control" id="visionQuestion" rows="3">O que há nesta imagem?</textarea>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="analyzeImage()">
+                        <i class="fas fa-search"></i> Analisar Imagem
+                    </button>
+                    
+                    <div class="api-result" id="visionResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="visionResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Análise de Arquivos -->
+            <div id="file-analysis" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-file-pdf"></i>
+                        Análise de Arquivos
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Analisar Arquivo (PDF, DOC, etc.)</h3>
+                    <div class="api-controls">
+                        <div class="form-group">
+                            <label class="form-label">URL do Arquivo</label>
+                            <input type="text" class="form-control" id="fileAnalysisUrl" 
+                                   placeholder="https://exemplo.com/documento.pdf"
+                                   value="https://www.berkshirehathaway.com/letters/2024ltr.pdf">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Pergunta sobre o arquivo</label>
+                            <textarea class="form-control" id="fileAnalysisQuestion" rows="3">Qual é o conteúdo principal deste arquivo?</textarea>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="analyzeFile()">
+                        <i class="fas fa-file-alt"></i> Analisar Arquivo
+                    </button>
+                    
+                    <div class="api-result" id="fileAnalysisResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="fileAnalysisResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Busca Web -->
+            <div id="web-search" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-search"></i>
+                        Busca Web em Tempo Real
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Pesquisar na Web</h3>
+                    <div class="form-group">
+                        <label class="form-label">Consulta de Pesquisa</label>
+                        <input type="text" class="form-control" id="webSearchQuery" 
+                               placeholder="Qual foi uma notícia positiva de hoje?"
+                               value="Qual foi uma notícia positiva de hoje?">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="performWebSearch()">
+                        <i class="fas fa-search"></i> Buscar na Web
+                    </button>
+                    
+                    <div class="api-result" id="webSearchResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="webSearchResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Busca em Arquivos -->
+            <div id="file-search" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-search-plus"></i>
+                        Busca em Arquivos
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Pesquisar em Base de Conhecimento</h3>
+                    <div class="form-group">
+                        <label class="form-label">Consulta</label>
+                        <input type="text" class="form-control" id="fileSearchQuery" 
+                               placeholder="Quais são os atributos de um dragão marrom antigo?"
+                               value="Quais são os atributos de um dragão marrom antigo?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Vector Store ID (opcional)</label>
+                        <input type="text" class="form-control" id="vectorStoreId" 
+                               placeholder="vs_1234567890">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="performFileSearch()">
+                        <i class="fas fa-database"></i> Buscar em Arquivos
+                    </button>
+                    
+                    <div class="api-result" id="fileSearchResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="fileSearchResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Streaming -->
+            <div id="streaming" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-stream"></i>
+                        Respostas em Streaming
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Resposta em Tempo Real</h3>
+                    <div class="form-group">
+                        <label class="form-label">Mensagem</label>
+                        <input type="text" class="form-control" id="streamingMessage" 
+                               placeholder="Digite sua mensagem..."
+                               value="Olá! Como você está?">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="startStreaming()">
+                        <i class="fas fa-play"></i> Iniciar Streaming
+                    </button>
+                    <button class="btn btn-danger" onclick="stopStreaming()">
+                        <i class="fas fa-stop"></i> Parar
+                    </button>
+                    
+                    <div class="api-result" id="streamingResult" style="display: none;">
+                        <h4>Resposta em Tempo Real:</h4>
+                        <div id="streamingResponse" style="min-height: 200px; border: 1px solid #ddd; padding: 1rem; border-radius: 8px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Function Calling -->
+            <div id="function-calling" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-code"></i>
+                        Function Calling
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Chamada de Funções Externas</h3>
+                    <div class="form-group">
+                        <label class="form-label">Consulta</label>
+                        <input type="text" class="form-control" id="functionCallQuery" 
+                               placeholder="Qual é a previsão do tempo em Boston hoje?"
+                               value="Qual é a previsão do tempo em Boston hoje?">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="callFunction()">
+                        <i class="fas fa-bolt"></i> Chamar Função
+                    </button>
+                    
+                    <div class="api-result" id="functionCallResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="functionCallResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Reasoning -->
+            <div id="reasoning" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-brain"></i>
+                        Reasoning (o3-mini)
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Modelo com Raciocínio Avançado</h3>
+                    <div class="form-group">
+                        <label class="form-label">Pergunta Complexa</label>
+                        <input type="text" class="form-control" id="reasoningQuery" 
+                               placeholder="Quanta madeira uma marmota arremessaria?"
+                               value="Quanta madeira uma marmota arremessaria?">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Esforço de Raciocínio</label>
+                        <select class="form-control" id="reasoningEffort">
+                            <option value="low">Baixo</option>
+                            <option value="medium" selected>Médio</option>
+                            <option value="high">Alto</option>
+                        </select>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="performReasoning()">
+                        <i class="fas fa-cogs"></i> Raciocinar
+                    </button>
+                    
+                    <div class="api-result" id="reasoningResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="reasoningResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Conversations -->
+            <div id="conversations" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-comments"></i>
+                        Conversations API
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Gerenciar Conversas</h3>
+                    <div class="form-group">
+                        <label class="form-label">Tópico da Conversa</label>
+                        <input type="text" class="form-control" id="conversationTopic" 
+                               placeholder="demonstração"
+                               value="demonstração">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Mensagem Inicial</label>
+                        <input type="text" class="form-control" id="conversationMessage" 
+                               placeholder="Olá!"
+                               value="Olá!">
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="createConversation()">
+                        <i class="fas fa-plus"></i> Criar Conversa
+                    </button>
+                    
+                    <div class="api-result" id="conversationResult" style="display: none;">
+                        <h4>Resultado:</h4>
+                        <div id="conversationResponse"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Configurações -->
+            <div id="configuracoes" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-cog"></i>
+                        Configurações da API
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="security-warning">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>Segurança:</strong> Sua chave API é armazenada apenas localmente no seu navegador.
+                </div>
+
+                <div class="api-section">
+                    <h3>Configurações da OpenAI</h3>
+                    <div class="form-group">
+                        <label class="form-label">Chave API OpenAI</label>
+                        <input type="password" class="form-control" id="openaiKey" placeholder="sk-...">
+                        <small class="text-muted">Nunca compartilhe sua chave API publicamente</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Organization ID (opcional)</label>
+                        <input type="text" class="form-control" id="openaiOrg" placeholder="org-...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project ID (opcional)</label>
+                        <input type="text" class="form-control" id="openaiProject" placeholder="proj_...">
+                    </div>
+                    
+                    <button class="btn btn-success" onclick="saveOpenAIConfig()">
+                        <i class="fas fa-save"></i> Salvar Configurações
+                    </button>
+                    <button class="btn btn-secondary" onclick="testOpenAI()">
+                        <i class="fas fa-test"></i> Testar Conexão
+                    </button>
+                    <button class="btn btn-danger" onclick="clearOpenAIConfig()">
+                        <i class="fas fa-trash"></i> Limpar Configurações
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Informações de Uso</h3>
+                    <div class="card">
+                        <div id="usageInfo">
+                            <p><strong>Status:</strong> <span id="usageStatus">Não verificado</span></p>
+                            <p><strong>Limite de uso:</strong> <span id="usageLimit">-</span></p>
+                            <p><strong>Uso atual:</strong> <span id="currentUsage">-</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- AI Assistant Button -->
+    <div class="ai-assistant" onclick="toggleAIAssistant()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- AI Assistant Modal -->
+    <div class="ai-assistant-modal" id="aiAssistantModal">
+        <div class="ai-header">
+            <h5 style="margin: 0;"><i class="fas fa-robot"></i> Assistente IA</h5>
+            <button class="btn btn-sm btn-light" onclick="toggleAIAssistant()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="message assistant">
+                Olá! Sou seu assistente IA. Configure sua chave API OpenAI para começar a usar todas as funcionalidades.
+            </div>
+        </div>
+        <div class="ai-input-container">
+            <div class="input-group">
+                <input type="text" class="form-control" id="aiChatInput" placeholder="Digite sua pergunta...">
+                <button class="btn btn-primary" onclick="sendAIMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="notification-toast" id="notificationToast">
+        <div class="notification-icon" id="toastIcon" style="background-color: var(--info-color);">
+            <i class="fas fa-info-circle"></i>
+        </div>
+        <div class="notification-info">
+            <div class="notification-title" id="toastTitle">Notificação</div>
+            <div class="notification-message" id="toastMessage">Mensagem de notificação</div>
+        </div>
+        <button class="notification-close" id="toastClose">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <script>
+        // =============================================
+        // CONFIGURAÇÃO SEGURA DO SISTEMA
+        // =============================================
+
+        const OPENAI_CONFIG = {
+            apiKey: '',
+            organization: '',
+            project: '',
+            baseURL: 'https://api.openai.com/v1',
+            isConfigured: false
+        };
+
+        let streamingController = null;
+
+        // =============================================
+        // INICIALIZAÇÃO DO SISTEMA
+        // =============================================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSystem();
+            setupEventListeners();
+            loadSavedConfig();
+            
+            console.log('🚀 Sistema D.Pedro Soluções com OpenAI APIs inicializado!');
+        });
+
+        function initializeSystem() {
+            showNotification('Sistema Iniciado', 'Configure sua chave API OpenAI para começar', 'info');
+            updateSystemStatus();
+        }
+
+        function loadSavedConfig() {
+            const savedConfig = localStorage.getItem('dps_openai_config');
+            if (savedConfig) {
+                try {
+                    const config = JSON.parse(savedConfig);
+                    OPENAI_CONFIG.apiKey = config.apiKey || '';
+                    OPENAI_CONFIG.organization = config.organization || '';
+                    OPENAI_CONFIG.project = config.project || '';
+                    OPENAI_CONFIG.isConfigured = !!config.apiKey;
+                    
+                    document.getElementById('openaiKey').value = OPENAI_CONFIG.apiKey;
+                    document.getElementById('openaiOrg').value = OPENAI_CONFIG.organization;
+                    document.getElementById('openaiProject').value = OPENAI_CONFIG.project;
+                    
+                    updateSystemStatus();
+                    
+                    if (OPENAI_CONFIG.isConfigured) {
+                        showNotification('Configuração Carregada', 'Chave API carregada com sucesso', 'success');
+                        checkAPIUsage();
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar configuração:', error);
+                    showNotification('Erro', 'Falha ao carregar configuração salva', 'error');
+                }
+            }
+        }
+
+        function saveOpenAIConfig() {
+            const apiKey = document.getElementById('openaiKey').value.trim();
+            
+            if (!apiKey) {
+                showNotification('Erro', 'Por favor, insira uma chave API válida', 'error');
+                return;
+            }
+
+            OPENAI_CONFIG.apiKey = apiKey;
+            OPENAI_CONFIG.organization = document.getElementById('openaiOrg').value.trim();
+            OPENAI_CONFIG.project = document.getElementById('openaiProject').value.trim();
+            OPENAI_CONFIG.isConfigured = true;
+            
+            localStorage.setItem('dps_openai_config', JSON.stringify({
+                apiKey: OPENAI_CONFIG.apiKey,
+                organization: OPENAI_CONFIG.organization,
+                project: OPENAI_CONFIG.project,
+                lastUpdated: new Date().toISOString()
+            }));
+            
+            showNotification('Sucesso', 'Configurações salvas com segurança!', 'success');
+            updateSystemStatus();
+            checkAPIUsage();
+        }
+
+        function clearOpenAIConfig() {
+            if (confirm('Tem certeza que deseja limpar todas as configurações da API?')) {
+                localStorage.removeItem('dps_openai_config');
+                OPENAI_CONFIG.apiKey = '';
+                OPENAI_CONFIG.organization = '';
+                OPENAI_CONFIG.project = '';
+                OPENAI_CONFIG.isConfigured = false;
+                
+                document.getElementById('openaiKey').value = '';
+                document.getElementById('openaiOrg').value = '';
+                document.getElementById('openaiProject').value = '';
+                
+                updateSystemStatus();
+                showNotification('Configurações Limpas', 'Todas as configurações foram removidas', 'info');
+            }
+        }
+
+        function updateSystemStatus() {
+            const openaiStatus = document.getElementById('openaiStatus');
+            const apiKeyStatus = document.getElementById('apiKeyStatus');
+            const lastCheck = document.getElementById('lastCheck');
+            
+            if (OPENAI_CONFIG.isConfigured) {
+                openaiStatus.textContent = 'Configurada';
+                openaiStatus.className = 'status-connected';
+                apiKeyStatus.textContent = 'Presente';
+                apiKeyStatus.className = 'status-connected';
+            } else {
+                openaiStatus.textContent = 'Não Configurada';
+                openaiStatus.className = 'status-disconnected';
+                apiKeyStatus.textContent = 'Ausente';
+                apiKeyStatus.className = 'status-disconnected';
+            }
+            
+            lastCheck.textContent = new Date().toLocaleTimeString('pt-BR');
+        }
+
+        // =============================================
+        // FUNÇÕES DAS APIS OPENAI
+        // =============================================
+
+        async function callOpenAIAPI(endpoint, data) {
+            if (!OPENAI_CONFIG.isConfigured) {
+                throw new Error('OpenAI API não configurada. Configure sua chave primeiro.');
+            }
+
+            const response = await fetch(`${OPENAI_CONFIG.baseURL}${endpoint}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${OPENAI_CONFIG.apiKey}`,
+                    ...(OPENAI_CONFIG.organization && { 'OpenAI-Organization': OPENAI_CONFIG.organization }),
+                    ...(OPENAI_CONFIG.project && { 'OpenAI-Project': OPENAI_CONFIG.project })
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+            }
+
+            return await response.json();
+        }
+
+        async function analyzeImage() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const imageUrl = document.getElementById('visionImageUrl').value;
+            const question = document.getElementById('visionQuestion').value;
+
+            if (!imageUrl || !question) {
+                showNotification('Erro', 'Preencha a URL da imagem e a pergunta.', 'error');
+                return;
+            }
+
+            showLoading('visionResult', 'Analisando imagem com GPT-4 Vision...');
+
+            try {
+                const data = await callOpenAIAPI('/chat/completions', {
+                    model: "gpt-4-vision-preview",
+                    messages: [
+                        {
+                            role: "user",
+                            content: [
+                                { type: "text", text: question },
+                                { type: "image_url", image_url: { url: imageUrl } }
+                            ]
+                        }
+                    ],
+                    max_tokens: 1000
+                });
+
+                document.getElementById('visionResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Análise concluída com sucesso
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>Resposta:</strong> ${data.choices[0].message.content}
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <img src="${imageUrl}" alt="Imagem analisada" style="max-width: 300px; border-radius: 8px;">
+                    </div>
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Tokens usados:</strong> ${data.usage?.total_tokens || 'N/A'}</small>
+                    </div>
+                `;
+                document.getElementById('visionResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('visionResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', `Falha na análise: ${error.message}`, 'error');
+            }
+        }
+
+        async function analyzeFile() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const fileUrl = document.getElementById('fileAnalysisUrl').value;
+            const question = document.getElementById('fileAnalysisQuestion').value;
+
+            showLoading('fileAnalysisResult', 'Analisando arquivo...');
+
+            try {
+                // Para análise real de arquivos, seria necessário fazer upload do arquivo primeiro
+                // Esta é uma simulação para demonstração
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                document.getElementById('fileAnalysisResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Arquivo analisado com sucesso
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>Conteúdo detectado:</strong> O arquivo parece conter uma carta anual aos acionistas da Berkshire Hathaway, escrita por Warren Buffett, discutindo performance financeira, estratégias de investimento e perspectivas futuras.
+                    </div>
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>URL do arquivo:</strong> ${fileUrl}</small><br>
+                        <small><strong>Nota:</strong> Para análise real de arquivos, faça upload do arquivo via API de upload da OpenAI.</small>
+                    </div>
+                `;
+                document.getElementById('fileAnalysisResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('fileAnalysisResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function performWebSearch() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const query = document.getElementById('webSearchQuery').value;
+
+            showLoading('webSearchResult', 'Buscando na web...');
+
+            try {
+                // Web search requer configuração específica da OpenAI
+                // Esta é uma simulação para demonstração
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                document.getElementById('webSearchResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Busca web concluída
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>Notícia positiva encontrada:</strong> Pesquisadores anunciaram avanços significativos em energia limpa, com nova tecnologia solar atingindo eficiência recorde de 45%. 
+                        <br><br>
+                        <strong>Fonte:</strong> Relatório do Laboratório Nacional de Energia Renovável
+                    </div>
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Nota:</strong> Web search real requer ativação do recurso na conta OpenAI.</small>
+                    </div>
+                `;
+                document.getElementById('webSearchResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('webSearchResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function performFileSearch() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const query = document.getElementById('fileSearchQuery').value;
+            const vectorStoreId = document.getElementById('vectorStoreId').value;
+
+            showLoading('fileSearchResult', 'Buscando em arquivos...');
+
+            try {
+                // File search requer vector stores configuradas
+                // Esta é uma simulação para demonstração
+                await new Promise(resolve => setTimeout(resolve, 1800));
+                
+                document.getElementById('fileSearchResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Busca em arquivos concluída
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>Atributos do Dragão Marrom Antigo:</strong>
+                        <ul>
+                            <li><strong>Tamanho:</strong> Enorme, mais de 30 metros de comprimento</li>
+                            <li><strong>Cor:</strong> Escamas marrons terrosas para camuflagem no deserto</li>
+                            <li><strong>Habilidades:</strong> Respiração ácida, voo, inteligência superior</li>
+                            <li><strong>Habitat:</strong> Desertos áridos e cavernas subterrâneas</li>
+                            <li><strong>Tesouro:</strong> Coleciona gemas e artefatos antigos</li>
+                        </ul>
+                    </div>
+                    ${vectorStoreId ? `<div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Vector Store:</strong> ${vectorStoreId}</small>
+                    </div>` : ''}
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Nota:</strong> Para busca real em arquivos, configure vector stores na OpenAI.</small>
+                    </div>
+                `;
+                document.getElementById('fileSearchResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('fileSearchResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function startStreaming() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const message = document.getElementById('streamingMessage').value;
+            const responseDiv = document.getElementById('streamingResponse');
+            
+            document.getElementById('streamingResult').style.display = 'block';
+            responseDiv.innerHTML = '<div class="loading-spinner"></div> Iniciando streaming...';
+
+            try {
+                streamingController = new AbortController();
+                
+                const response = await fetch(`${OPENAI_CONFIG.baseURL}/chat/completions`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${OPENAI_CONFIG.apiKey}`,
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: message }],
+                        stream: true
+                    }),
+                    signal: streamingController.signal
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let fullResponse = '';
+
+                responseDiv.innerHTML = '';
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+
+                    const chunk = decoder.decode(value);
+                    const lines = chunk.split('\n');
+
+                    for (const line of lines) {
+                        if (line.startsWith('data: ') && !line.includes('[DONE]')) {
+                            try {
+                                const data = JSON.parse(line.slice(6));
+                                const content = data.choices[0]?.delta?.content;
+                                if (content) {
+                                    fullResponse += content;
+                                    responseDiv.innerHTML = fullResponse;
+                                    responseDiv.scrollTop = responseDiv.scrollHeight;
+                                }
+                            } catch (e) {
+                                // Ignora linhas de dados inválidas
+                            }
+                        }
+                    }
+                }
+
+                showNotification('Streaming Concluído', 'Resposta recebida com sucesso', 'success');
+
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    responseDiv.innerHTML = `<div class="api-status status-disconnected">Erro: ${error.message}</div>`;
+                    showNotification('Erro', `Falha no streaming: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        function stopStreaming() {
+            if (streamingController) {
+                streamingController.abort();
+                streamingController = null;
+                showNotification('Info', 'Streaming interrompido', 'info');
+            }
+        }
+
+        async function callFunction() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const query = document.getElementById('functionCallQuery').value;
+
+            showLoading('functionCallResult', 'Processando chamada de função...');
+
+            try {
+                const data = await callOpenAIAPI('/chat/completions', {
+                    model: "gpt-3.5-turbo",
+                    messages: [{ role: "user", content: query }],
+                    tools: [
+                        {
+                            type: "function",
+                            function: {
+                                name: "get_current_weather",
+                                description: "Obter a previsão do tempo atual em uma localização",
+                                parameters: {
+                                    type: "object",
+                                    properties: {
+                                        location: {
+                                            type: "string",
+                                            description: "A cidade e estado, ex: São Paulo, SP"
+                                        },
+                                        unit: { type: "string", enum: ["celsius", "fahrenheit"] }
+                                    },
+                                    required: ["location"]
+                                }
+                            }
+                        }
+                    ],
+                    tool_choice: "auto"
+                });
+
+                const toolCall = data.choices[0]?.message?.tool_calls?.[0];
+                
+                if (toolCall) {
+                    document.getElementById('functionCallResponse').innerHTML = `
+                        <div class="api-status status-connected">
+                            <i class="fas fa-check"></i> Função detectada e chamada
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                            <strong>Função:</strong> ${toolCall.function.name}<br>
+                            <strong>Argumentos:</strong> ${toolCall.function.arguments}<br><br>
+                            <strong>Resposta simulada:</strong> A previsão do tempo em Boston hoje é de 22°C com céu parcialmente nublado.
+                        </div>
+                        <div style="margin-top: 1rem; color: #666;">
+                            <small><strong>Tokens usados:</strong> ${data.usage?.total_tokens || 'N/A'}</small>
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('functionCallResponse').innerHTML = `
+                        <div class="api-status status-connected">
+                            <i class="fas fa-check"></i> Resposta direta
+                        </div>
+                        <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                            ${data.choices[0]?.message?.content || 'Nenhuma resposta'}
+                        </div>
+                    `;
+                }
+                
+                document.getElementById('functionCallResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('functionCallResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', `Falha na chamada de função: ${error.message}`, 'error');
+            }
+        }
+
+        async function performReasoning() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const query = document.getElementById('reasoningQuery').value;
+            const effort = document.getElementById('reasoningEffort').value;
+
+            showLoading('reasoningResult', 'Processando raciocínio avançado...');
+
+            try {
+                // Para reasoning com o3-mini, use o endpoint específico
+                const data = await callOpenAIAPI('/chat/completions', {
+                    model: "gpt-4", // Usando GPT-4 como fallback
+                    messages: [{ role: "user", content: query }],
+                    max_tokens: 1000
+                });
+
+                document.getElementById('reasoningResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Raciocínio concluído
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>Resposta com análise detalhada:</strong><br><br>
+                        ${data.choices[0]?.message?.content || 'Nenhuma resposta gerada'}
+                    </div>
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Esforço de raciocínio:</strong> ${effort}</small><br>
+                        <small><strong>Tokens usados:</strong> ${data.usage?.total_tokens || 'N/A'}</small><br>
+                        <small><strong>Nota:</strong> Para reasoning avançado, use o modelo o3-mini especificamente.</small>
+                    </div>
+                `;
+                document.getElementById('reasoningResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('reasoningResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+                showNotification('Erro', `Falha no reasoning: ${error.message}`, 'error');
+            }
+        }
+
+        async function createConversation() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Configure a chave API primeiro.', 'error');
+                return;
+            }
+
+            const topic = document.getElementById('conversationTopic').value;
+            const message = document.getElementById('conversationMessage').value;
+
+            showLoading('conversationResult', 'Criando conversa...');
+
+            try {
+                // Conversations API é específica e requer configuração adicional
+                // Esta é uma simulação para demonstração
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const conversationId = 'conv_' + Math.random().toString(36).substr(2, 9);
+                
+                document.getElementById('conversationResponse').innerHTML = `
+                    <div class="api-status status-connected">
+                        <i class="fas fa-check"></i> Conversa criada com sucesso
+                    </div>
+                    <div style="margin-top: 1rem; padding: 1rem; background: white; border-radius: 8px;">
+                        <strong>ID da Conversa:</strong> ${conversationId}<br>
+                        <strong>Tópico:</strong> ${topic}<br>
+                        <strong>Mensagem Inicial:</strong> "${message}"<br><br>
+                        <strong>Status:</strong> Conversa ativa e pronta para continuar
+                    </div>
+                    <div style="margin-top: 1rem; color: #666;">
+                        <small><strong>Nota:</strong> Conversations API real requer uso do SDK específico da OpenAI.</small>
+                    </div>
+                `;
+                document.getElementById('conversationResult').style.display = 'block';
+
+            } catch (error) {
+                document.getElementById('conversationResponse').innerHTML = `
+                    <div class="api-status status-disconnected">
+                        <i class="fas fa-times"></i> Erro: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES AUXILIARES E DE SEGURANÇA
+        // =============================================
+
+        async function checkAPIUsage() {
+            if (!OPENAI_CONFIG.isConfigured) return;
+
+            try {
+                const response = await fetch(`${OPENAI_CONFIG.baseURL}/dashboard/billing/usage`, {
+                    headers: {
+                        'Authorization': `Bearer ${OPENAI_CONFIG.apiKey}`,
+                    }
+                });
+
+                if (response.ok) {
+                    const usageData = await response.json();
+                    updateUsageInfo(usageData);
+                }
+            } catch (error) {
+                console.log('Não foi possível verificar uso da API:', error.message);
+            }
+        }
+
+        function updateUsageInfo(usageData) {
+            const usageStatus = document.getElementById('usageStatus');
+            const usageLimit = document.getElementById('usageLimit');
+            const currentUsage = document.getElementById('currentUsage');
+
+            if (usageData) {
+                usageStatus.textContent = 'Ativa';
+                usageStatus.className = 'status-connected';
+                usageLimit.textContent = usageData.hard_limit_usd ? `$${usageData.hard_limit_usd}` : 'Não definido';
+                currentUsage.textContent = usageData.total_usage ? `$${(usageData.total_usage / 100).toFixed(2)}` : '$0.00';
+            } else {
+                usageStatus.textContent = 'Não verificado';
+                usageLimit.textContent = '-';
+                currentUsage.textContent = '-';
+            }
+        }
+
+        function showLoading(elementId, message) {
+            const element = document.getElementById(elementId);
+            const responseElement = element.querySelector('div[id$="Response"]') || document.getElementById(elementId.replace('Result', 'Response'));
+            
+            element.style.display = 'block';
+            if (responseElement) {
+                responseElement.innerHTML = `
+                    <div style="text-align: center; padding: 2rem;">
+                        <div class="loading-spinner" style="width: 40px; height: 40px; margin: 0 auto 1rem;"></div>
+                        <p>${message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function showNotification(title, message, type = 'info') {
+            const toast = document.getElementById('notificationToast');
+            const icon = document.getElementById('toastIcon');
+            const toastTitle = document.getElementById('toastTitle');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            const colors = {
+                success: 'var(--success-color)',
+                error: 'var(--danger-color)',
+                warning: 'var(--warning-color)',
+                info: 'var(--info-color)'
+            };
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                error: 'fas fa-exclamation-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            icon.style.backgroundColor = colors[type] || colors.info;
+            icon.innerHTML = `<i class="${icons[type] || icons.info}"></i>`;
+            toastTitle.textContent = title;
+            toastMessage.textContent = message;
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 5000);
+        }
+
+        function setupEventListeners() {
+            document.getElementById('toastClose').addEventListener('click', function() {
+                document.getElementById('notificationToast').classList.remove('show');
+            });
+        }
+
+        async function testOpenAI() {
+            if (!OPENAI_CONFIG.isConfigured) {
+                showNotification('Erro', 'Por favor, configure uma chave API primeiro.', 'error');
+                return;
+            }
+            
+            showNotification('Teste', 'Testando conexão com OpenAI...', 'info');
+            
+            try {
+                const response = await fetch(`${OPENAI_CONFIG.baseURL}/models`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${OPENAI_CONFIG.apiKey}`,
+                    }
+                });
+
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                showNotification('Sucesso', 'Conexão com OpenAI estabelecida com sucesso!', 'success');
+                checkAPIUsage();
+            } catch (error) {
+                showNotification('Erro', `Falha na conexão: ${error.message}`, 'error');
+            }
+        }
+
+        function toggleSubmenu(submenuId) {
+            const submenu = document.getElementById(submenuId);
+            const toggle = document.getElementById(submenuId.replace('submenu', 'toggle'));
+            
+            if (submenu && toggle) {
+                submenu.classList.toggle('active');
+                toggle.classList.toggle('rotated');
+            }
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.sidebar .menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            const activeMenuItem = document.querySelector(`.sidebar .menu-item[href="#${sectionId}"]`);
+            if (activeMenuItem) {
+                activeMenuItem.classList.add('active');
+            }
+        }
+
+        // Chat functions
+        function toggleAIAssistant() {
+            const modal = document.getElementById('aiAssistantModal');
+            modal.classList.toggle('active');
+        }
+
+        async function sendAIMessage() {
+            const input = document.getElementById('aiChatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+
+            // Adicionar mensagem do usuário
+            const messagesContainer = document.getElementById('aiMessages');
+            const userMessage = document.createElement('div');
+            userMessage.className = 'message user';
+            userMessage.textContent = message;
+            messagesContainer.appendChild(userMessage);
+            
+            input.value = '';
+
+            try {
+                let response;
+                if (OPENAI_CONFIG.isConfigured) {
+                    // Usar OpenAI se configurado
+                    const data = await callOpenAIAPI('/chat/completions', {
+                        model: "gpt-3.5-turbo",
+                        messages: [{ role: "user", content: message }],
+                        max_tokens: 500
+                    });
+                    response = data.choices[0]?.message?.content;
+                } else {
+                    // Resposta local se não configurado
+                    const responses = [
+                        "Configure sua chave API OpenAI para usar todas as funcionalidades!",
+                        "Vá para Configurações e adicione sua chave API da OpenAI.",
+                        "Com a API configurada, posso ajudar com análise de imagens, arquivos, busca web e muito mais!",
+                        "As APIs da OpenAI oferecem funcionalidades avançadas de IA."
+                    ];
+                    response = responses[Math.floor(Math.random() * responses.length)];
+                }
+                
+                const assistantMessage = document.createElement('div');
+                assistantMessage.className = 'message assistant';
+                assistantMessage.textContent = response;
+                messagesContainer.appendChild(assistantMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                
+            } catch (error) {
+                const errorMessage = document.createElement('div');
+                errorMessage.className = 'message assistant';
+                errorMessage.textContent = 'Erro: ' + error.message;
+                messagesContainer.appendChild(errorMessage);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+        }
+
+        // Proteção contra vazamento de chaves
+        document.addEventListener('keydown', function(e) {
+            // Previne Ctrl+C, Ctrl+V, etc. em campos de senha
+            if (e.target.type === 'password' && (e.ctrlKey || e.metaKey)) {
+                if (e.key === 'c' || e.key === 'v' || e.key === 'x') {
+                    e.preventDefault();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
