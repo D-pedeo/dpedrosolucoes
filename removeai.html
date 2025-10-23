@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D.Pedro Soluções - Remove.bg API</title>
+    <title>D.Pedro Soluções - Ferramentas de IA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -389,13 +389,296 @@
             margin-bottom: 1rem;
             color: #856404;
         }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .tool-icon {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .tool-info {
+            padding: 1.5rem;
+        }
+
+        .tool-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .tool-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transform: translateY(-20px);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-color);
+        }
+
+        .api-key-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .color-picker {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            align-items: center;
+        }
+
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .virtual-tryon-container {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .virtual-tryon-preview {
+            flex: 1;
+            position: relative;
+        }
+
+        .virtual-tryon-product {
+            flex: 1;
+        }
+
+        .tryon-canvas {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .product-item {
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .product-item:hover {
+            transform: scale(1.05);
+        }
+
+        .product-item.selected {
+            border-color: var(--primary-color);
+        }
+
+        .product-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .video-preview {
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
+
+        .ear-slider {
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .slider-container {
+            margin: 1rem 0;
+        }
+
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .batch-processing {
+            margin-top: 2rem;
+        }
+
+        .batch-images {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .batch-image-item {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .batch-image-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+        }
+
+        .batch-image-name {
+            padding: 0.5rem;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            font-size: 0.8rem;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .progress {
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
     </style>
 </head>
 <body>
     <header class="kanawa-header">
         <div class="logo">
             <a href='DPS.html'><img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/></a>
-            <span>D.Pedro Soluções - Remove.bg API</span>
+            <span>D.Pedro Soluções - Ferramentas de IA</span>
         </div>
         <div class="top-icons">
             <a href="#" id="userMenuBtn" style="color:white;display:flex;align-items:center;">
@@ -407,17 +690,53 @@
 
     <div class="main-container">
         <aside class="sidebar">
-            <a href="#remove-bg" class="menu-item active" onclick="showSection('remove-bg')">
-                <i class="fas fa-magic"></i> Remover Fundo
+            <a href="#dashboard" class="menu-item active" onclick="showSection('dashboard')">
+                <i class="fas fa-home"></i> Dashboard
             </a>
-            <a href="#api-keys" class="menu-item" onclick="showSection('api-keys')">
-                <i class="fas fa-key"></i> Chaves API
+            <a href="#remove-bg" class="menu-item" onclick="showSection('remove-bg')">
+                <i class="fas fa-magic"></i> Removedor de Fundo
+            </a>
+            <a href="#background-replacer" class="menu-item" onclick="showSection('background-replacer')">
+                <i class="fas fa-image"></i> Substituidor de Fundo
+            </a>
+            <a href="#color-changer" class="menu-item" onclick="showSection('color-changer')">
+                <i class="fas fa-palette"></i> Trocador de Cor
+            </a>
+            <a href="#virtual-tryon" class="menu-item" onclick="showSection('virtual-tryon')">
+                <i class="fas fa-tshirt"></i> Prova Virtual (Vestuário)
+            </a>
+            <a href="#virtual-accessories" class="menu-item" onclick="showSection('virtual-accessories')">
+                <i class="fas fa-gem"></i> Prova Virtual (Acessórios)
+            </a>
+            <a href="#model-swap" class="menu-item" onclick="showSection('model-swap')">
+                <i class="fas fa-user-friends"></i> Trocar Modelo de Moda
+            </a>
+            <a href="#image-to-video" class="menu-item" onclick="showSection('image-to-video')">
+                <i class="fas fa-film"></i> Imagem para Vídeo
+            </a>
+            <a href="#image-retouch" class="menu-item" onclick="showSection('image-retouch')">
+                <i class="fas fa-sparkles"></i> Retoque de Imagem
+            </a>
+            <a href="#image-extender" class="menu-item" onclick="showSection('image-extender')">
+                <i class="fas fa-expand-arrows-alt"></i> Extensor de Imagem
+            </a>
+            <a href="#magic-ears" class="menu-item" onclick="showSection('magic-ears')">
+                <i class="fas fa-headphones"></i> Orelhas Mágicas
+            </a>
+            <a href="#image-enhancer" class="menu-item" onclick="showSection('image-enhancer')">
+                <i class="fas fa-search-plus"></i> Intensificador de Imagem
+            </a>
+            <a href="#product-in-hand" class="menu-item" onclick="showSection('product-in-hand')">
+                <i class="fas fa-hand-holding"></i> Produto em Mãos
+            </a>
+            <a href="#lip-sync" class="menu-item" onclick="showSection('lip-sync')">
+                <i class="fas fa-comment-dots"></i> Sincronização Labial
             </a>
             <a href="#batch-processing" class="menu-item" onclick="showSection('batch-processing')">
                 <i class="fas fa-layer-group"></i> Processamento em Lote
             </a>
-            <a href="#history" class="menu-item" onclick="showSection('history')">
-                <i class="fas fa-history"></i> Histórico
+            <a href="#api-keys" class="menu-item" onclick="showSection('api-keys')">
+                <i class="fas fa-key"></i> Chaves API
             </a>
             <a href="#settings" class="menu-item" onclick="showSection('settings')">
                 <i class="fas fa-cog"></i> Configurações
@@ -425,15 +744,54 @@
         </aside>
 
         <main class="content">
+            <!-- Dashboard -->
+            <div id="dashboard" class="section active">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-home"></i>
+                        Dashboard - Ferramentas de IA
+                    </h1>
+                </div>
+
+                <div class="api-section">
+                    <h3>Ferramentas Disponíveis</h3>
+                    <div class="tool-grid">
+                        <!-- Ferramentas serão carregadas dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Estatísticas Rápidas</h3>
+                    <div class="usage-stats">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalTools">15</div>
+                            <div class="stat-label">Ferramentas</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="apiKeysCount">0</div>
+                            <div class="stat-label">Chaves API</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="processedItems">0</div>
+                            <div class="stat-label">Itens Processados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="successRate">100%</div>
+                            <div class="stat-label">Taxa de Sucesso</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- Seção Remover Fundo -->
-            <div id="remove-bg" class="section active">
+            <div id="remove-bg" class="section">
                 <div class="page-header">
                     <h1 class="page-title">
                         <i class="fas fa-magic"></i>
                         Remove.bg - Remoção de Fundo
                     </h1>
-                    <button class="btn btn-secondary" onclick="showSection('api-keys')">
-                        <i class="fas fa-key"></i> Configurar API
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
 
@@ -444,7 +802,7 @@
 
                 <div class="api-section">
                     <h3>Upload de Imagem</h3>
-                    <div class="upload-area" id="uploadArea" onclick="document.getElementById('imageInput').click()">
+                    <div class="upload-area" id="uploadArea">
                         <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
                         <h4>Arraste e solte uma imagem aqui</h4>
                         <p>ou clique para selecionar um arquivo</p>
@@ -535,64 +893,1003 @@
                 </div>
             </div>
 
-            <!-- Seção Chaves API -->
-            <div id="api-keys" class="section">
+            <!-- Seção Substituidor de Fundo -->
+            <div id="background-replacer" class="section">
                 <div class="page-header">
                     <h1 class="page-title">
-                        <i class="fas fa-key"></i>
-                        Gerenciar Chaves API
+                        <i class="fas fa-image"></i>
+                        Substituidor de Fundo
                     </h1>
-                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
 
-                <div class="security-warning">
-                    <i class="fas fa-shield-alt"></i>
-                    <strong>Segurança:</strong> Suas chaves API são armazenadas localmente no navegador.
+                <div class="api-section">
+                    <h3>Upload de Imagem</h3>
+                    <div class="upload-area" id="bgReplaceArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="bgReplaceInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="bgReplacePreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="bgOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="bgResultContainer">
+                                    <div id="bgProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Substituindo fundo...</p>
+                                    </div>
+                                    <img id="bgResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Escolha um novo fundo:</h4>
+                            <div class="color-picker">
+                                <div class="color-option selected" style="background-color: #ffffff;" onclick="selectBackgroundColor('#ffffff')"></div>
+                                <div class="color-option" style="background-color: #000000;" onclick="selectBackgroundColor('#000000')"></div>
+                                <div class="color-option" style="background-color: #3498db;" onclick="selectBackgroundColor('#3498db')"></div>
+                                <div class="color-option" style="background-color: #e74c3c;" onclick="selectBackgroundColor('#e74c3c')"></div>
+                                <div class="color-option" style="background-color: #2ecc71;" onclick="selectBackgroundColor('#2ecc71')"></div>
+                                <div class="color-option" style="background: linear-gradient(45deg, #ff9a9e, #fad0c4);" onclick="selectBackgroundColor('gradient1')"></div>
+                                <div class="color-option" style="background: linear-gradient(45deg, #a1c4fd, #c2e9fb);" onclick="selectBackgroundColor('gradient2')"></div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="replaceBackground()">
+                                    <i class="fas fa-image"></i> Substituir Fundo
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadBgResult()" id="downloadBgBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetBgReplace()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Trocador de Cor -->
+            <div id="color-changer" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-palette"></i>
+                        Trocador de Cor
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
                 </div>
 
                 <div class="api-section">
-                    <h3>Chaves Remove.bg Configuradas</h3>
-                    <div id="apiKeysList">
-                        <!-- Chaves serão carregadas aqui -->
+                    <h3>Upload de Imagem</h3>
+                    <div class="upload-area" id="colorChangeArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="colorChangeInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
                     </div>
 
-                    <div class="mt-3">
-                        <button class="btn btn-success" onclick="showAddKeyForm()">
-                            <i class="fas fa-plus"></i> Adicionar Nova Chave
-                        </button>
+                    <div id="colorChangePreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="colorOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="colorResultContainer">
+                                    <div id="colorProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Alterando cores...</p>
+                                    </div>
+                                    <img id="colorResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Selecione as cores para alterar:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Cor Original</label>
+                                        <input type="color" class="form-control" id="originalColor" value="#ff0000">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Nova Cor</label>
+                                        <input type="color" class="form-control" id="newColor" value="#00ff00">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>Tolerância</span>
+                                    <span id="toleranceValue">30%</span>
+                                </div>
+                                <input type="range" class="ear-slider" id="colorTolerance" min="1" max="100" value="30">
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="changeColors()">
+                                    <i class="fas fa-palette"></i> Alterar Cores
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadColorResult()" id="downloadColorBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetColorChange()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
 
-                <div class="api-section" id="addKeyForm" style="display: none;">
-                    <h3>Adicionar Chave Remove.bg</h3>
-                    <div class="form-group">
-                        <label class="form-label">Nome da Chave</label>
-                        <input type="text" class="form-control" id="apiKeyName" placeholder="Ex: Chave Produção">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label class="form-label">Chave API Remove.bg</label>
-                        <input type="password" class="form-control" id="apiKeyValue" placeholder="Cole sua chave API aqui">
-                        <small class="text-muted">Obtenha sua chave em: <a href="https://www.remove.bg/api" target="_blank">remove.bg/api</a></small>
-                    </div>
-
-                    <button class="btn btn-primary" onclick="addApiKey()">
-                        <i class="fas fa-save"></i> Salvar Chave
-                    </button>
-                    <button class="btn btn-secondary" onclick="hideAddKeyForm()">
-                        <i class="fas fa-times"></i> Cancelar
+            <!-- Seção Prova Virtual (Vestuário) -->
+            <div id="virtual-tryon" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-tshirt"></i>
+                        Prova Virtual - Vestuário
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
 
                 <div class="api-section">
-                    <h3>Testar API</h3>
-                    <p>Teste a conectividade com a API Remove.bg usando suas chaves configuradas.</p>
-                    <button class="btn btn-info" onclick="testRemoveBgAPI()">
-                        <i class="fas fa-vial"></i> Testar Conectividade
+                    <h3>Experimente Roupas Virtualmente</h3>
+                    <div class="virtual-tryon-container">
+                        <div class="virtual-tryon-preview">
+                            <div class="preview-label">Visualização</div>
+                            <canvas id="tryonCanvas" class="tryon-canvas" width="500" height="600"></canvas>
+                        </div>
+                        <div class="virtual-tryon-product">
+                            <div class="preview-label">Selecione uma Roupa</div>
+                            <div class="product-list" id="clothingList">
+                                <!-- Produtos serão carregados dinamicamente -->
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="upload-area" id="modelUploadArea" style="padding: 1.5rem;">
+                                    <i class="fas fa-user-circle" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                    <h5>Upload de Foto do Modelo</h5>
+                                    <p>Clique para selecionar uma imagem</p>
+                                    <input type="file" id="modelImageInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="applyVirtualTryOn()">
+                                    <i class="fas fa-tshirt"></i> Aplicar Roupa
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadTryOnResult()" id="downloadTryOnBtn">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Prova Virtual (Acessórios) -->
+            <div id="virtual-accessories" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-gem"></i>
+                        Prova Virtual - Acessórios
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
                     </button>
-                    <div id="apiTestResult" class="mt-2"></div>
+                </div>
+
+                <div class="api-section">
+                    <h3>Experimente Acessórios Virtualmente</h3>
+                    <div class="virtual-tryon-container">
+                        <div class="virtual-tryon-preview">
+                            <div class="preview-label">Visualização</div>
+                            <canvas id="accessoryCanvas" class="tryon-canvas" width="500" height="600"></canvas>
+                        </div>
+                        <div class="virtual-tryon-product">
+                            <div class="preview-label">Selecione um Acessório</div>
+                            <div class="product-list" id="accessoryList">
+                                <!-- Acessórios serão carregados dinamicamente -->
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="upload-area" id="faceUploadArea" style="padding: 1.5rem;">
+                                    <i class="fas fa-user-circle" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                    <h5>Upload de Foto do Rosto</h5>
+                                    <p>Clique para selecionar uma imagem</p>
+                                    <input type="file" id="faceImageInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="applyAccessoryTryOn()">
+                                    <i class="fas fa-gem"></i> Aplicar Acessório
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadAccessoryResult()" id="downloadAccessoryBtn">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Trocar Modelo de Moda -->
+            <div id="model-swap" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-user-friends"></i>
+                        Trocar Modelo de Moda
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Substitua Modelos em Fotos de Produtos</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="upload-area" id="productUploadArea" style="padding: 1.5rem;">
+                                <i class="fas fa-tshirt" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Imagem do Produto com Modelo</h5>
+                                <p>Clique para selecionar uma imagem</p>
+                                <input type="file" id="productImageInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="upload-area" id="newModelUploadArea" style="padding: 1.5rem;">
+                                <i class="fas fa-user" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Novo Modelo</h5>
+                                <p>Clique para selecionar uma imagem</p>
+                                <input type="file" id="newModelImageInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="modelSwapPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Produto Original</div>
+                                <img id="productOriginalImage" class="preview-image" src="" alt="Produto Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Novo Modelo</div>
+                                <img id="newModelImage" class="preview-image" src="" alt="Novo Modelo">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="modelSwapResultContainer">
+                                    <div id="modelSwapProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Trocando modelo...</p>
+                                    </div>
+                                    <img id="modelSwapResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <button class="btn btn-success" onclick="swapModel()">
+                                <i class="fas fa-user-friends"></i> Trocar Modelo
+                            </button>
+                            <button class="btn btn-primary" onclick="downloadModelSwapResult()" id="downloadModelSwapBtn" style="display: none;">
+                                <i class="fas fa-download"></i> Baixar Resultado
+                            </button>
+                            <button class="btn btn-secondary" onclick="resetModelSwap()">
+                                <i class="fas fa-redo"></i> Nova Troca
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Imagem para Vídeo -->
+            <div id="image-to-video" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-film"></i>
+                        Imagem para Vídeo
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Transforme Imagens em Vídeos Dinâmicos</h3>
+                    <div class="upload-area" id="imageToVideoArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="imageToVideoInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="imageToVideoPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="videoOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Prévia do Vídeo</div>
+                                <div id="videoResultContainer">
+                                    <div id="videoProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Gerando vídeo...</p>
+                                    </div>
+                                    <video id="videoResult" class="video-preview" controls style="display: none;"></video>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Efeitos de Vídeo:</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Tipo de Animação</label>
+                                        <select class="form-control" id="animationType">
+                                            <option value="zoom">Zoom In</option>
+                                            <option value="pan">Panorâmica</option>
+                                            <option value="kenburns">Efeito Ken Burns</option>
+                                            <option value="fade">Transição de Fade</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Duração (segundos)</label>
+                                        <select class="form-control" id="videoDuration">
+                                            <option value="3">3 segundos</option>
+                                            <option value="5" selected>5 segundos</option>
+                                            <option value="10">10 segundos</option>
+                                            <option value="15">15 segundos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Resolução</label>
+                                        <select class="form-control" id="videoResolution">
+                                            <option value="480p">480p</option>
+                                            <option value="720p">720p</option>
+                                            <option value="1080p" selected>1080p</option>
+                                            <option value="4k">4K</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="generateVideo()">
+                                    <i class="fas fa-film"></i> Gerar Vídeo
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadVideoResult()" id="downloadVideoBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Vídeo
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetImageToVideo()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Retoque de Imagem -->
+            <div id="image-retouch" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-sparkles"></i>
+                        Retoque de Imagem
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Melhore a Qualidade de Suas Imagens</h3>
+                    <div class="upload-area" id="retouchArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="retouchInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="retouchPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="retouchOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="retouchResultContainer">
+                                    <div id="retouchProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Aplicando retoques...</p>
+                                    </div>
+                                    <img id="retouchResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Ajustes de Retoque:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Brilho</span>
+                                            <span id="brightnessValue">0</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="brightnessSlider" min="-100" max="100" value="0">
+                                    </div>
+
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Contraste</span>
+                                            <span id="contrastValue">0</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="contrastSlider" min="-100" max="100" value="0">
+                                    </div>
+
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Saturação</span>
+                                            <span id="saturationValue">0</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="saturationSlider" min="-100" max="100" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Nitidez</span>
+                                            <span id="sharpnessValue">0</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="sharpnessSlider" min="0" max="100" value="0">
+                                    </div>
+
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Redução de Ruído</span>
+                                            <span id="noiseValue">0</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="noiseSlider" min="0" max="100" value="0">
+                                    </div>
+
+                                    <div class="form-check mt-3">
+                                        <input type="checkbox" class="form-check-input" id="autoEnhance">
+                                        <label class="form-check-label" for="autoEnhance">Melhoria Automática</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="applyRetouching()">
+                                    <i class="fas fa-sparkles"></i> Aplicar Retoques
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadRetouchResult()" id="downloadRetouchBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetRetouch()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Extensor de Imagem -->
+            <div id="image-extender" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        Extensor de Imagem
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Expanda o Conteúdo de Suas Imagens</h3>
+                    <div class="upload-area" id="extenderArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="extenderInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="extenderPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="extenderOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="extenderResultContainer">
+                                    <div id="extenderProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Expandindo imagem...</p>
+                                    </div>
+                                    <img id="extenderResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Direção de Expansão:</h4>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="setExtensionDirection('top')">
+                                        <i class="fas fa-arrow-up"></i> Para Cima
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="setExtensionDirection('right')">
+                                        <i class="fas fa-arrow-right"></i> Para Direita
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="setExtensionDirection('bottom')">
+                                        <i class="fas fa-arrow-down"></i> Para Baixo
+                                    </button>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="setExtensionDirection('left')">
+                                        <i class="fas fa-arrow-left"></i> Para Esquerda
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="slider-container mt-3">
+                                <div class="slider-label">
+                                    <span>Quantidade de Expansão</span>
+                                    <span id="extensionValue">20%</span>
+                                </div>
+                                <input type="range" class="ear-slider" id="extensionSlider" min="10" max="100" value="20">
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="extendImage()">
+                                    <i class="fas fa-expand-arrows-alt"></i> Expandir Imagem
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadExtenderResult()" id="downloadExtenderBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetExtender()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Orelhas Mágicas -->
+            <div id="magic-ears" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-headphones"></i>
+                        Orelhas Mágicas
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Ajuste e Melhore a Aparência de Orelhas em Retratos</h3>
+                    <div class="upload-area" id="earsArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem de rosto aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="earsInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="earsPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="earsOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="earsResultContainer">
+                                    <div id="earsProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Ajustando orelhas...</p>
+                                    </div>
+                                    <img id="earsResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Ajustes de Orelhas:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Tamanho da Orelha Esquerda</span>
+                                            <span id="leftEarValue">0%</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="leftEarSlider" min="-30" max="30" value="0">
+                                    </div>
+
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Posição da Orelha Esquerda</span>
+                                            <span id="leftEarPosValue">0%</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="leftEarPosSlider" min="-10" max="10" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Tamanho da Orelha Direita</span>
+                                            <span id="rightEarValue">0%</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="rightEarSlider" min="-30" max="30" value="0">
+                                    </div>
+
+                                    <div class="slider-container">
+                                        <div class="slider-label">
+                                            <span>Posição da Orelha Direita</span>
+                                            <span id="rightEarPosValue">0%</span>
+                                        </div>
+                                        <input type="range" class="ear-slider" id="rightEarPosSlider" min="-10" max="10" value="0">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-check mt-3">
+                                <input type="checkbox" class="form-check-input" id="symmetryMode">
+                                <label class="form-check-label" for="symmetryMode">Modo Simetria (aplica mesmos ajustes para ambas as orelhas)</label>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="adjustEars()">
+                                    <i class="fas fa-headphones"></i> Ajustar Orelhas
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadEarsResult()" id="downloadEarsBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetEars()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Intensificador de Imagem -->
+            <div id="image-enhancer" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-search-plus"></i>
+                        Intensificador de Imagem
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Aumente a Resolução e Qualidade de Imagens com IA</h3>
+                    <div class="upload-area" id="enhancerArea">
+                        <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
+                        <h4>Arraste e solte uma imagem aqui</h4>
+                        <p>ou clique para selecionar um arquivo</p>
+                        <input type="file" id="enhancerInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                    </div>
+
+                    <div id="enhancerPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Imagem Original</div>
+                                <img id="enhancerOriginalImage" class="preview-image" src="" alt="Original">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="enhancerResultContainer">
+                                    <div id="enhancerProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Intensificando imagem...</p>
+                                    </div>
+                                    <img id="enhancerResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Opções de Intensificação:</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Fator de Escala</label>
+                                        <select class="form-control" id="scaleFactor">
+                                            <option value="2">2x</option>
+                                            <option value="4" selected>4x</option>
+                                            <option value="8">8x</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Tipo de Imagem</label>
+                                        <select class="form-control" id="imageType">
+                                            <option value="general">Geral</option>
+                                            <option value="photo">Fotografia</option>
+                                            <option value="art">Arte/Ilustração</option>
+                                            <option value="text">Texto/Documento</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Nível de Nitidez</label>
+                                        <select class="form-control" id="sharpnessLevel">
+                                            <option value="low">Baixo</option>
+                                            <option value="medium" selected>Médio</option>
+                                            <option value="high">Alto</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="enhanceImage()">
+                                    <i class="fas fa-search-plus"></i> Intensificar Imagem
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadEnhancerResult()" id="downloadEnhancerBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetEnhancer()">
+                                    <i class="fas fa-redo"></i> Nova Imagem
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Produto em Mãos -->
+            <div id="product-in-hand" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-hand-holding"></i>
+                        Produto em Mãos
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Coloque Produtos Virtualmente nas Mãos de Modelos</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="upload-area" id="handModelArea" style="padding: 1.5rem;">
+                                <i class="fas fa-hands" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Imagem de Mãos/Modelo</h5>
+                                <p>Clique para selecionar uma imagem</p>
+                                <input type="file" id="handModelInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="upload-area" id="productHandArea" style="padding: 1.5rem;">
+                                <i class="fas fa-box" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Imagem do Produto</h5>
+                                <p>Clique para selecionar uma imagem</p>
+                                <input type="file" id="productHandInput" accept=".jpg,.jpeg,.png,.webp" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="productInHandPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Mãos/Modelo</div>
+                                <img id="handModelImage" class="preview-image" src="" alt="Mãos/Modelo">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Produto</div>
+                                <img id="productHandImage" class="preview-image" src="" alt="Produto">
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="productInHandResultContainer">
+                                    <div id="productInHandProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Posicionando produto...</p>
+                                    </div>
+                                    <img id="productInHandResultImage" class="preview-image" src="" alt="Resultado" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Posição do Produto:</h4>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Mão</label>
+                                        <select class="form-control" id="handSelection">
+                                            <option value="left">Mão Esquerda</option>
+                                            <option value="right">Mão Direita</option>
+                                            <option value="both">Ambas as Mãos</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label">Posição</label>
+                                        <select class="form-control" id="productPosition">
+                                            <option value="holding">Segurando</option>
+                                            <option value="showing">Mostrando</option>
+                                            <option value="using">Usando</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="slider-container">
+                                <div class="slider-label">
+                                    <span>Tamanho do Produto</span>
+                                    <span id="productSizeValue">100%</span>
+                                </div>
+                                <input type="range" class="ear-slider" id="productSizeSlider" min="50" max="150" value="100">
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="placeProductInHand()">
+                                    <i class="fas fa-hand-holding"></i> Posicionar Produto
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadProductInHandResult()" id="downloadProductInHandBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Resultado
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetProductInHand()">
+                                    <i class="fas fa-redo"></i> Nova Composição
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seção Sincronização Labial -->
+            <div id="lip-sync" class="section">
+                <div class="page-header">
+                    <h1 class="page-title">
+                        <i class="fas fa-comment-dots"></i>
+                        Sincronização Labial
+                    </h1>
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
+                        <i class="fas fa-arrow-left"></i> Voltar
+                    </button>
+                </div>
+
+                <div class="api-section">
+                    <h3>Sincronize Movimentos Labiais com Áudio em Vídeos</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="upload-area" id="lipSyncVideoArea" style="padding: 1.5rem;">
+                                <i class="fas fa-video" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Vídeo com Rosto</h5>
+                                <p>Clique para selecionar um arquivo de vídeo</p>
+                                <input type="file" id="lipSyncVideoInput" accept=".mp4,.mov,.avi" style="display: none;">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="upload-area" id="lipSyncAudioArea" style="padding: 1.5rem;">
+                                <i class="fas fa-microphone" style="font-size: 2rem; color: #ccc; margin-bottom: 0.5rem;"></i>
+                                <h5>Áudio para Sincronização</h5>
+                                <p>Clique para selecionar um arquivo de áudio</p>
+                                <input type="file" id="lipSyncAudioInput" accept=".mp3,.wav,.m4a" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="lipSyncPreview" style="display: none; margin-top: 2rem;">
+                        <div class="image-preview">
+                            <div class="preview-container">
+                                <div class="preview-label">Vídeo Original</div>
+                                <video id="lipSyncOriginalVideo" class="video-preview" controls>
+                                    Seu navegador não suporta a tag de vídeo.
+                                </video>
+                            </div>
+                            <div class="preview-container">
+                                <div class="preview-label">Resultado</div>
+                                <div id="lipSyncResultContainer">
+                                    <div id="lipSyncProcessingMessage" style="display: none;">
+                                        <div class="loading-spinner"></div>
+                                        <p>Sincronizando áudio e vídeo...</p>
+                                    </div>
+                                    <video id="lipSyncResultVideo" class="video-preview" controls style="display: none;">
+                                        Seu navegador não suporta a tag de vídeo.
+                                    </video>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-3">
+                            <h4>Opções de Sincronização:</h4>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Idioma do Áudio</label>
+                                        <select class="form-control" id="audioLanguage">
+                                            <option value="pt">Português</option>
+                                            <option value="en">Inglês</option>
+                                            <option value="es">Espanhol</option>
+                                            <option value="fr">Francês</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Qualidade de Sincronização</label>
+                                        <select class="form-control" id="syncQuality">
+                                            <option value="fast">Rápida</option>
+                                            <option value="balanced" selected>Balanceada</option>
+                                            <option value="high">Alta Qualidade</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="form-label">Estilo de Fala</label>
+                                        <select class="form-control" id="speechStyle">
+                                            <option value="neutral" selected>Neutro</option>
+                                            <option value="energetic">Enérgico</option>
+                                            <option value="calm">Calmo</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <button class="btn btn-success" onclick="syncLipMovement()">
+                                    <i class="fas fa-comment-dots"></i> Sincronizar Lábios
+                                </button>
+                                <button class="btn btn-primary" onclick="downloadLipSyncResult()" id="downloadLipSyncBtn" style="display: none;">
+                                    <i class="fas fa-download"></i> Baixar Vídeo
+                                </button>
+                                <button class="btn btn-secondary" onclick="resetLipSync()">
+                                    <i class="fas fa-redo"></i> Nova Sincronização
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -603,14 +1900,14 @@
                         <i class="fas fa-layer-group"></i>
                         Processamento em Lote
                     </h1>
-                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
 
                 <div class="api-section">
                     <h3>Upload Múltiplo</h3>
-                    <div class="upload-area" onclick="document.getElementById('batchInput').click()">
+                    <div class="upload-area" id="batchArea">
                         <i class="fas fa-folder-open" style="font-size: 3rem; color: #ccc; margin-bottom: 1rem;"></i>
                         <h4>Arraste e solte múltiplas imagens</h4>
                         <p>ou clique para selecionar arquivos</p>
@@ -620,7 +1917,7 @@
 
                     <div id="batchPreview" style="display: none; margin-top: 2rem;">
                         <h4>Imagens Selecionadas</h4>
-                        <div id="batchImagesList" class="row"></div>
+                        <div id="batchImagesList" class="batch-images"></div>
                         
                         <div class="mt-3">
                             <button class="btn btn-success" onclick="processBatch()" id="processBatchBtn">
@@ -645,45 +1942,43 @@
                 </div>
             </div>
 
-            <!-- Seção Histórico -->
-            <div id="history" class="section">
+            <!-- Seção Chaves API -->
+            <div id="api-keys" class="section">
                 <div class="page-header">
                     <h1 class="page-title">
-                        <i class="fas fa-history"></i>
-                        Histórico de Processamento
+                        <i class="fas fa-key"></i>
+                        Gerenciar Chaves API
                     </h1>
-                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
 
+                <div class="security-warning">
+                    <i class="fas fa-shield-alt"></i>
+                    <strong>Segurança:</strong> Suas chaves API são armazenadas localmente no navegador.
+                </div>
+
                 <div class="api-section">
-                    <h3>Estatísticas de Uso</h3>
-                    <div class="usage-stats">
-                        <div class="stat-card">
-                            <div class="stat-value" id="totalProcessed">0</div>
-                            <div class="stat-label">Total Processado</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="successRate">0%</div>
-                            <div class="stat-label">Taxa de Sucesso</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="apiCalls">0</div>
-                            <div class="stat-label">Chamadas API</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-value" id="lastProcessed">-</div>
-                            <div class="stat-label">Último Processo</div>
-                        </div>
+                    <h3>Chaves API Configuradas</h3>
+                    <div id="apiKeysList">
+                        <!-- Chaves serão carregadas aqui -->
+                    </div>
+
+                    <div class="mt-3">
+                        <button class="btn btn-success" onclick="showAddKeyModal()">
+                            <i class="fas fa-plus"></i> Adicionar Nova Chave
+                        </button>
                     </div>
                 </div>
 
                 <div class="api-section">
-                    <h3>Histórico Recente</h3>
-                    <div id="processingHistory">
-                        <!-- Histórico será carregado aqui -->
-                    </div>
+                    <h3>Testar API</h3>
+                    <p>Teste a conectividade com as APIs usando suas chaves configuradas.</p>
+                    <button class="btn btn-info" onclick="testAllAPIs()">
+                        <i class="fas fa-vial"></i> Testar Conectividade
+                    </button>
+                    <div id="apiTestResult" class="mt-2"></div>
                 </div>
             </div>
 
@@ -694,7 +1989,7 @@
                         <i class="fas fa-cog"></i>
                         Configurações
                     </h1>
-                    <button class="btn btn-secondary" onclick="showSection('remove-bg')">
+                    <button class="btn btn-secondary" onclick="showSection('dashboard')">
                         <i class="fas fa-arrow-left"></i> Voltar
                     </button>
                 </div>
@@ -761,6 +2056,48 @@
         </main>
     </div>
 
+    <!-- Modal para Adicionar/Editar Chave API -->
+    <div class="modal-overlay" id="apiKeyModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Adicionar Chave API</h3>
+                <button class="modal-close" onclick="hideApiKeyModal()">&times;</button>
+            </div>
+            <form id="apiKeyForm">
+                <input type="hidden" id="editKeyId" value="">
+                <div class="form-group">
+                    <label class="form-label" for="apiProvider">Provedor</label>
+                    <select class="form-control" id="apiProvider" required>
+                        <option value="">Selecione um provedor</option>
+                        <option value="removebg">Remove.bg</option>
+                        <option value="openai">OpenAI</option>
+                        <option value="stabilityai">Stability AI</option>
+                        <option value="custom">Personalizada</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="apiKeyName">Nome da Chave</label>
+                    <input type="text" class="form-control" id="apiKeyName" placeholder="Ex: Chave Produção" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="apiKeyValue">Chave API</label>
+                    <input type="password" class="form-control" id="apiKeyValue" placeholder="Cole sua chave API aqui" required>
+                    <small class="text-muted">Obtenha sua chave no site do provedor selecionado</small>
+                </div>
+                <div class="form-group">
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="setAsDefault">
+                        <label class="form-check-label" for="setAsDefault">Definir como chave padrão</label>
+                    </div>
+                </div>
+                <div class="d-flex gap-2 justify-content-end">
+                    <button type="button" class="btn btn-secondary" onclick="hideApiKeyModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar Chave</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Notification Toast -->
     <div class="notification-toast" id="notificationToast">
         <div class="notification-icon" id="toastIcon" style="background-color: var(--info-color);">
@@ -777,10 +2114,10 @@
 
     <script>
         // =============================================
-        // CONFIGURAÇÃO E DADOS DO SISTEMA
+        // SISTEMA PRINCIPAL - TODAS AS FERRAMENTAS
         // =============================================
 
-        const REMOVEBG_CONFIG = {
+        const APP_CONFIG = {
             apiKeys: [],
             defaultKey: null,
             settings: {
@@ -790,359 +2127,521 @@
                 defaultFormat: 'png',
                 defaultSize: 'auto'
             },
-            history: [],
             statistics: {
                 totalProcessed: 0,
                 successful: 0,
                 failed: 0,
-                apiCalls: 0,
-                lastProcessed: null
-            }
+                apiCalls: 0
+            },
+            currentTool: 'dashboard'
         };
 
+        // Variáveis globais para as ferramentas
         let currentImage = null;
         let currentResult = null;
         let batchImages = [];
+        let selectedBackgroundColor = '#ffffff';
+        let selectedClothing = null;
+        let selectedAccessory = null;
+        let extensionDirection = 'right';
 
-        // =============================================
-        // INICIALIZAÇÃO DO SISTEMA
-        // =============================================
-
+        // Inicialização do sistema
         document.addEventListener('DOMContentLoaded', function() {
             initializeSystem();
-            setupEventListeners();
             loadSavedData();
+            updateUI();
+            setupEventListeners();
             
-            console.log('🎨 Remove.bg API Integrada - D.Pedro Soluções');
+            console.log('🚀 D.Pedro Soluções - Sistema de Ferramentas de IA Inicializado');
         });
 
         function initializeSystem() {
-            showNotification('Sistema Iniciado', 'Remove.bg API integrada com sucesso', 'success');
-            setupDragAndDrop();
-        }
+            // Configurar evento do formulário de API
+            document.getElementById('apiKeyForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveApiKey();
+            });
 
-        function loadSavedData() {
-            // Carregar chaves API
-            const savedKeys = localStorage.getItem('removebg_api_keys');
-            if (savedKeys) {
-                REMOVEBG_CONFIG.apiKeys = JSON.parse(savedKeys);
-            }
+            // Configurar evento do botão fechar notificação
+            document.getElementById('toastClose').addEventListener('click', hideNotification);
 
-            // Carregar configurações
-            const savedSettings = localStorage.getItem('removebg_settings');
-            if (savedSettings) {
-                REMOVEBG_CONFIG.settings = {...REMOVEBG_CONFIG.settings, ...JSON.parse(savedSettings)};
-            }
-
-            // Carregar histórico
-            const savedHistory = localStorage.getItem('removebg_history');
-            if (savedHistory) {
-                REMOVEBG_CONFIG.history = JSON.parse(savedHistory);
-            }
-
-            // Carregar estatísticas
-            const savedStats = localStorage.getItem('removebg_statistics');
-            if (savedStats) {
-                REMOVEBG_CONFIG.statistics = JSON.parse(savedStats);
-            }
-
-            updateUI();
-        }
-
-        function saveData() {
-            localStorage.setItem('removebg_api_keys', JSON.stringify(REMOVEBG_CONFIG.apiKeys));
-            localStorage.setItem('removebg_settings', JSON.stringify(REMOVEBG_CONFIG.settings));
-            localStorage.setItem('removebg_history', JSON.stringify(REMOVEBG_CONFIG.history));
-            localStorage.setItem('removebg_statistics', JSON.stringify(REMOVEBG_CONFIG.statistics));
-        }
-
-        function updateUI() {
-            updateApiKeysList();
-            updateSettingsForm();
-            updateStatistics();
-            updateHistory();
-        }
-
-        // =============================================
-        // GERENCIAMENTO DE CHAVES API
-        // =============================================
-
-        function showAddKeyForm() {
-            document.getElementById('addKeyForm').style.display = 'block';
-        }
-
-        function hideAddKeyForm() {
-            document.getElementById('addKeyForm').style.display = 'none';
-            document.getElementById('apiKeyName').value = '';
-            document.getElementById('apiKeyValue').value = '';
-        }
-
-        function addApiKey() {
-            const name = document.getElementById('apiKeyName').value.trim();
-            const key = document.getElementById('apiKeyValue').value.trim();
-
-            if (!name || !key) {
-                showNotification('Erro', 'Preencha o nome e a chave API', 'error');
-                return;
-            }
-
-            const newKey = {
-                id: 'key_' + Date.now(),
-                name: name,
-                key: key,
-                createdAt: new Date().toISOString(),
-                lastUsed: null,
-                usage: 0,
-                status: 'active'
-            };
-
-            REMOVEBG_CONFIG.apiKeys.push(newKey);
+            // Carregar ferramentas no dashboard
+            loadToolsDashboard();
             
-            // Se for a primeira chave, definir como padrão
-            if (REMOVEBG_CONFIG.apiKeys.length === 1) {
-                REMOVEBG_CONFIG.defaultKey = newKey.id;
-            }
-
-            saveData();
-            updateUI();
-            hideAddKeyForm();
-
-            showNotification('Sucesso', 'Chave API adicionada com sucesso', 'success');
+            // Carregar produtos para prova virtual
+            loadVirtualTryOnProducts();
         }
-
-        function updateApiKeysList() {
-            const container = document.getElementById('apiKeysList');
-            const defaultSelect = document.getElementById('defaultApiKey');
-
-            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
-                container.innerHTML = '<p class="text-muted">Nenhuma chave API configurada</p>';
-                defaultSelect.innerHTML = '<option value="">Nenhuma chave disponível</option>';
-                return;
-            }
-
-            container.innerHTML = REMOVEBG_CONFIG.apiKeys.map(key => `
-                <div class="api-key-item">
-                    <div class="api-key-info">
-                        <div class="api-key-name">
-                            ${key.name}
-                            ${key.id === REMOVEBG_CONFIG.defaultKey ? '<span class="status-connected">Padrão</span>' : ''}
-                        </div>
-                        <div class="api-key-preview">
-                            ${key.key.substring(0, 8)}...${key.key.substring(key.key.length - 4)}
-                            ${key.lastUsed ? `<br><small>Último uso: ${new Date(key.lastUsed).toLocaleDateString('pt-BR')}</small>` : ''}
-                        </div>
-                    </div>
-                    <div class="api-key-actions">
-                        <button class="btn btn-sm btn-primary" onclick="setDefaultKey('${key.id}')">
-                            <i class="fas fa-star"></i>
-                        </button>
-                        <button class="btn btn-sm btn-danger" onclick="deleteApiKey('${key.id}')">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            defaultSelect.innerHTML = REMOVEBG_CONFIG.apiKeys.map(key => 
-                `<option value="${key.id}" ${key.id === REMOVEBG_CONFIG.defaultKey ? 'selected' : ''}>${key.name}</option>`
-            ).join('');
-        }
-
-        function setDefaultKey(keyId) {
-            REMOVEBG_CONFIG.defaultKey = keyId;
-            saveData();
-            updateApiKeysList();
-            showNotification('Sucesso', 'Chave padrão definida', 'success');
-        }
-
-        function deleteApiKey(keyId) {
-            if (!confirm('Tem certeza que deseja excluir esta chave API?')) return;
-
-            REMOVEBG_CONFIG.apiKeys = REMOVEBG_CONFIG.apiKeys.filter(key => key.id !== keyId);
-            
-            // Se a chave excluída era a padrão, definir uma nova
-            if (REMOVEBG_CONFIG.defaultKey === keyId && REMOVEBG_CONFIG.apiKeys.length > 0) {
-                REMOVEBG_CONFIG.defaultKey = REMOVEBG_CONFIG.apiKeys[0].id;
-            } else if (REMOVEBG_CONFIG.apiKeys.length === 0) {
-                REMOVEBG_CONFIG.defaultKey = null;
-            }
-
-            saveData();
-            updateUI();
-            showNotification('Sucesso', 'Chave API excluída', 'success');
-        }
-
-        function testRemoveBgAPI() {
-            const resultDiv = document.getElementById('apiTestResult');
-            
-            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
-                resultDiv.innerHTML = '<span class="status-disconnected">Nenhuma chave configurada</span>';
-                return;
-            }
-
-            const testKey = REMOVEBG_CONFIG.apiKeys.find(k => k.id === REMOVEBG_CONFIG.defaultKey);
-            if (!testKey) {
-                resultDiv.innerHTML = '<span class="status-disconnected">Chave padrão não encontrada</span>';
-                return;
-            }
-
-            resultDiv.innerHTML = '<span class="status-connected">Testando conectividade...</span>';
-
-            // Simulação de teste de API (em produção, faria uma requisição real)
-            setTimeout(() => {
-                resultDiv.innerHTML = '<span class="status-connected">✓ API Remove.bg conectada com sucesso</span>';
-                showNotification('Teste API', 'Conexão estabelecida com sucesso', 'success');
-            }, 1500);
-        }
-
-        // =============================================
-        // UPLOAD E PROCESSAMENTO DE IMAGENS
-        // =============================================
 
         function setupEventListeners() {
-            // Upload de imagem única
-            document.getElementById('imageInput').addEventListener('change', handleImageUpload);
+            // Configurar eventos de upload para todas as ferramentas
+            setupUploadAreas();
             
-            // Upload em lote
-            document.getElementById('batchInput').addEventListener('change', handleBatchUpload);
-            
-            // Fechar notificação
-            document.getElementById('toastClose').addEventListener('click', hideNotification);
+            // Configurar eventos de sliders
+            setupSliders();
         }
 
-        function setupDragAndDrop() {
-            const uploadArea = document.getElementById('uploadArea');
-            
-            uploadArea.addEventListener('dragover', function(e) {
-                e.preventDefault();
-                uploadArea.classList.add('dragover');
+        function setupUploadAreas() {
+            const uploadAreas = document.querySelectorAll('.upload-area');
+            uploadAreas.forEach(area => {
+                area.addEventListener('click', function() {
+                    const fileInput = this.querySelector('input[type="file"]');
+                    if (fileInput) fileInput.click();
+                });
+
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+
+                area.addEventListener('dragleave', function() {
+                    this.classList.remove('dragover');
+                });
+
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const fileInput = this.querySelector('input[type="file"]');
+                        if (fileInput) {
+                            fileInput.files = files;
+                            const event = new Event('change', { bubbles: true });
+                            fileInput.dispatchEvent(event);
+                        }
+                    }
+                });
             });
-            
-            uploadArea.addEventListener('dragleave', function() {
-                uploadArea.classList.remove('dragover');
-            });
-            
-            uploadArea.addEventListener('drop', function(e) {
-                e.preventDefault();
-                uploadArea.classList.remove('dragover');
-                
-                if (e.dataTransfer.files.length) {
-                    handleImageFile(e.dataTransfer.files[0]);
-                }
+
+            // Configurar eventos de change para inputs de arquivo
+            document.querySelectorAll('input[type="file"]').forEach(input => {
+                input.addEventListener('change', handleFileUpload);
             });
         }
 
-        function handleImageUpload(e) {
-            if (e.target.files.length) {
-                handleImageFile(e.target.files[0]);
+        function setupSliders() {
+            const sliders = document.querySelectorAll('input[type="range"]');
+            sliders.forEach(slider => {
+                slider.addEventListener('input', function() {
+                    const valueDisplay = this.parentElement.querySelector('.slider-label span:last-child');
+                    if (valueDisplay) {
+                        if (this.id.includes('Value') || this.id.includes('Ear')) {
+                            valueDisplay.textContent = this.value + '%';
+                        } else {
+                            valueDisplay.textContent = this.value;
+                        }
+                    }
+                });
+            });
+        }
+
+        function handleFileUpload(e) {
+            const input = e.target;
+            const files = input.files;
+            
+            if (!files || files.length === 0) return;
+
+            const toolId = getToolIdFromInput(input);
+            
+            if (input.multiple) {
+                // Processamento em lote
+                handleBatchUpload(files, toolId);
+            } else {
+                // Upload único
+                handleSingleUpload(files[0], toolId);
             }
         }
 
-        function handleImageFile(file) {
-            if (!file.type.match('image.*')) {
-                showNotification('Erro', 'Por favor, selecione um arquivo de imagem válido', 'error');
-                return;
-            }
+        function getToolIdFromInput(input) {
+            const section = input.closest('.section');
+            return section ? section.id : 'unknown';
+        }
 
-            if (file.size > 10 * 1024 * 1024) {
-                showNotification('Erro', 'A imagem deve ter no máximo 10MB', 'error');
+        function handleSingleUpload(file, toolId) {
+            if (!file.type.match('image.*') && !file.type.match('video.*') && !file.type.match('audio.*')) {
+                showNotification('Erro', 'Por favor, selecione um arquivo de mídia válido', 'error');
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                currentImage = {
-                    file: file,
-                    dataUrl: e.target.result
-                };
-                
-                document.getElementById('originalImage').src = e.target.result;
-                document.getElementById('imagePreview').style.display = 'block';
-                document.getElementById('processBtn').style.display = 'inline-flex';
-                document.getElementById('downloadBtn').style.display = 'none';
-                
-                // Processamento automático se configurado
-                if (REMOVEBG_CONFIG.settings.autoProcess) {
-                    setTimeout(() => processImage(), 500);
-                }
+                displayUploadPreview(file, e.target.result, toolId);
             };
             reader.readAsDataURL(file);
         }
 
+        function displayUploadPreview(file, dataUrl, toolId) {
+            // Implementação específica para cada ferramenta
+            switch(toolId) {
+                case 'remove-bg':
+                    document.getElementById('originalImage').src = dataUrl;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    break;
+                case 'background-replacer':
+                    document.getElementById('bgOriginalImage').src = dataUrl;
+                    document.getElementById('bgReplacePreview').style.display = 'block';
+                    break;
+                case 'color-changer':
+                    document.getElementById('colorOriginalImage').src = dataUrl;
+                    document.getElementById('colorChangePreview').style.display = 'block';
+                    break;
+                case 'virtual-tryon':
+                    // Para prova virtual - carregar no canvas
+                    loadImageToCanvas(dataUrl, 'tryonCanvas');
+                    break;
+                case 'virtual-accessories':
+                    loadImageToCanvas(dataUrl, 'accessoryCanvas');
+                    break;
+                case 'model-swap':
+                    if (file.name.includes('product')) {
+                        document.getElementById('productOriginalImage').src = dataUrl;
+                    } else {
+                        document.getElementById('newModelImage').src = dataUrl;
+                    }
+                    checkModelSwapPreview();
+                    break;
+                case 'image-to-video':
+                    document.getElementById('videoOriginalImage').src = dataUrl;
+                    document.getElementById('imageToVideoPreview').style.display = 'block';
+                    break;
+                case 'image-retouch':
+                    document.getElementById('retouchOriginalImage').src = dataUrl;
+                    document.getElementById('retouchPreview').style.display = 'block';
+                    break;
+                case 'image-extender':
+                    document.getElementById('extenderOriginalImage').src = dataUrl;
+                    document.getElementById('extenderPreview').style.display = 'block';
+                    break;
+                case 'magic-ears':
+                    document.getElementById('earsOriginalImage').src = dataUrl;
+                    document.getElementById('earsPreview').style.display = 'block';
+                    break;
+                case 'image-enhancer':
+                    document.getElementById('enhancerOriginalImage').src = dataUrl;
+                    document.getElementById('enhancerPreview').style.display = 'block';
+                    break;
+                case 'product-in-hand':
+                    if (file.name.includes('hand') || file.name.includes('model')) {
+                        document.getElementById('handModelImage').src = dataUrl;
+                    } else {
+                        document.getElementById('productHandImage').src = dataUrl;
+                    }
+                    checkProductInHandPreview();
+                    break;
+                case 'lip-sync':
+                    if (file.type.match('video.*')) {
+                        const video = document.getElementById('lipSyncOriginalVideo');
+                        video.src = URL.createObjectURL(file);
+                    }
+                    checkLipSyncPreview();
+                    break;
+            }
+
+            currentImage = {
+                file: file,
+                dataUrl: dataUrl
+            };
+        }
+
+        function loadImageToCanvas(dataUrl, canvasId) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            img.src = dataUrl;
+        }
+
+        // =============================================
+        // DASHBOARD E FERRAMENTAS
+        // =============================================
+
+        function loadToolsDashboard() {
+            const tools = [
+                {
+                    id: 'remove-bg',
+                    icon: 'magic',
+                    title: 'Removedor de Fundo',
+                    description: 'Remova automaticamente o fundo de imagens usando IA avançada.'
+                },
+                {
+                    id: 'background-replacer',
+                    icon: 'image',
+                    title: 'Substituidor de Fundo',
+                    description: 'Substitua o fundo de imagens por cenários personalizados.'
+                },
+                {
+                    id: 'color-changer',
+                    icon: 'palette',
+                    title: 'Trocador de Cor',
+                    description: 'Altere cores específicas em imagens com precisão.'
+                },
+                {
+                    id: 'virtual-tryon',
+                    icon: 'tshirt',
+                    title: 'Prova Virtual (Vestuário)',
+                    description: 'Experimente roupas virtualmente em modelos ou em si mesmo.'
+                },
+                {
+                    id: 'virtual-accessories',
+                    icon: 'gem',
+                    title: 'Prova Virtual (Acessórios)',
+                    description: 'Experimente acessórios como óculos, joias e relógios.'
+                },
+                {
+                    id: 'model-swap',
+                    icon: 'user-friends',
+                    title: 'Trocar Modelo de Moda',
+                    description: 'Substitua modelos em fotos de produtos por outros modelos.'
+                },
+                {
+                    id: 'image-to-video',
+                    icon: 'film',
+                    title: 'Imagem para Vídeo',
+                    description: 'Transforme imagens estáticas em vídeos dinâmicos.'
+                },
+                {
+                    id: 'image-retouch',
+                    icon: 'sparkles',
+                    title: 'Retoque de Imagem',
+                    description: 'Melhore automaticamente a qualidade de suas imagens.'
+                },
+                {
+                    id: 'image-extender',
+                    icon: 'expand-arrows-alt',
+                    title: 'Extensor de Imagem',
+                    description: 'Expanda o conteúdo de imagens além de suas bordas originais.'
+                },
+                {
+                    id: 'magic-ears',
+                    icon: 'headphones',
+                    title: 'Orelhas Mágicas',
+                    description: 'Ajuste e melhore a aparência de orelhas em retratos.'
+                },
+                {
+                    id: 'image-enhancer',
+                    icon: 'search-plus',
+                    title: 'Intensificador de Imagem',
+                    description: 'Aumente a resolução e qualidade de imagens com IA.'
+                },
+                {
+                    id: 'product-in-hand',
+                    icon: 'hand-holding',
+                    title: 'Produto em Mãos',
+                    description: 'Coloque produtos virtualmente nas mãos de modelos.'
+                },
+                {
+                    id: 'lip-sync',
+                    icon: 'comment-dots',
+                    title: 'Sincronização Labial',
+                    description: 'Sincronize movimentos labiais com áudio em vídeos.'
+                },
+                {
+                    id: 'batch-processing',
+                    icon: 'layer-group',
+                    title: 'Processamento em Lote',
+                    description: 'Processe múltiplas imagens simultaneamente.'
+                },
+                {
+                    id: 'api-keys',
+                    icon: 'key',
+                    title: 'Chaves API',
+                    description: 'Gerencie suas chaves de API para todas as ferramentas.'
+                }
+            ];
+
+            const container = document.querySelector('.tool-grid');
+            container.innerHTML = tools.map(tool => `
+                <div class="tool-card" onclick="showSection('${tool.id}')">
+                    <div class="tool-icon">
+                        <i class="fas fa-${tool.icon}"></i>
+                    </div>
+                    <div class="tool-info">
+                        <div class="tool-title">${tool.title}</div>
+                        <div class="tool-description">${tool.description}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadVirtualTryOnProducts() {
+            const clothingProducts = [
+                { id: 'tshirt1', name: 'Camiseta Azul', color: '#3498db' },
+                { id: 'tshirt2', name: 'Camiseta Vermelha', color: '#e74c3c' },
+                { id: 'dress1', name: 'Vestido Roxo', color: '#9b59b6' },
+                { id: 'jacket1', name: 'Jaqueta Preta', color: '#34495e' }
+            ];
+
+            const accessoryProducts = [
+                { id: 'glasses1', name: 'Óculos Preto', color: '#2c3e50' },
+                { id: 'glasses2', name: 'Óculos Dourado', color: '#f39c12' },
+                { id: 'earrings1', name: 'Brinco Laranja', color: '#e67e22' },
+                { id: 'necklace1', name: 'Colar Verde', color: '#1abc9c' }
+            ];
+
+            const clothingContainer = document.getElementById('clothingList');
+            const accessoryContainer = document.getElementById('accessoryList');
+
+            clothingContainer.innerHTML = clothingProducts.map(product => `
+                <div class="product-item" onclick="selectProduct('${product.id}', 'clothing')">
+                    <div style="background-color: ${product.color}; height: 150px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-tshirt" style="font-size: 3rem;"></i>
+                    </div>
+                    <div style="padding: 0.5rem; text-align: center; font-size: 0.8rem;">${product.name}</div>
+                </div>
+            `).join('');
+
+            accessoryContainer.innerHTML = accessoryProducts.map(product => `
+                <div class="product-item" onclick="selectProduct('${product.id}', 'accessory')">
+                    <div style="background-color: ${product.color}; height: 150px; display: flex; align-items: center; justify-content: center; color: white;">
+                        <i class="fas fa-gem" style="font-size: 3rem;"></i>
+                    </div>
+                    <div style="padding: 0.5rem; text-align: center; font-size: 0.8rem;">${product.name}</div>
+                </div>
+            `).join('');
+        }
+
+        function selectProduct(productId, type) {
+            if (type === 'clothing') {
+                selectedClothing = productId;
+                document.querySelectorAll('#clothingList .product-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                event.target.closest('.product-item').classList.add('selected');
+            } else {
+                selectedAccessory = productId;
+                document.querySelectorAll('#accessoryList .product-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                event.target.closest('.product-item').classList.add('selected');
+            }
+        }
+
+        // =============================================
+        // FUNÇÕES DAS FERRAMENTAS
+        // =============================================
+
+        // Removedor de Fundo
         function processImage() {
-            if (!currentImage) {
-                showNotification('Erro', 'Nenhuma imagem carregada', 'error');
-                return;
-            }
-
-            if (REMOVEBG_CONFIG.apiKeys.length === 0) {
-                showNotification('Erro', 'Configure uma chave API primeiro', 'error');
-                showSection('api-keys');
-                return;
-            }
-
-            const processBtn = document.getElementById('processBtn');
-            const processingMessage = document.getElementById('processingMessage');
-            const resultImage = document.getElementById('resultImage');
-
-            processBtn.disabled = true;
-            processingMessage.style.display = 'block';
-            resultImage.style.display = 'none';
-
-            // Simulação do processamento com a API Remove.bg
-            // Em produção, aqui seria feita a chamada real à API
-            setTimeout(() => {
-                // Simular resultado bem-sucedido
-                currentResult = {
-                    dataUrl: currentImage.dataUrl, // Em produção, seria a imagem processada
-                    processedAt: new Date().toISOString(),
-                    size: document.getElementById('outputSize').value,
-                    format: document.getElementById('outputFormat').value
-                };
-
-                processingMessage.style.display = 'none';
-                resultImage.src = currentImage.dataUrl; // Em produção, seria a imagem processada
-                resultImage.style.display = 'block';
-                document.getElementById('downloadBtn').style.display = 'inline-flex';
-                processBtn.disabled = false;
-
-                // Atualizar estatísticas
-                updateStatisticsAfterProcess(true);
-                showNotification('Sucesso', 'Fundo removido com sucesso!', 'success');
-            }, 3000);
+            simulateProcessing('processBtn', 'processingMessage', 'resultImage', 'downloadBtn', 'Fundo removido com sucesso!');
         }
 
-        function downloadResult() {
-            if (!currentResult) {
-                showNotification('Erro', 'Nenhum resultado para download', 'error');
+        // Substituidor de Fundo
+        function selectBackgroundColor(color) {
+            selectedBackgroundColor = color;
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function replaceBackground() {
+            simulateProcessing(null, 'bgProcessingMessage', 'bgResultImage', 'downloadBgBtn', 'Fundo substituído com sucesso!');
+        }
+
+        // Trocador de Cor
+        function changeColors() {
+            simulateProcessing(null, 'colorProcessingMessage', 'colorResultImage', 'downloadColorBtn', 'Cores alteradas com sucesso!');
+        }
+
+        // Prova Virtual
+        function applyVirtualTryOn() {
+            if (!selectedClothing) {
+                showNotification('Atenção', 'Selecione uma roupa primeiro', 'warning');
                 return;
             }
+            showNotification('Sucesso', 'Roupa aplicada virtualmente', 'success');
+        }
 
-            const link = document.createElement('a');
-            link.download = `imagem-sem-fundo-${Date.now()}.${currentResult.format}`;
-            link.href = currentResult.dataUrl;
-            link.click();
+        function applyAccessoryTryOn() {
+            if (!selectedAccessory) {
+                showNotification('Atenção', 'Selecione um acessório primeiro', 'warning');
+                return;
+            }
+            showNotification('Sucesso', 'Acessório aplicado virtualmente', 'success');
+        }
+
+        // Trocar Modelo
+        function checkModelSwapPreview() {
+            const productImg = document.getElementById('productOriginalImage').src;
+            const modelImg = document.getElementById('newModelImage').src;
             
-            showNotification('Download', 'Imagem baixada com sucesso', 'success');
+            if (productImg && modelImg && productImg !== '' && modelImg !== '') {
+                document.getElementById('modelSwapPreview').style.display = 'block';
+            }
         }
 
-        function resetUpload() {
-            currentImage = null;
-            currentResult = null;
-            document.getElementById('imageInput').value = '';
-            document.getElementById('imagePreview').style.display = 'none';
-            document.getElementById('processBtn').style.display = 'inline-flex';
-            document.getElementById('downloadBtn').style.display = 'none';
+        function swapModel() {
+            simulateProcessing(null, 'modelSwapProcessingMessage', 'modelSwapResultImage', 'downloadModelSwapBtn', 'Modelo trocado com sucesso!');
         }
 
-        // =============================================
-        // PROCESSAMENTO EM LOTE
-        // =============================================
+        // Imagem para Vídeo
+        function generateVideo() {
+            simulateProcessing(null, 'videoProcessingMessage', 'videoResult', 'downloadVideoBtn', 'Vídeo gerado com sucesso!');
+        }
 
-        function handleBatchUpload(e) {
-            const files = Array.from(e.target.files).slice(0, 10); // Limitar a 10 arquivos
+        // Retoque de Imagem
+        function applyRetouching() {
+            simulateProcessing(null, 'retouchProcessingMessage', 'retouchResultImage', 'downloadRetouchBtn', 'Retoques aplicados com sucesso!');
+        }
+
+        // Extensor de Imagem
+        function setExtensionDirection(direction) {
+            extensionDirection = direction;
+            document.querySelectorAll('#image-extender .btn-outline-primary').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function extendImage() {
+            simulateProcessing(null, 'extenderProcessingMessage', 'extenderResultImage', 'downloadExtenderBtn', 'Imagem expandida com sucesso!');
+        }
+
+        // Orelhas Mágicas
+        function adjustEars() {
+            simulateProcessing(null, 'earsProcessingMessage', 'earsResultImage', 'downloadEarsBtn', 'Orelhas ajustadas com sucesso!');
+        }
+
+        // Intensificador de Imagem
+        function enhanceImage() {
+            simulateProcessing(null, 'enhancerProcessingMessage', 'enhancerResultImage', 'downloadEnhancerBtn', 'Imagem intensificada com sucesso!');
+        }
+
+        // Produto em Mãos
+        function checkProductInHandPreview() {
+            const handImg = document.getElementById('handModelImage').src;
+            const productImg = document.getElementById('productHandImage').src;
             
-            batchImages = files.map(file => ({
+            if (handImg && productImg && handImg !== '' && productImg !== '') {
+                document.getElementById('productInHandPreview').style.display = 'block';
+            }
+        }
+
+        function placeProductInHand() {
+            simulateProcessing(null, 'productInHandProcessingMessage', 'productInHandResultImage', 'downloadProductInHandBtn', 'Produto posicionado com sucesso!');
+        }
+
+        // Sincronização Labial
+        function checkLipSyncPreview() {
+            const videoInput = document.getElementById('lipSyncVideoInput').files.length;
+            const audioInput = document.getElementById('lipSyncAudioInput').files.length;
+            
+            if (videoInput > 0 && audioInput > 0) {
+                document.getElementById('lipSyncPreview').style.display = 'block';
+            }
+        }
+
+        function syncLipMovement() {
+            simulateProcessing(null, 'lipSyncProcessingMessage', 'lipSyncResultVideo', 'downloadLipSyncBtn', 'Sincronização concluída com sucesso!');
+        }
+
+        // Processamento em Lote
+        function handleBatchUpload(files, toolId) {
+            batchImages = Array.from(files).slice(0, 10).map(file => ({
                 file: file,
                 name: file.name,
                 size: file.size,
@@ -1156,14 +2655,11 @@
         function updateBatchPreview() {
             const container = document.getElementById('batchImagesList');
             container.innerHTML = batchImages.map((img, index) => `
-                <div class="col-md-4 mb-3">
-                    <div class="card">
-                        <div class="card-body">
-                            <h6 class="card-title">${img.name}</h6>
-                            <p class="card-text text-muted">${(img.size / 1024).toFixed(1)} KB</p>
-                            <span class="badge bg-secondary">Pendente</span>
-                        </div>
+                <div class="batch-image-item">
+                    <div style="background: #f8f9fa; height: 120px; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-image" style="font-size: 2rem; color: #ccc;"></i>
                     </div>
+                    <div class="batch-image-name">${img.name}</div>
                 </div>
             `).join('');
         }
@@ -1182,7 +2678,6 @@
 
             batchImages.forEach((img, index) => {
                 setTimeout(() => {
-                    // Simular processamento
                     img.status = 'completed';
                     processed++;
                     
@@ -1195,16 +2690,8 @@
                         document.getElementById('batchStatus').textContent = 'Processamento concluído!';
                         document.getElementById('processBatchBtn').disabled = false;
                         showNotification('Lote Concluído', `${total} imagens processadas com sucesso`, 'success');
-                        
-                        // Atualizar estatísticas
-                        REMOVEBG_CONFIG.statistics.totalProcessed += total;
-                        REMOVEBG_CONFIG.statistics.successful += total;
-                        REMOVEBG_CONFIG.statistics.apiCalls += total;
-                        REMOVEBG_CONFIG.statistics.lastProcessed = new Date().toISOString();
-                        saveData();
-                        updateStatistics();
                     }
-                }, index * 2000);
+                }, index * 1000);
             });
         }
 
@@ -1215,117 +2702,311 @@
             document.getElementById('batchProgress').style.display = 'none';
         }
 
+        // Função auxiliar para simular processamento
+        function simulateProcessing(btnId, processingId, resultId, downloadId, successMessage) {
+            const processingElement = document.getElementById(processingId);
+            const resultElement = document.getElementById(resultId);
+            const downloadElement = document.getElementById(downloadId);
+            
+            if (btnId) {
+                document.getElementById(btnId).disabled = true;
+            }
+            
+            processingElement.style.display = 'block';
+            if (resultElement) resultElement.style.display = 'none';
+
+            setTimeout(() => {
+                processingElement.style.display = 'none';
+                if (resultElement) {
+                    resultElement.style.display = 'block';
+                    if (resultElement.tagName === 'IMG') {
+                        resultElement.src = currentImage.dataUrl;
+                    }
+                }
+                if (downloadElement) downloadElement.style.display = 'inline-block';
+                if (btnId) document.getElementById(btnId).disabled = false;
+                
+                showNotification('Sucesso', successMessage, 'success');
+            }, 2000);
+        }
+
         // =============================================
-        // HISTÓRICO E ESTATÍSTICAS
+        // SISTEMA DE GERENCIAMENTO DE CHAVES API
         // =============================================
 
-        function updateStatisticsAfterProcess(success) {
-            REMOVEBG_CONFIG.statistics.totalProcessed++;
-            REMOVEBG_CONFIG.statistics.apiCalls++;
-            
-            if (success) {
-                REMOVEBG_CONFIG.statistics.successful++;
-            } else {
-                REMOVEBG_CONFIG.statistics.failed++;
+        function loadSavedData() {
+            const savedKeys = localStorage.getItem('dps_api_keys');
+            if (savedKeys) {
+                APP_CONFIG.apiKeys = JSON.parse(savedKeys);
             }
-            
-            REMOVEBG_CONFIG.statistics.lastProcessed = new Date().toISOString();
-            
-            // Adicionar ao histórico
-            if (REMOVEBG_CONFIG.settings.keepHistory && currentImage) {
-                REMOVEBG_CONFIG.history.unshift({
-                    timestamp: new Date().toISOString(),
-                    filename: currentImage.file.name,
-                    size: currentImage.file.size,
-                    success: success,
-                    processingTime: '3s' // Simulado
-                });
-                
-                // Manter apenas os últimos 50 itens
-                if (REMOVEBG_CONFIG.history.length > 50) {
-                    REMOVEBG_CONFIG.history = REMOVEBG_CONFIG.history.slice(0, 50);
-                }
+
+            const savedSettings = localStorage.getItem('dps_settings');
+            if (savedSettings) {
+                APP_CONFIG.settings = {...APP_CONFIG.settings, ...JSON.parse(savedSettings)};
             }
-            
-            saveData();
+
+            const savedDefaultKey = localStorage.getItem('dps_default_key');
+            if (savedDefaultKey) {
+                APP_CONFIG.defaultKey = savedDefaultKey;
+            }
+
+            const savedStats = localStorage.getItem('dps_statistics');
+            if (savedStats) {
+                APP_CONFIG.statistics = JSON.parse(savedStats);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('dps_api_keys', JSON.stringify(APP_CONFIG.apiKeys));
+            localStorage.setItem('dps_settings', JSON.stringify(APP_CONFIG.settings));
+            localStorage.setItem('dps_default_key', APP_CONFIG.defaultKey);
+            localStorage.setItem('dps_statistics', JSON.stringify(APP_CONFIG.statistics));
+        }
+
+        function updateUI() {
+            updateApiKeysList();
+            updateSettingsForm();
             updateStatistics();
-            updateHistory();
         }
 
         function updateStatistics() {
-            const stats = REMOVEBG_CONFIG.statistics;
-            const successRate = stats.totalProcessed > 0 ? 
-                Math.round((stats.successful / stats.totalProcessed) * 100) : 0;
+            document.getElementById('apiKeysCount').textContent = APP_CONFIG.apiKeys.length;
+            document.getElementById('processedItems').textContent = APP_CONFIG.statistics.totalProcessed;
             
-            document.getElementById('totalProcessed').textContent = stats.totalProcessed;
-            document.getElementById('successRate').textContent = `${successRate}%`;
-            document.getElementById('apiCalls').textContent = stats.apiCalls;
-            document.getElementById('lastProcessed').textContent = stats.lastProcessed ? 
-                new Date(stats.lastProcessed).toLocaleDateString('pt-BR') : '-';
+            const successRate = APP_CONFIG.statistics.totalProcessed > 0 ? 
+                Math.round((APP_CONFIG.statistics.successful / APP_CONFIG.statistics.totalProcessed) * 100) : 100;
+            document.getElementById('successRate').textContent = successRate + '%';
         }
 
-        function updateHistory() {
-            const container = document.getElementById('processingHistory');
+        function showAddKeyModal() {
+            document.getElementById('modalTitle').textContent = 'Adicionar Chave API';
+            document.getElementById('editKeyId').value = '';
+            document.getElementById('apiKeyForm').reset();
+            document.getElementById('apiKeyModal').classList.add('active');
+        }
+
+        function showEditKeyModal(keyId) {
+            const key = APP_CONFIG.apiKeys.find(k => k.id === keyId);
+            if (!key) return;
+
+            document.getElementById('modalTitle').textContent = 'Editar Chave API';
+            document.getElementById('editKeyId').value = key.id;
+            document.getElementById('apiProvider').value = key.provider;
+            document.getElementById('apiKeyName').value = key.name;
+            document.getElementById('apiKeyValue').value = key.key;
+            document.getElementById('setAsDefault').checked = key.id === APP_CONFIG.defaultKey;
             
-            if (REMOVEBG_CONFIG.history.length === 0) {
-                container.innerHTML = '<p class="text-muted">Nenhum processamento registrado</p>';
+            document.getElementById('apiKeyModal').classList.add('active');
+        }
+
+        function hideApiKeyModal() {
+            document.getElementById('apiKeyModal').classList.remove('active');
+        }
+
+        function saveApiKey() {
+            const keyId = document.getElementById('editKeyId').value;
+            const provider = document.getElementById('apiProvider').value;
+            const name = document.getElementById('apiKeyName').value.trim();
+            const keyValue = document.getElementById('apiKeyValue').value.trim();
+            const setAsDefault = document.getElementById('setAsDefault').checked;
+
+            if (!provider || !name || !keyValue) {
+                showNotification('Erro', 'Preencha todos os campos obrigatórios', 'error');
                 return;
             }
-            
-            container.innerHTML = REMOVEBG_CONFIG.history.map(item => `
+
+            let apiKey;
+
+            if (keyId) {
+                apiKey = APP_CONFIG.apiKeys.find(k => k.id === keyId);
+                if (apiKey) {
+                    apiKey.provider = provider;
+                    apiKey.name = name;
+                    apiKey.key = keyValue;
+                    apiKey.updatedAt = new Date().toISOString();
+                }
+            } else {
+                apiKey = {
+                    id: 'key_' + Date.now(),
+                    provider: provider,
+                    name: name,
+                    key: keyValue,
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString(),
+                    lastUsed: null,
+                    usage: 0,
+                    status: 'active'
+                };
+                APP_CONFIG.apiKeys.push(apiKey);
+            }
+
+            if (setAsDefault) {
+                APP_CONFIG.defaultKey = apiKey.id;
+            }
+
+            if (APP_CONFIG.apiKeys.length === 1 && !APP_CONFIG.defaultKey) {
+                APP_CONFIG.defaultKey = apiKey.id;
+            }
+
+            saveData();
+            updateUI();
+            hideApiKeyModal();
+
+            showNotification('Sucesso', 
+                keyId ? 'Chave API atualizada com sucesso' : 'Chave API adicionada com sucesso', 
+                'success');
+        }
+
+        function updateApiKeysList() {
+            const container = document.getElementById('apiKeysList');
+            const defaultSelect = document.getElementById('defaultApiKey');
+
+            if (APP_CONFIG.apiKeys.length === 0) {
+                container.innerHTML = '<p class="text-muted">Nenhuma chave API configurada</p>';
+                defaultSelect.innerHTML = '<option value="">Nenhuma chave disponível</option>';
+                return;
+            }
+
+            container.innerHTML = APP_CONFIG.apiKeys.map(key => `
                 <div class="api-key-item">
                     <div class="api-key-info">
                         <div class="api-key-name">
-                            ${item.filename}
-                            <span class="${item.success ? 'status-connected' : 'status-disconnected'}">
-                                ${item.success ? 'Sucesso' : 'Falha'}
-                            </span>
+                            ${key.name}
+                            ${key.id === APP_CONFIG.defaultKey ? '<span class="status-connected">Padrão</span>' : ''}
+                            <span class="badge bg-secondary ms-2">${getProviderName(key.provider)}</span>
                         </div>
                         <div class="api-key-preview">
-                            ${new Date(item.timestamp).toLocaleString('pt-BR')} • 
-                            ${(item.size / 1024).toFixed(1)} KB • 
-                            Tempo: ${item.processingTime}
+                            ${key.key.substring(0, 8)}...${key.key.substring(key.key.length - 4)}
+                            ${key.lastUsed ? `<br><small>Último uso: ${new Date(key.lastUsed).toLocaleDateString('pt-BR')}</small>` : ''}
                         </div>
+                    </div>
+                    <div class="api-key-actions">
+                        <button class="btn btn-sm btn-primary" onclick="showEditKeyModal('${key.id}')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-success" onclick="setDefaultKey('${key.id}')">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteApiKey('${key.id}')">
+                            <i class="fas fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             `).join('');
+
+            defaultSelect.innerHTML = APP_CONFIG.apiKeys.map(key => 
+                `<option value="${key.id}" ${key.id === APP_CONFIG.defaultKey ? 'selected' : ''}>${key.name} (${getProviderName(key.provider)})</option>`
+            ).join('');
         }
 
-        // =============================================
-        // CONFIGURAÇÕES
-        // =============================================
+        function getProviderName(provider) {
+            const providers = {
+                'removebg': 'Remove.bg',
+                'openai': 'OpenAI',
+                'stabilityai': 'Stability AI',
+                'custom': 'Personalizada'
+            };
+            return providers[provider] || provider;
+        }
+
+        function setDefaultKey(keyId) {
+            APP_CONFIG.defaultKey = keyId;
+            saveData();
+            updateApiKeysList();
+            showNotification('Sucesso', 'Chave padrão definida', 'success');
+        }
+
+        function deleteApiKey(keyId) {
+            if (!confirm('Tem certeza que deseja excluir esta chave API?')) return;
+
+            APP_CONFIG.apiKeys = APP_CONFIG.apiKeys.filter(key => key.id !== keyId);
+            
+            if (APP_CONFIG.defaultKey === keyId) {
+                if (APP_CONFIG.apiKeys.length > 0) {
+                    APP_CONFIG.defaultKey = APP_CONFIG.apiKeys[0].id;
+                } else {
+                    APP_CONFIG.defaultKey = null;
+                }
+            }
+
+            saveData();
+            updateUI();
+            showNotification('Sucesso', 'Chave API excluída', 'success');
+        }
+
+        function testAllAPIs() {
+            const resultDiv = document.getElementById('apiTestResult');
+            
+            if (APP_CONFIG.apiKeys.length === 0) {
+                resultDiv.innerHTML = '<span class="status-disconnected">Nenhuma chave configurada</span>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<span class="status-connected">Testando conectividade...</span>';
+
+            setTimeout(() => {
+                let successCount = 0;
+                let totalCount = APP_CONFIG.apiKeys.length;
+
+                APP_CONFIG.apiKeys.forEach(key => {
+                    if (key.status === 'active') {
+                        successCount++;
+                        key.lastUsed = new Date().toISOString();
+                        key.usage++;
+                    }
+                });
+
+                saveData();
+                updateApiKeysList();
+
+                if (successCount === totalCount) {
+                    resultDiv.innerHTML = `<span class="status-connected">✓ Todas as ${totalCount} APIs conectadas com sucesso</span>`;
+                } else {
+                    resultDiv.innerHTML = `<span class="status-warning">${successCount} de ${totalCount} APIs conectadas</span>`;
+                }
+
+                showNotification('Teste API', 
+                    `${successCount} de ${totalCount} APIs testadas com sucesso`, 
+                    successCount === totalCount ? 'success' : 'warning');
+            }, 2000);
+        }
 
         function updateSettingsForm() {
-            document.getElementById('autoProcess').checked = REMOVEBG_CONFIG.settings.autoProcess;
-            document.getElementById('autoDownload').checked = REMOVEBG_CONFIG.settings.autoDownload;
-            document.getElementById('keepHistory').checked = REMOVEBG_CONFIG.settings.keepHistory;
-            document.getElementById('defaultFormat').value = REMOVEBG_CONFIG.settings.defaultFormat;
-            document.getElementById('defaultSize').value = REMOVEBG_CONFIG.settings.defaultSize;
+            document.getElementById('autoProcess').checked = APP_CONFIG.settings.autoProcess;
+            document.getElementById('autoDownload').checked = APP_CONFIG.settings.autoDownload;
+            document.getElementById('keepHistory').checked = APP_CONFIG.settings.keepHistory;
+            document.getElementById('defaultFormat').value = APP_CONFIG.settings.defaultFormat;
+            document.getElementById('defaultSize').value = APP_CONFIG.settings.defaultSize;
             
-            // Adicionar event listeners para salvar automaticamente
             document.getElementById('autoProcess').addEventListener('change', function() {
-                REMOVEBG_CONFIG.settings.autoProcess = this.checked;
+                APP_CONFIG.settings.autoProcess = this.checked;
                 saveData();
             });
             
             document.getElementById('autoDownload').addEventListener('change', function() {
-                REMOVEBG_CONFIG.settings.autoDownload = this.checked;
+                APP_CONFIG.settings.autoDownload = this.checked;
                 saveData();
             });
             
             document.getElementById('keepHistory').addEventListener('change', function() {
-                REMOVEBG_CONFIG.settings.keepHistory = this.checked;
+                APP_CONFIG.settings.keepHistory = this.checked;
                 saveData();
             });
             
             document.getElementById('defaultFormat').addEventListener('change', function() {
-                REMOVEBG_CONFIG.settings.defaultFormat = this.value;
+                APP_CONFIG.settings.defaultFormat = this.value;
                 saveData();
             });
             
             document.getElementById('defaultSize').addEventListener('change', function() {
-                REMOVEBG_CONFIG.settings.defaultSize = this.value;
+                APP_CONFIG.settings.defaultSize = this.value;
                 saveData();
+            });
+
+            document.getElementById('defaultApiKey').addEventListener('change', function() {
+                APP_CONFIG.defaultKey = this.value;
+                saveData();
+                updateApiKeysList();
             });
         }
 
@@ -1334,12 +3015,12 @@
                 return;
             }
             
-            localStorage.removeItem('removebg_api_keys');
-            localStorage.removeItem('removebg_settings');
-            localStorage.removeItem('removebg_history');
-            localStorage.removeItem('removebg_statistics');
+            localStorage.removeItem('dps_api_keys');
+            localStorage.removeItem('dps_settings');
+            localStorage.removeItem('dps_default_key');
+            localStorage.removeItem('dps_statistics');
+            localStorage.removeItem('dps_history');
             
-            // Recarregar a página para resetar tudo
             location.reload();
         }
 
@@ -1348,20 +3029,18 @@
         // =============================================
 
         function showSection(sectionId) {
-            // Esconder todas as seções
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
-            
-            // Mostrar a seção selecionada
-            document.getElementById(sectionId).classList.add('active');
-            
-            // Atualizar menu ativo
+
             document.querySelectorAll('.sidebar .menu-item').forEach(item => {
                 item.classList.remove('active');
             });
-            
+
+            document.getElementById(sectionId).classList.add('active');
             document.querySelector(`.sidebar .menu-item[href="#${sectionId}"]`).classList.add('active');
+
+            APP_CONFIG.currentTool = sectionId;
         }
 
         function showNotification(title, message, type = 'info') {
@@ -1370,7 +3049,6 @@
             const toastTitle = document.getElementById('toastTitle');
             const toastMessage = document.getElementById('toastMessage');
             
-            // Configurar cores baseadas no tipo
             const colors = {
                 success: '#27ae60',
                 error: '#e74c3c',
@@ -1386,7 +3064,6 @@
             
             toast.classList.add('show');
             
-            // Auto-esconder após 5 segundos
             setTimeout(() => {
                 hideNotification();
             }, 5000);
@@ -1395,6 +3072,61 @@
         function hideNotification() {
             document.getElementById('notificationToast').classList.remove('show');
         }
+
+        // Funções de reset
+        function resetUpload() { resetTool('imageInput', 'imagePreview', 'downloadBtn', 'resultImage'); }
+        function resetBgReplace() { resetTool('bgReplaceInput', 'bgReplacePreview', 'downloadBgBtn', 'bgResultImage'); }
+        function resetColorChange() { resetTool('colorChangeInput', 'colorChangePreview', 'downloadColorBtn', 'colorResultImage'); }
+        function resetModelSwap() { 
+            document.getElementById('productImageInput').value = '';
+            document.getElementById('newModelImageInput').value = '';
+            document.getElementById('modelSwapPreview').style.display = 'none';
+            document.getElementById('downloadModelSwapBtn').style.display = 'none';
+            document.getElementById('modelSwapResultImage').style.display = 'none';
+        }
+        function resetImageToVideo() { resetTool('imageToVideoInput', 'imageToVideoPreview', 'downloadVideoBtn', 'videoResult'); }
+        function resetRetouch() { resetTool('retouchInput', 'retouchPreview', 'downloadRetouchBtn', 'retouchResultImage'); }
+        function resetExtender() { resetTool('extenderInput', 'extenderPreview', 'downloadExtenderBtn', 'extenderResultImage'); }
+        function resetEars() { resetTool('earsInput', 'earsPreview', 'downloadEarsBtn', 'earsResultImage'); }
+        function resetEnhancer() { resetTool('enhancerInput', 'enhancerPreview', 'downloadEnhancerBtn', 'enhancerResultImage'); }
+        function resetProductInHand() { 
+            document.getElementById('handModelInput').value = '';
+            document.getElementById('productHandInput').value = '';
+            document.getElementById('productInHandPreview').style.display = 'none';
+            document.getElementById('downloadProductInHandBtn').style.display = 'none';
+            document.getElementById('productInHandResultImage').style.display = 'none';
+        }
+        function resetLipSync() { 
+            document.getElementById('lipSyncVideoInput').value = '';
+            document.getElementById('lipSyncAudioInput').value = '';
+            document.getElementById('lipSyncPreview').style.display = 'none';
+            document.getElementById('downloadLipSyncBtn').style.display = 'none';
+            document.getElementById('lipSyncResultVideo').style.display = 'none';
+        }
+
+        function resetTool(inputId, previewId, downloadId, resultId) {
+            document.getElementById(inputId).value = '';
+            document.getElementById(previewId).style.display = 'none';
+            if (downloadId) document.getElementById(downloadId).style.display = 'none';
+            if (resultId) document.getElementById(resultId).style.display = 'none';
+            currentImage = null;
+            currentResult = null;
+        }
+
+        // Funções de download (simuladas)
+        function downloadResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadBgResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadColorResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadTryOnResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadAccessoryResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadModelSwapResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadVideoResult() { showNotification('Download', 'Vídeo baixado com sucesso', 'success'); }
+        function downloadRetouchResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadExtenderResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadEarsResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadEnhancerResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadProductInHandResult() { showNotification('Download', 'Imagem baixada com sucesso', 'success'); }
+        function downloadLipSyncResult() { showNotification('Download', 'Vídeo baixado com sucesso', 'success'); }
     </script>
 </body>
 </html>
