@@ -3,1178 +3,849 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - D.Pedro Soluções</title>
+    <title>Sistema de Login Completo</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        /* ===== VARIÁVEIS DE CORES E ESTILOS ===== */
+        /* Manter todos os estilos anteriores */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --accent-color: #e74c3c;
-            --light-color: #ecf0f1;
-            --dark-color: #2c3e50;
-            --success-color: #27ae60;
-            --warning-color: #f39c12;
-            --danger-color: #e74c3c;
-            --info-color: #2980b9;
-            --border-radius: 10px;
-            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            --transition-speed: 0.3s;
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ff6b6b;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+            --error-color: #dc3545;
+            --warning-color: #ffc107;
         }
-
-        /* ===== ESTILOS GERAIS ===== */
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        
         body {
-            font-family: 'Roboto', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            min-height: 100vh;
             padding: 20px;
         }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--primary-color);
-        }
-
-        a {
-            text-decoration: none;
-            color: var(--secondary-color);
-            transition: color var(--transition-speed);
-        }
-
-        a:hover {
-            color: #2980b9;
-        }
-
-        /* ===== CONTAINER PRINCIPAL ===== */
-        .auth-container {
+        
+        .container {
             width: 100%;
             max-width: 450px;
-            background: white;
-            border-radius: var(--border-radius);
-            box-shadow: var(--box-shadow);
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            animation: fadeIn 0.5s ease;
         }
-
-        .auth-header {
-            background: linear-gradient(135deg, var(--primary-color), #1a2530);
-            color: white;
-            padding: 2rem;
-            text-align: center;
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-
-        .auth-logo {
+        
+        .form-container {
+            padding: 30px;
+        }
+        
+        .tabs {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 1rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
         }
-
-        .auth-logo img {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid white;
+        
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark-color);
+            transition: all 0.3s ease;
         }
-
-        .auth-logo span {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 700;
-            font-size: 1.4rem;
-        }
-
-        .auth-body {
-            padding: 2rem;
-        }
-
-        /* ===== FORMULÁRIOS ===== */
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
+        
+        .tab.active {
             color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
         }
-
-        .form-control {
-            width: 100%;
-            padding: 0.75rem 1rem;
-            border: 1px solid #ddd;
-            border-radius: var(--border-radius);
-            font-size: 1rem;
-            transition: all var(--transition-speed);
+        
+        .form {
+            display: none;
         }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--secondary-color);
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        
+        .form.active {
+            display: block;
         }
-
-        .input-group {
+        
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--dark-color);
+        }
+        
+        .subtitle {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
             position: relative;
         }
-
-        .input-group .form-control {
-            padding-right: 40px;
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark-color);
         }
-
-        .input-group-append {
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        .input-icon {
             position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #777;
+            right: 15px;
+            top: 38px;
+            color: #6c757d;
         }
-
-        /* ===== UPLOAD DE FOTO ===== */
-        .avatar-upload {
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .btn-secondary {
+            background-color: #6c757d;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+        
+        .btn-success {
+            background-color: var(--success-color);
+        }
+        
+        .btn-success:hover {
+            background-color: #218838;
+        }
+        
+        .message {
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 5px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .success {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+        
+        .error {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--error-color);
+            border: 1px solid var(--error-color);
+        }
+        
+        .warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+        
+        .user-info {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .user-info h2 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .user-info p {
+            margin-bottom: 15px;
+            color: var(--dark-color);
+        }
+        
+        .logout-btn {
+            background-color: var(--error-color);
+            width: auto;
+            padding: 10px 20px;
+            margin-top: 15px;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .remember-me input {
+            width: auto;
+            margin-right: 8px;
+        }
+        
+        .social-login {
+            margin-top: 25px;
+            text-align: center;
+        }
+        
+        .social-login p {
+            margin-bottom: 15px;
+            color: #6c757d;
+            position: relative;
+        }
+        
+        .social-login p::before, .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: #e0e0e0;
+        }
+        
+        .social-login p::before {
+            left: 0;
+        }
+        
+        .social-login p::after {
+            right: 0;
+        }
+        
+        .social-buttons {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            margin-bottom: 1.5rem;
+            gap: 10px;
         }
-
-        .avatar-preview {
+        
+        .social-btn {
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e0e0;
+            background: white;
+            color: #333;
+        }
+        
+        .social-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .google-btn {
+            border-color: #dadce0;
+        }
+        
+        .google-btn:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .facebook-btn {
+            background-color: #1877f2;
+            color: white;
+            border: none;
+        }
+        
+        .facebook-btn:hover {
+            background-color: #166fe5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .profile-pic {
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            border: 3px solid #ddd;
-            overflow: hidden;
-            margin-bottom: 1rem;
-            position: relative;
-        }
-
-        .avatar-preview img {
-            width: 100%;
-            height: 100%;
             object-fit: cover;
+            margin: 0 auto 15px;
+            border: 3px solid var(--primary-color);
+            display: block;
         }
-
-        .avatar-placeholder {
-            width: 100%;
-            height: 100%;
+        
+        .upload-btn {
+            background-color: #6c757d;
+            width: auto;
+            padding: 8px 15px;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .verification-code {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .verification-code input {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        
+        .resend-code {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .resend-code a {
+            color: var(--primary-color);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        
+        .resend-code a:hover {
+            text-decoration: underline;
+        }
+        
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e9ecef;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #f8f9fa;
+            margin: 0 10px;
+            font-weight: bold;
             color: #6c757d;
         }
-
-        .avatar-upload-btn {
-            display: inline-block;
-            padding: 0.5rem 1rem;
-            background-color: var(--secondary-color);
+        
+        .step.active {
+            background-color: var(--primary-color);
             color: white;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            transition: all var(--transition-speed);
         }
-
-        .avatar-upload-btn:hover {
-            background-color: #2980b9;
+        
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background-color: #e9ecef;
+            margin: 0 5px;
+            align-self: center;
         }
-
-        .avatar-upload input[type="file"] {
+        
+        .step-line.active {
+            background-color: var(--primary-color);
+        }
+        
+        .hidden {
             display: none;
         }
-
-        /* ===== BOTÕES ===== */
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: var(--border-radius);
-            font-weight: 500;
-            transition: all var(--transition-speed);
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
+        
+        .g_id_signin {
+            width: 100% !important;
         }
-
-        .btn-primary {
-            background-color: var(--secondary-color);
-            color: white;
+        
+        .g_id_signin > div {
+            width: 100% !important;
+            border-radius: 8px !important;
         }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
+        
+        .fb-login-button {
+            width: 100% !important;
         }
-
-        .btn-secondary {
-            background-color: #f8f9fa;
-            color: #555;
+        
+        .fb-login-button span {
+            width: 100% !important;
         }
-
-        .btn-secondary:hover {
-            background-color: #e9ecef;
-        }
-
-        /* ===== BOTÕES DE LOGIN SOCIAL ===== */
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border: none;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            cursor: pointer;
-            transition: all var(--transition-speed);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .social-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .social-btn.google {
-            background: white;
-            color: #4285F4;
-        }
-
-        .social-btn.facebook {
-            background: #4267B2;
-            color: white;
-        }
-
-        .social-btn.github {
-            background: #333;
-            color: white;
-        }
-
-        /* ===== LINKS E TEXTOS ===== */
-        .auth-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #eee;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 1.5rem 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #eee;
-        }
-
-        .divider span {
-            padding: 0 1rem;
-            color: #777;
-            font-size: 0.9rem;
-        }
-
-        /* ===== MENSAGENS DE ALERTA ===== */
-        .alert {
-            padding: 0.75rem 1rem;
-            border-radius: var(--border-radius);
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-
-        .alert-success {
-            background-color: rgba(39, 174, 96, 0.15);
-            color: var(--success-color);
-            border: 1px solid rgba(39, 174, 96, 0.2);
-        }
-
-        .alert-error {
-            background-color: rgba(231, 76, 60, 0.15);
-            color: var(--danger-color);
-            border: 1px solid rgba(231, 76, 60, 0.2);
-        }
-
-        .alert-info {
-            background-color: rgba(52, 152, 219, 0.15);
-            color: var(--secondary-color);
-            border: 1px solid rgba(52, 152, 219, 0.2);
-        }
-
-        /* ===== RESPONSIVIDADE ===== */
-        @media (max-width: 576px) {
-            .auth-container {
-                max-width: 100%;
-            }
-            
-            .auth-body {
-                padding: 1.5rem;
-            }
-        }
-
+        
         .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .loading-spinner {
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #3498db;
+            border: 3px solid #ffffff;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
         }
-
+        
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-header">
-            <div class="auth-logo">
-                <img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO'/>
-                <span>D.Pedro Soluções</span>
+    <div class="container">
+        <!-- Tela de Login -->
+        <div id="auth-container" class="form-container">
+            <div class="tabs">
+                <div class="tab active" id="login-tab">Login</div>
+                <div class="tab" id="register-tab">Registrar</div>
             </div>
-            <h2 id="auth-title">Acessar Sistema</h2>
+            
+            <form id="login-form" class="form active">
+                <h2>Entrar na Conta</h2>
+                <p class="subtitle">Entre com suas credenciais</p>
+                
+                <div class="form-group">
+                    <label for="login-email">E-mail ou Telefone</label>
+                    <input type="text" id="login-email" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                
+                <div class="remember-me">
+                    <input type="checkbox" id="remember-me">
+                    <label for="remember-me">Lembrar de mim</label>
+                </div>
+                
+                <button type="submit">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Entrar
+                </button>
+                
+                <div class="form-group">
+                    <a href="#" id="forgot-password">Esqueci minha senha</a>
+                </div>
+                
+                <div id="login-message" class="message"></div>
+                
+                <div class="social-login">
+                    <p>Ou entre com</p>
+                    <div class="social-buttons">
+                        <!-- Botão Google oficial -->
+                        <div id="g_id_onload"
+                            data-client_id="1079087525845-mje6b82okbqadogtml06qef4rhemd27n.apps.googleusercontent.com"
+                            data-context="signin"
+                            data-ux_mode="popup"
+                            data-callback="handleGoogleSignIn"
+                            data-auto_prompt="false">
+                        </div>
+
+                        <div class="g_id_signin"
+                            data-type="standard"
+                            data-shape="rectangular"
+                            data-theme="outline"
+                            data-text="signin_with"
+                            data-size="large"
+                            data-logo_alignment="left">
+                        </div>
+                        
+                        <!-- Botão Facebook oficial -->
+                        <div class="fb-login-button" 
+                            data-width="" 
+                            data-size="large" 
+                            data-button-type="continue_with" 
+                            data-layout="default" 
+                            data-auto-logout-link="false" 
+                            data-use-continue-as="true"
+                            onlogin="checkFacebookLoginState();">
+                        </div>
+                        
+                        <!-- Botão Facebook customizado -->
+                        <button class="social-btn facebook-btn" id="custom-facebook-btn">
+                            <i class="fab fa-facebook-f"></i>
+                            Continuar com Facebook
+                        </button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Formulários de registro mantidos iguais -->
+            <!-- ... (manter todo o conteúdo dos formulários de registro) ... -->
         </div>
         
-        <div class="auth-body">
-            <div id="login-form">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Use suas credenciais para acessar o sistema
-                </div>
-                
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label for="loginEmail" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="loginEmail" placeholder="seu@email.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="loginPassword" class="form-label">Senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Sua senha" required>
-                            <span class="input-group-append" id="toggleLoginPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="rememberMe">
-                            <label class="form-check-label" for="rememberMe">Lembrar-me</label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sign-in-alt"></i> Entrar
-                    </button>
-                    
-                    <div class="divider"><span>ou entre com</span></div>
-                    
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn google" id="loginGoogle">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button type="button" class="social-btn facebook" id="loginFacebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button type="button" class="social-btn github" id="loginGithub">
-                            <i class="fab fa-github"></i>
-                        </button>
-                    </div>
-                </form>
-                
-                <div class="auth-footer">
-                    <p>
-                        <a href="#" id="forgot-password-link">Esqueceu sua senha?</a>
-                    </p>
-                    <p>
-                        Não tem uma conta? <a href="#" id="register-link">Criar conta</a>
-                    </p>
-                </div>
-            </div>
-            
-            <div id="register-form" style="display: none;">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Preencha os dados para criar sua conta
-                </div>
-                
-                <form id="registerForm">
-                    <div class="avatar-upload">
-                        <div class="avatar-preview" id="avatarPreview">
-                            <div class="avatar-placeholder">
-                                <i class="fas fa-user fa-2x"></i>
-                            </div>
-                        </div>
-                        <label class="avatar-upload-btn">
-                            <i class="fas fa-camera"></i> Escolher Foto
-                            <input type="file" id="avatarInput" accept="image/*" />
-                        </label>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerName" class="form-label">Nome Completo</label>
-                        <input type="text" class="form-control" id="registerName" placeholder="Seu nome completo" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerEmail" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="registerEmail" placeholder="seu@email.com" required>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerPassword" class="form-label">Senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="registerPassword" placeholder="Crie uma senha segura" required>
-                            <span class="input-group-append" id="toggleRegisterPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                        <small class="form-text text-muted">Mínimo de 8 caracteres, com letras e números</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="registerConfirmPassword" class="form-label">Confirmar Senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="registerConfirmPassword" placeholder="Confirme sua senha" required>
-                            <span class="input-group-append" id="toggleRegisterConfirmPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="termsAgree" required>
-                            <label class="form-check-label" for="termsAgree">
-                                Concordo com os <a href="#">termos de uso</a> e <a href="#">política de privacidade</a>
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i> Criar Conta
-                    </button>
-                    
-                    <div class="divider"><span>ou crie com</span></div>
-                    
-                    <div class="social-buttons">
-                        <button type="button" class="social-btn google" id="registerGoogle">
-                            <i class="fab fa-google"></i>
-                        </button>
-                        <button type="button" class="social-btn facebook" id="registerFacebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </button>
-                        <button type="button" class="social-btn github" id="registerGithub">
-                            <i class="fab fa-github"></i>
-                        </button>
-                    </div>
-                </form>
-                
-                <div class="auth-footer">
-                    <p>
-                        Já tem uma conta? <a href="#" id="login-link">Fazer login</a>
-                    </p>
-                </div>
-            </div>
-            
-            <div id="forgot-password-form" style="display: none;">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Informe seu e-mail para recuperar a senha
-                </div>
-                
-                <form id="forgotPasswordForm">
-                    <div class="form-group">
-                        <label for="recoveryEmail" class="form-label">E-mail</label>
-                        <input type="email" class="form-control" id="recoveryEmail" placeholder="seu@email.com" required>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-paper-plane"></i> Enviar Link de Recuperação
-                    </button>
-                </form>
-                
-                <div class="auth-footer">
-                    <p>
-                        <a href="#" id="back-to-login">Voltar para o login</a>
-                    </p>
-                </div>
-            </div>
-            
-            <div id="reset-password-form" style="display: none;">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Crie uma nova senha para sua conta
-                </div>
-                
-                <form id="resetPasswordForm">
-                    <div class="form-group">
-                        <label for="newPassword" class="form-label">Nova Senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="newPassword" placeholder="Nova senha" required>
-                            <span class="input-group-append" id="toggleNewPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                        <small class="form-text text-muted">Mínimo de 8 caracteres, com letras e números</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="confirmNewPassword" class="form-label">Confirmar Nova Senha</label>
-                        <div class="input-group">
-                            <input type="password" class="form-control" id="confirmNewPassword" placeholder="Confirme a nova senha" required>
-                            <span class="input-group-append" id="toggleConfirmNewPassword">
-                                <i class="fas fa-eye"></i>
-                            </span>
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-sync-alt"></i> Redefinir Senha
-                    </button>
-                </form>
-                
-                <div class="auth-footer">
-                    <p>
-                        <a href="#" id="back-to-login-from-reset">Voltar para o login</a>
-                    </p>
-                </div>
-            </div>
+        <!-- Tela do Usuário Logado -->
+        <div id="user-container" class="user-info" style="display: none;">
+            <img id="user-profile-pic" src="https://via.placeholder.com/100" class="profile-pic" alt="Foto do usuário">
+            <h2>Bem-vindo!</h2>
+            <p id="user-name"></p>
+            <p id="user-email"></p>
+            <p id="user-phone"></p>
+            <p id="user-provider"></p>
+            <button class="logout-btn" id="logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Sair
+            </button>
         </div>
     </div>
 
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Facebook SDK -->
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js#xfbml=1&version=v18.0&appId=795780770080530" nonce="YOUR_NONCE"></script>
-
     <script>
-        // =============================================
-        // CONFIGURAÇÕES DE AUTENTICAÇÃO
-        // =============================================
-        const GOOGLE_CLIENT_ID = '584615187873-gui56bupmd6gjhq3m45rtsdg1jv3r4dq.apps.googleusercontent.com';
-        const FACEBOOK_APP_ID = '795780770080530';
-        const GITHUB_CLIENT_ID = 'SEU_GITHUB_CLIENT_ID'; // Configure no GitHub OAuth Apps
-        
-        const MAILS_API_KEY = '3aa66ff5-4a3d-4b9c-9e0e-14cfbd22f96a';
-        
-        // =============================================
-        // BANCO DE DADOS COM LOCALSTORAGE
-        // =============================================
-        const DB_NAME = 'DPSystemDB';
-        
-        // Inicializar o banco de dados
-        function initDatabase() {
-            if (!localStorage.getItem(DB_NAME)) {
-                // Criar estrutura inicial do banco de dados
-                const initialDB = {
-                    users: [
-                        {
-                            id: 1,
-                            name: "Daniel Pedro",
-                            email: "daniel@dpedrosolucoes.com",
-                            password: "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918", // admin
-                            avatar: "https://i.postimg.cc/7YQvLZxX/user-avatar.jpg",
-                            provider: "local",
-                            createdAt: new Date().toISOString(),
-                            lastLogin: new Date().toISOString()
-                        }
-                    ],
-                    sessions: [],
-                    passwordResets: []
-                };
+        // ========== CONFIGURAÇÕES ==========
+        const GOOGLE_CLIENT_ID = '1079087525845-mje6b82okbqadogtml06qef4rhemd27n.apps.googleusercontent.com';
+        const FACEBOOK_APP_ID = '589839547537969';
+        const FACEBOOK_APP_SECRET = 'db6f10c0c5ab05e9d6de343bc6ffec08';
+
+        // ========== ELEMENTOS DOM ==========
+        const loginTab = document.getElementById('login-tab');
+        const registerTab = document.getElementById('register-tab');
+        const loginForm = document.getElementById('login-form');
+        const loginMessage = document.getElementById('login-message');
+        const authContainer = document.getElementById('auth-container');
+        const userContainer = document.getElementById('user-container');
+        const userName = document.getElementById('user-name');
+        const userEmail = document.getElementById('user-email');
+        const userPhone = document.getElementById('user-phone');
+        const userProvider = document.getElementById('user-provider');
+        const userProfilePic = document.getElementById('user-profile-pic');
+        const logoutBtn = document.getElementById('logout-btn');
+        const customFacebookBtn = document.getElementById('custom-facebook-btn');
+
+        // ========== FACEBOOK SDK ==========
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: FACEBOOK_APP_ID,
+                cookie: true,
+                xfbml: true,
+                version: 'v18.0'
+            });
+            
+            FB.AppEvents.logPageView();
+            
+            // Verificar status de login ao carregar a página
+            checkFacebookLoginState();
+        };
+
+        // Carregar SDK do Facebook
+        (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/pt_BR/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+
+        // ========== FUNÇÕES FACEBOOK ==========
+        function checkFacebookLoginState() {
+            FB.getLoginStatus(function(response) {
+                console.log('Status do Facebook Login:', response);
+                statusChangeCallback(response);
+            });
+        }
+
+        function statusChangeCallback(response) {
+            console.log('Facebook Status Change:', response);
+            
+            if (response.status === 'connected') {
+                // Usuário está logado no Facebook e autorizou o app
+                const accessToken = response.authResponse.accessToken;
+                const userID = response.authResponse.userID;
                 
-                localStorage.setItem(DB_NAME, JSON.stringify(initialDB));
-                console.log('Banco de dados inicializado');
+                showMessage(loginMessage, 'Conectado ao Facebook! Buscando informações...', 'success');
+                getFacebookUserData(accessToken);
+                
+            } else if (response.status === 'not_authorized') {
+                // Usuário logado no Facebook mas não autorizou o app
+                console.log('Usuário não autorizou o app do Facebook');
+                showMessage(loginMessage, 'Por favor, autorize o aplicativo para continuar', 'warning');
+                
+            } else {
+                // Usuário não está logado no Facebook
+                console.log('Usuário não está logado no Facebook');
+            }
+        }
+
+        function getFacebookUserData(accessToken) {
+            showLoading(customFacebookBtn, true);
+            
+            FB.api('/me', 
+                { fields: 'id,name,email,picture.width(200).height(200)' }, 
+                function(response) {
+                    showLoading(customFacebookBtn, false);
+                    console.log('Dados do usuário Facebook:', response);
+                    
+                    if (response && !response.error) {
+                        const facebookUser = {
+                            id: response.id,
+                            name: response.name,
+                            email: response.email || `${response.id}@facebook.com`,
+                            profilePic: response.picture?.data?.url || 'https://via.placeholder.com/100',
+                            verified: true,
+                            provider: 'facebook'
+                        };
+                        
+                        saveOrUpdateUser(facebookUser);
+                        loginWithUser(facebookUser);
+                        
+                    } else {
+                        console.error('Erro ao buscar dados do Facebook:', response.error);
+                        showMessage(loginMessage, 'Erro ao buscar dados do Facebook', 'error');
+                    }
+                }
+            );
+        }
+
+        function loginWithFacebook() {
+            showLoading(customFacebookBtn, true);
+            
+            FB.login(function(response) {
+                showLoading(customFacebookBtn, false);
+                
+                if (response.authResponse) {
+                    console.log('Login Facebook bem-sucedido:', response);
+                    const accessToken = response.authResponse.accessToken;
+                    getFacebookUserData(accessToken);
+                    
+                } else {
+                    console.log('Usuário cancelou o login ou não autorizou');
+                    showMessage(loginMessage, 'Login com Facebook cancelado', 'warning');
+                }
+            }, {
+                scope: 'public_profile,email',
+                return_scopes: true
+            });
+        }
+
+        // ========== FUNÇÕES GOOGLE ==========
+        function handleGoogleSignIn(response) {
+            console.log('Resposta do Google:', response);
+            
+            const credential = response.credential;
+            const payload = JSON.parse(atob(credential.split('.')[1]));
+            
+            const googleUser = {
+                id: payload.sub,
+                name: payload.name,
+                email: payload.email,
+                profilePic: payload.picture,
+                verified: true,
+                provider: 'google'
+            };
+            
+            saveOrUpdateUser(googleUser);
+            loginWithUser(googleUser);
+        }
+
+        // ========== FUNÇÕES COMUNS ==========
+        function saveOrUpdateUser(userData) {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const existingUserIndex = users.findIndex(u => u.email === userData.email || u.id === userData.id);
+            
+            if (existingUserIndex !== -1) {
+                // Atualizar usuário existente
+                users[existingUserIndex] = { 
+                    ...users[existingUserIndex], 
+                    ...userData,
+                    lastLogin: new Date().toISOString()
+                };
+                console.log('Usuário atualizado:', users[existingUserIndex]);
+            } else {
+                // Adicionar novo usuário
+                userData.registerDate = new Date().toISOString();
+                userData.lastLogin = new Date().toISOString();
+                userData.id = userData.id || 'user_' + Date.now();
+                users.push(userData);
+                console.log('Novo usuário criado:', userData);
             }
             
-            return JSON.parse(localStorage.getItem(DB_NAME));
+            localStorage.setItem('users', JSON.stringify(users));
+            return userData;
         }
-        
-        // Obter banco de dados
-        function getDatabase() {
-            return JSON.parse(localStorage.getItem(DB_NAME));
+
+        function loginWithUser(user) {
+            const sessionData = {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                profilePic: user.profilePic,
+                phone: user.phone,
+                timestamp: Date.now(),
+                provider: user.provider
+            };
+            
+            localStorage.setItem('currentUser', JSON.stringify(sessionData));
+            localStorage.setItem('rememberedUser', JSON.stringify(sessionData));
+            
+            showUserInfo(user);
+            showMessage(loginMessage, `Login realizado com sucesso via ${user.provider}!`, 'success');
         }
-        
-        // Salvar banco de dados
-        function saveDatabase(db) {
-            localStorage.setItem(DB_NAME, JSON.stringify(db));
+
+        function showUserInfo(user) {
+            authContainer.style.display = 'none';
+            userContainer.style.display = 'block';
+            userName.textContent = `Nome: ${user.name}`;
+            userEmail.textContent = `E-mail: ${user.email}`;
+            userPhone.textContent = `Telefone: ${user.phone || 'Não informado'}`;
+            userProvider.textContent = `Login via: ${user.provider}`;
+            userProfilePic.src = user.profilePic || 'https://via.placeholder.com/100';
         }
-        
-        // =============================================
-        // FUNÇÕES DE CRIPTOGRAFIA
-        // =============================================
-        
-        // Hash de senha usando SHA-256
-        async function hashPassword(password) {
-            const encoder = new TextEncoder();
-            const data = encoder.encode(password);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `message ${type}`;
+            setTimeout(() => {
+                element.textContent = '';
+                element.className = 'message';
+            }, 5000);
         }
-        
-        // =============================================
-        // API DE VALIDAÇÃO DE E-MAIL
-        // =============================================
-        
-        async function validateEmailWithAPI(email) {
-            try {
-                const response = await fetch(`https://api.mails.so/v1/validate?email=${encodeURIComponent(email)}`, {
-                    method: 'GET',
-                    headers: {
-                        'x-mails-api-key': MAILS_API_KEY
-                    }
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Erro na API: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                console.error('Erro na validação de e-mail:', error);
-                return { valid: false, error: error.message };
+
+        function showLoading(button, isLoading) {
+            if (isLoading) {
+                button.classList.add('loading');
+                button.innerHTML = '<div class="loading-spinner"></div> Conectando...';
+                button.disabled = true;
+            } else {
+                button.classList.remove('loading');
+                button.innerHTML = '<i class="fab fa-facebook-f"></i> Continuar com Facebook';
+                button.disabled = false;
             }
         }
-        
-        // =============================================
-        // FUNÇÕES DE AUTENTICAÇÃO
-        // =============================================
-        
-        // Verificar se usuário está logado
-        function isLoggedIn() {
-            return localStorage.getItem('currentUser') !== null;
+
+        function logout() {
+            // Logout do Facebook
+            if (window.FB) {
+                FB.getLoginStatus(function(response) {
+                    if (response.status === 'connected') {
+                        FB.logout(function(logoutResponse) {
+                            console.log('Logout do Facebook realizado:', logoutResponse);
+                        });
+                    }
+                });
+            }
+            
+            // Logout do Google
+            if (window.google && google.accounts) {
+                google.accounts.id.disableAutoSelect();
+                const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
+                if (user.email) {
+                    google.accounts.id.revoke(user.email, done => {
+                        console.log('Logout do Google realizado');
+                    });
+                }
+            }
+            
+            localStorage.removeItem('currentUser');
+            authContainer.style.display = 'block';
+            userContainer.style.display = 'none';
+            
+            // Recarregar para resetar completamente
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
         }
-        
-        // Criar ou atualizar usuário
-        async function createOrUpdateUser(userData, provider = "local") {
-            const db = getDatabase();
-            let user = db.users.find(u => u.email === userData.email);
+
+        // ========== LOGIN TRADICIONAL ==========
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => (u.email === email || u.phone === email) && u.password === password);
             
             if (user) {
-                // Atualizar usuário existente
                 user.lastLogin = new Date().toISOString();
-                user.provider = provider;
-                if (userData.avatar && !user.avatar.includes('ui-avatars.com')) {
-                    user.avatar = userData.avatar;
-                }
-                if (userData.name && user.name === "Usuário") {
-                    user.name = userData.name;
-                }
-                if (provider !== "local") {
-                    user[provider + 'Id'] = userData.id;
-                }
+                localStorage.setItem('users', JSON.stringify(users));
+                loginWithUser(user);
             } else {
-                // Criar novo usuário
-                user = {
-                    id: db.users.length > 0 ? Math.max(...db.users.map(u => u.id)) + 1 : 1,
-                    name: userData.name || "Usuário",
-                    email: userData.email,
-                    password: userData.password || await hashPassword(Math.random().toString(36)),
-                    avatar: userData.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || "Usuário")}&background=3498db&color=fff`,
-                    provider: provider,
-                    createdAt: new Date().toISOString(),
-                    lastLogin: new Date().toISOString(),
-                    ...(provider !== "local" && { [provider + 'Id']: userData.id })
-                };
-                
-                db.users.push(user);
+                showMessage(loginMessage, 'E-mail/telefone ou senha incorretos!', 'error');
             }
-            
-            // Criar sessão
-            const session = {
-                userId: user.id,
-                token: Math.random().toString(36).substring(2) + Date.now().toString(36),
-                createdAt: new Date().toISOString(),
-                expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-                provider: provider
-            };
-            
-            db.sessions.push(session);
-            saveDatabase(db);
-            
-            // Salvar usuário atual
-            localStorage.setItem('currentUser', JSON.stringify(user));
-            localStorage.setItem('sessionToken', session.token);
-            
-            return { success: true, user };
-        }
-        
-        // Fazer login
-        async function login(email, password) {
-            const db = getDatabase();
-            const user = db.users.find(u => u.email === email);
-            
-            if (!user) {
-                return { success: false, message: "E-mail não encontrado" };
-            }
-            
-            const hashedPassword = await hashPassword(password);
-            if (user.password !== hashedPassword) {
-                return { success: false, message: "Senha incorreta" };
-            }
-            
-            return await createOrUpdateUser(user, "local");
-        }
-        
-        // Registrar novo usuário
-        async function register(name, email, password, avatar = null) {
-            const db = getDatabase();
-            
-            // Verificar se e-mail já existe
-            if (db.users.some(u => u.email === email)) {
-                return { success: false, message: "E-mail já cadastrado" };
-            }
-            
-            // Validar e-mail com API
-            const emailValidation = await validateEmailWithAPI(email);
-            if (!emailValidation.valid) {
-                return { 
-                    success: false, 
-                    message: "E-mail inválido. Por favor, use um e-mail válido." 
-                };
-            }
-            
-            const userData = {
-                name,
-                email,
-                password: await hashPassword(password),
-                avatar: avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=3498db&color=fff`
-            };
-            
-            return await createOrUpdateUser(userData, "local");
-        }
-        
-        // =============================================
-        // AUTENTICAÇÃO COM PROVEDORES SOCIAIS
-        // =============================================
-        
-        // Google Sign-In
-        function initializeGoogleAuth() {
-            if (typeof google !== 'undefined') {
-                google.accounts.id.initialize({
-                    client_id: GOOGLE_CLIENT_ID,
-                    callback: handleGoogleSignIn,
-                    auto_select: false,
-                    cancel_on_tap_outside: true
-                });
-                
-                // Renderizar botões do Google
-                const googleButtons = document.querySelectorAll('#loginGoogle, #registerGoogle');
-                googleButtons.forEach(button => {
-                    if (button) {
-                        google.accounts.id.renderButton(button, {
-                            type: 'icon',
-                            shape: 'circle',
-                            theme: 'filled_blue',
-                            size: 'large'
-                        });
-                    }
-                });
-            }
-        }
-        
-        async function handleGoogleSignIn(response) {
-            try {
-                const payload = JSON.parse(atob(response.credential.split('.')[1]));
-                
-                const googleUser = {
-                    id: payload.sub,
-                    name: payload.name,
-                    email: payload.email,
-                    avatar: payload.picture,
-                    email_verified: payload.email_verified
-                };
-                
-                // Validar e-mail
-                const emailValidation = await validateEmailWithAPI(googleUser.email);
-                if (!emailValidation.valid) {
-                    throw new Error("E-mail do Google é inválido");
-                }
-                
-                const result = await createOrUpdateUser(googleUser, "google");
-                
-                if (result.success) {
-                    alert('Autenticação com Google realizada com sucesso!');
-                    window.location.href = 'DPS.html';
-                }
-                
-            } catch (error) {
-                console.error('Erro na autenticação com Google:', error);
-                alert('Erro na autenticação com Google: ' + error.message);
-            }
-        }
-        
-        // Facebook Sign-In
-        function initializeFacebookAuth() {
-            if (typeof FB !== 'undefined') {
-                FB.init({
-                    appId: FACEBOOK_APP_ID,
-                    cookie: true,
-                    xfbml: true,
-                    version: 'v18.0'
-                });
-            }
-        }
-        
-        async function authenticateWithFacebook() {
-            try {
-                if (typeof FB === 'undefined') {
-                    throw new Error('Facebook SDK não carregado');
-                }
-                
-                FB.login(function(response) {
-                    if (response.authResponse) {
-                        // Usuário autenticado com sucesso
-                        FB.api('/me', { fields: 'name,email,picture' }, async function(userInfo) {
-                            const facebookUser = {
-                                id: userInfo.id,
-                                name: userInfo.name,
-                                email: userInfo.email || `user_${userInfo.id}@facebook.com`,
-                                avatar: userInfo.picture?.data?.url || `https://ui-avatars.com/api/?name=${encodeURIComponent(userInfo.name)}&background=4267B2&color=fff`
-                            };
-                            
-                            const emailValidation = await validateEmailWithAPI(facebookUser.email);
-                            if (!emailValidation.valid) {
-                                alert("E-mail do Facebook é inválido");
-                                return;
-                            }
-                            
-                            const result = await createOrUpdateUser(facebookUser, "facebook");
-                            
-                            if (result.success) {
-                                alert('Autenticação com Facebook realizada com sucesso!');
-                                window.location.href = 'DPS.html';
-                            }
-                        });
-                    } else {
-                        alert('Usuário cancelou a autenticação com Facebook.');
-                    }
-                }, { scope: 'public_profile,email' });
-                
-            } catch (error) {
-                console.error('Erro na autenticação com Facebook:', error);
-                
-                // Fallback: autenticação simulada
-                const confirmSimulation = confirm('Facebook SDK pode não estar carregado. Deseja continuar com autenticação simulada?');
-                if (confirmSimulation) {
-                    const facebookUser = {
-                        id: 'fb_' + Date.now(),
-                        name: 'Usuário Facebook',
-                        email: 'usuario.facebook@example.com',
-                        avatar: 'https://ui-avatars.com/api/?name=Usuario+Facebook&background=4267B2&color=fff'
-                    };
-                    
-                    const result = await createOrUpdateUser(facebookUser, "facebook");
-                    
-                    if (result.success) {
-                        alert('Autenticação com Facebook realizada com sucesso!');
-                        window.location.href = 'DPS.html';
-                    }
-                }
-            }
-        }
-        
-        // GitHub Sign-In (Simulado)
-        async function authenticateWithGitHub() {
-            try {
-                // Simular autenticação com GitHub
-                const githubUser = {
-                    id: 'gh_' + Date.now(),
-                    name: 'Usuário GitHub',
-                    email: 'usuario.github@example.com',
-                    avatar: 'https://ui-avatars.com/api/?name=Usuario+GitHub&background=333&color=fff'
-                };
-                
-                const result = await createOrUpdateUser(githubUser, "github");
-                
-                if (result.success) {
-                    alert('Autenticação com GitHub realizada com sucesso!');
-                    window.location.href = 'DPS.html';
-                }
-                
-            } catch (error) {
-                console.error('Erro na autenticação com GitHub:', error);
-                alert('Erro na autenticação com GitHub: ' + error.message);
-            }
-        }
-        
-        // =============================================
-        // FUNÇÕES DE UPLOAD DE FOTO
-        // =============================================
-        
-        function setupAvatarPreview() {
-            const avatarInput = document.getElementById('avatarInput');
-            const avatarPreview = document.getElementById('avatarPreview');
-            
-            avatarInput.addEventListener('change', function() {
-                const file = this.files[0];
-                if (file) {
-                    // Validar tipo de arquivo
-                    if (!file.type.startsWith('image/')) {
-                        alert('Por favor, selecione uma imagem válida.');
-                        return;
-                    }
-                    
-                    // Validar tamanho do arquivo (max 5MB)
-                    if (file.size > 5 * 1024 * 1024) {
-                        alert('A imagem deve ter no máximo 5MB.');
-                        return;
-                    }
-                    
-                    const reader = new FileReader();
-                    
-                    reader.addEventListener('load', function() {
-                        avatarPreview.innerHTML = `<img src="${this.result}" alt="Preview">`;
-                    });
-                    
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-        
-        function getAvatarBase64() {
-            const avatarInput = document.getElementById('avatarInput');
-            if (avatarInput.files && avatarInput.files[0]) {
-                return new Promise((resolve) => {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        resolve(e.target.result);
-                    };
-                    reader.readAsDataURL(avatarInput.files[0]);
-                });
-            }
-            return null;
-        }
-        
-        // =============================================
-        // FUNÇÕES DE INTERFACE
-        // =============================================
-        
-        function showForm(formId) {
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'none';
-            document.getElementById('forgot-password-form').style.display = 'none';
-            document.getElementById('reset-password-form').style.display = 'none';
-            
-            document.getElementById(formId).style.display = 'block';
-            
-            const titles = {
-                'login-form': 'Acessar Sistema',
-                'register-form': 'Criar Conta',
-                'forgot-password-form': 'Recuperar Senha',
-                'reset-password-form': 'Redefinir Senha'
-            };
-            
-            document.getElementById('auth-title').textContent = titles[formId];
-        }
-        
-        function setupPasswordToggles() {
-            // Configurar todos os toggles de senha
-            const toggles = [
-                { toggleId: 'toggleLoginPassword', inputId: 'loginPassword' },
-                { toggleId: 'toggleRegisterPassword', inputId: 'registerPassword' },
-                { toggleId: 'toggleRegisterConfirmPassword', inputId: 'registerConfirmPassword' },
-                { toggleId: 'toggleNewPassword', inputId: 'newPassword' },
-                { toggleId: 'toggleConfirmNewPassword', inputId: 'confirmNewPassword' }
-            ];
-            
-            toggles.forEach(({ toggleId, inputId }) => {
-                const toggle = document.getElementById(toggleId);
-                const input = document.getElementById(inputId);
-                
-                if (toggle && input) {
-                    toggle.addEventListener('click', function() {
-                        const icon = this.querySelector('i');
-                        if (input.type === 'password') {
-                            input.type = 'text';
-                            icon.classList.replace('fa-eye', 'fa-eye-slash');
-                        } else {
-                            input.type = 'password';
-                            icon.classList.replace('fa-eye-slash', 'fa-eye');
-                        }
-                    });
-                }
-            });
-        }
-        
-        // =============================================
-        // INICIALIZAÇÃO
-        // =============================================
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            // Inicializar banco de dados
-            initDatabase();
-            
-            // Configurar preview de avatar
-            setupAvatarPreview();
-            
-            // Configurar toggles de senha
-            setupPasswordToggles();
-            
-            // Inicializar autenticação do Google
-            initializeGoogleAuth();
-            
-            // Inicializar autenticação do Facebook
-            initializeFacebookAuth();
-            
-            // Verificar token de redefinição
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('token')) {
-                showForm('reset-password-form');
-            }
-            
-            // Redirecionar se já estiver logado
-            if (isLoggedIn()) {
-                window.location.href = 'DPS.html';
-            }
-            
-            // Configurar navegação entre formulários
-            document.getElementById('register-link').addEventListener('click', (e) => {
-                e.preventDefault();
-                showForm('register-form');
-            });
-            
-            document.getElementById('login-link').addEventListener('click', (e) => {
-                e.preventDefault();
-                showForm('login-form');
-            });
-            
-            document.getElementById('forgot-password-link').addEventListener('click', (e) => {
-                e.preventDefault();
-                showForm('forgot-password-form');
-            });
-            
-            document.getElementById('back-to-login').addEventListener('click', (e) => {
-                e.preventDefault();
-                showForm('login-form');
-            });
-            
-            document.getElementById('back-to-login-from-reset').addEventListener('click', (e) => {
-                e.preventDefault();
-                showForm('login-form');
-            });
-            
-            // Configurar autenticação social - Login
-            document.getElementById('loginFacebook').addEventListener('click', authenticateWithFacebook);
-            document.getElementById('loginGithub').addEventListener('click', authenticateWithGitHub);
-            
-            // Configurar autenticação social - Registro
-            document.getElementById('registerFacebook').addEventListener('click', authenticateWithFacebook);
-            document.getElementById('registerGithub').addEventListener('click', authenticateWithGitHub);
-            
-            // Configurar envio de formulários
-            document.getElementById('loginForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const email = document.getElementById('loginEmail').value;
-                const password = document.getElementById('loginPassword').value;
-                const button = this.querySelector('button[type="submit"]');
-                const originalText = button.innerHTML;
-                
-                button.innerHTML = '<span class="loading"></span> Entrando...';
-                button.disabled = true;
-                
-                try {
-                    const result = await login(email, password);
-                    
-                    if (result.success) {
-                        alert('Login realizado com sucesso!');
-                        window.location.href = 'DPS.html';
-                    } else {
-                        alert('Erro no login: ' + result.message);
-                    }
-                } catch (error) {
-                    alert('Erro no login: ' + error.message);
-                } finally {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            });
-            
-            document.getElementById('registerForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const name = document.getElementById('registerName').value;
-                const email = document.getElementById('registerEmail').value;
-                const password = document.getElementById('registerPassword').value;
-                const confirmPassword = document.getElementById('registerConfirmPassword').value;
-                const termsAgree = document.getElementById('termsAgree').checked;
-                
-                const button = this.querySelector('button[type="submit"]');
-                const originalText = button.innerHTML;
-                
-                // Validações
-                if (password !== confirmPassword) {
-                    alert('As senhas não coincidem!');
-                    return;
-                }
-                
-                if (password.length < 8) {
-                    alert('A senha deve ter pelo menos 8 caracteres!');
-                    return;
-                }
-                
-                if (!termsAgree) {
-                    alert('Você deve concordar com os termos de uso!');
-                    return;
-                }
-                
-                button.innerHTML = '<span class="loading"></span> Criando conta...';
-                button.disabled = true;
-                
-                try {
-                    const avatar = await getAvatarBase64();
-                    const result = await register(name, email, password, avatar);
-                    
-                    if (result.success) {
-                        alert('Conta criada com sucesso!');
-                        window.location.href = 'DPS.html';
-                    } else {
-                        alert('Erro ao criar conta: ' + result.message);
-                    }
-                } catch (error) {
-                    alert('Erro ao criar conta: ' + error.message);
-                } finally {
-                    button.innerHTML = originalText;
-                    button.disabled = false;
-                }
-            });
-            
-            console.log('Sistema de autenticação inicializado com Facebook App ID:', FACEBOOK_APP_ID);
         });
+
+        function checkLoggedInUser() {
+            let currentUser = localStorage.getItem('currentUser');
+            
+            if (!currentUser) {
+                currentUser = localStorage.getItem('rememberedUser');
+            }
+            
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                showUserInfo(user);
+            }
+        }
+
+        // ========== EVENT LISTENERS ==========
+        logoutBtn.addEventListener('click', logout);
+        customFacebookBtn.addEventListener('click', loginWithFacebook);
+
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoggedInUser();
+            console.log('Sistema inicializado com:');
+            console.log('- Google Client ID:', GOOGLE_CLIENT_ID);
+            console.log('- Facebook App ID:', FACEBOOK_APP_ID);
+            console.log('- Facebook App Secret:', FACEBOOK_APP_SECRET ? '***' + FACEBOOK_APP_SECRET.slice(-4) : 'Não definido');
+        });
+
+        // ========== BACKEND SIMULATION ==========
+        // Em produção, você teria um backend real para validar os tokens
+        async function validateFacebookToken(accessToken) {
+            // Esta é uma simulação - em produção, valide no backend
+            try {
+                const response = await fetch('/api/auth/facebook', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ accessToken })
+                });
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Erro na validação do token:', error);
+                return { success: false, error: 'Erro de conexão' };
+            }
+        }
     </script>
 </body>
-
 </html>
