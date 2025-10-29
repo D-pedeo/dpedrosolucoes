@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Login Completo</title>
+    <title>DPS - Sistema de Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
-        /* Manter todos os estilos anteriores */
         :root {
             --primary-color: #4a6fa5;
             --secondary-color: #6b8cbc;
@@ -17,6 +15,8 @@
             --success-color: #28a745;
             --error-color: #dc3545;
             --warning-color: #ffc107;
+            --dps-blue: #2c5282;
+            --dps-light: #4a6fa5;
         }
         
         * {
@@ -48,6 +48,41 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dps-header {
+            background: linear-gradient(135deg, var(--dps-blue) 0%, var(--dps-light) 100%);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+        
+        .dps-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: white;
+        }
+        
+        .dps-logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+            object-fit: cover;
+            border: 2px solid white;
+        }
+        
+        .dps-logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .dps-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
         }
         
         .form-container {
@@ -140,7 +175,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -165,6 +200,14 @@
         
         .btn-success:hover {
             background-color: #218838;
+        }
+        
+        .btn-dps {
+            background: linear-gradient(135deg, var(--dps-blue) 0%, var(--dps-light) 100%);
+        }
+        
+        .btn-dps:hover {
+            background: linear-gradient(135deg, var(--dps-light) 0%, var(--dps-blue) 100%);
         }
         
         .message {
@@ -390,23 +433,6 @@
             display: none;
         }
         
-        .g_id_signin {
-            width: 100% !important;
-        }
-        
-        .g_id_signin > div {
-            width: 100% !important;
-            border-radius: 8px !important;
-        }
-        
-        .fb-login-button {
-            width: 100% !important;
-        }
-        
-        .fb-login-button span {
-            width: 100% !important;
-        }
-        
         .loading {
             opacity: 0.7;
             pointer-events: none;
@@ -425,12 +451,94 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        
+        .forgot-password {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .forgot-password a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .local-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .dashboard-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .dashboard-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .dashboard-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container { max-width: 400px; }
+            .form-container { padding: 25px; }
+            .dps-logo-text { font-size: 1.3rem; }
+            .dps-logo-img { width: 45px; height: 45px; }
+        }
+        
+        @media (max-width: 600px) {
+            .container { max-width: 100%; border-radius: 12px; }
+            .form-container { padding: 20px; }
+            .dps-header { padding: 15px 20px; }
+            .dps-logo-text { font-size: 1.1rem; }
+        }
+        
+        @media (max-width: 480px) {
+            .form-container { padding: 15px; }
+            .dps-header { padding: 12px 15px; }
+            .dps-logo { flex-direction: column; gap: 8px; }
+            .dps-logo-text { font-size: 1rem; }
+            .dps-logo-img { width: 35px; height: 35px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header DPS -->
+        <div class="dps-header">
+            <a href='dps.html' class="dps-logo">
+                <img src='https://i.postimg.cc/fks90nbK/DPS-ICO.jpg' alt='DPS-ICO' class='dps-logo-img'/>
+                <div class="dps-logo-text">DPedro Soluções</div>
+            </a>
+            <div class="dps-subtitle">Sistema de Autenticação Segura</div>
+        </div>
+        
         <!-- Tela de Login -->
         <div id="auth-container" class="form-container">
+            <!-- Aviso para ambiente local -->
+            <div id="local-warning" class="local-warning" style="display: none;">
+                <i class="fas fa-info-circle"></i>
+                Modo local: Login social disponível apenas em servidor web
+            </div>
+            
             <div class="tabs">
                 <div class="tab active" id="login-tab">Login</div>
                 <div class="tab" id="register-tab">Registrar</div>
@@ -457,12 +565,12 @@
                     <label for="remember-me">Lembrar de mim</label>
                 </div>
                 
-                <button type="submit">
+                <button type="submit" class="btn-dps">
                     <i class="fas fa-sign-in-alt"></i>
                     Entrar
                 </button>
                 
-                <div class="form-group">
+                <div class="forgot-password">
                     <a href="#" id="forgot-password">Esqueci minha senha</a>
                 </div>
                 
@@ -471,37 +579,14 @@
                 <div class="social-login">
                     <p>Ou entre com</p>
                     <div class="social-buttons">
-                        <!-- Botão Google oficial -->
-                        <div id="g_id_onload"
-                            data-client_id="1079087525845-mje6b82okbqadogtml06qef4rhemd27n.apps.googleusercontent.com"
-                            data-context="signin"
-                            data-ux_mode="popup"
-                            data-callback="handleGoogleSignIn"
-                            data-auto_prompt="false">
-                        </div>
-
-                        <div class="g_id_signin"
-                            data-type="standard"
-                            data-shape="rectangular"
-                            data-theme="outline"
-                            data-text="signin_with"
-                            data-size="large"
-                            data-logo_alignment="left">
-                        </div>
+                        <!-- Botão Google Simulado -->
+                        <button class="social-btn google-btn" id="google-btn">
+                            <i class="fab fa-google"></i>
+                            Continuar com Google
+                        </button>
                         
-                        <!-- Botão Facebook oficial -->
-                        <div class="fb-login-button" 
-                            data-width="" 
-                            data-size="large" 
-                            data-button-type="continue_with" 
-                            data-layout="default" 
-                            data-auto-logout-link="false" 
-                            data-use-continue-as="true"
-                            onlogin="checkFacebookLoginState();">
-                        </div>
-                        
-                        <!-- Botão Facebook customizado -->
-                        <button class="social-btn facebook-btn" id="custom-facebook-btn">
+                        <!-- Botão Facebook Simulado -->
+                        <button class="social-btn facebook-btn" id="facebook-btn">
                             <i class="fab fa-facebook-f"></i>
                             Continuar com Facebook
                         </button>
@@ -509,18 +594,184 @@
                 </div>
             </form>
             
-            <!-- Formulários de registro mantidos iguais -->
-            <!-- ... (manter todo o conteúdo dos formulários de registro) ... -->
+            <!-- Formulário de Registro - Passo 1 -->
+            <form id="register-form" class="form">
+                <div class="step-indicator">
+                    <div class="step active">1</div>
+                    <div class="step-line"></div>
+                    <div class="step">2</div>
+                    <div class="step-line"></div>
+                    <div class="step">3</div>
+                </div>
+                
+                <h2>Criar Nova Conta</h2>
+                <p class="subtitle">Informe seus dados pessoais</p>
+                
+                <div class="form-group">
+                    <label for="register-name">Nome Completo</label>
+                    <input type="text" id="register-name" required>
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-email">E-mail</label>
+                    <input type="email" id="register-email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-phone">Telefone</label>
+                    <input type="tel" id="register-phone" required>
+                    <i class="fas fa-phone input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Senha</label>
+                    <input type="password" id="register-confirm-password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                
+                <button type="button" id="register-next-1" class="btn-dps">
+                    <i class="fas fa-arrow-right"></i>
+                    Próximo
+                </button>
+                
+                <div id="register-message" class="message"></div>
+            </form>
+            
+            <!-- Formulário de Registro - Passo 2 (Foto) -->
+            <form id="register-form-step2" class="form">
+                <div class="step-indicator">
+                    <div class="step">1</div>
+                    <div class="step-line active"></div>
+                    <div class="step active">2</div>
+                    <div class="step-line"></div>
+                    <div class="step">3</div>
+                </div>
+                
+                <h2>Adicionar Foto</h2>
+                <p class="subtitle">Adicione uma foto de perfil (opcional)</p>
+                
+                <div class="form-group">
+                    <img id="profile-preview" src="https://via.placeholder.com/100" class="profile-pic" alt="Preview">
+                    <input type="file" id="profile-picture" accept="image/*" class="hidden">
+                    <button type="button" class="upload-btn" id="upload-picture-btn">
+                        <i class="fas fa-upload"></i>
+                        Escolher Foto
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" id="register-next-2" class="btn-dps">
+                        <i class="fas fa-arrow-right"></i>
+                        Próximo
+                    </button>
+                    <button type="button" class="btn-secondary" id="register-back-1">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Formulário de Registro - Passo 3 (Verificação) -->
+            <form id="register-form-step3" class="form">
+                <div class="step-indicator">
+                    <div class="step">1</div>
+                    <div class="step-line active"></div>
+                    <div class="step">2</div>
+                    <div class="step-line active"></div>
+                    <div class="step active">3</div>
+                </div>
+                
+                <h2>Verificação de Conta</h2>
+                <p class="subtitle">Digite o código de verificação</p>
+                
+                <div class="form-group">
+                    <label for="verification-code">Código de Verificação</label>
+                    <div class="verification-code">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                        <input type="text" maxlength="1" class="code-input">
+                    </div>
+                </div>
+                
+                <div class="resend-code">
+                    Não recebeu o código? <a href="#" id="resend-code">Reenviar</a>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" id="register-submit" class="btn-success">
+                        <i class="fas fa-check"></i>
+                        Verificar e Criar Conta
+                    </button>
+                    <button type="button" class="btn-secondary" id="register-back-2">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar
+                    </button>
+                </div>
+                
+                <div id="verification-message" class="message"></div>
+            </form>
+            
+            <!-- Formulário de Recuperação de Senha -->
+            <form id="recovery-form" class="form">
+                <h2>Recuperar Senha</h2>
+                <p class="subtitle">Informe seu e-mail para redefinir a senha</p>
+                
+                <div class="form-group">
+                    <label for="recovery-email">E-mail</label>
+                    <input type="email" id="recovery-email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                </div>
+                
+                <button type="button" id="send-recovery" class="btn-dps">
+                    <i class="fas fa-paper-plane"></i>
+                    Enviar Código
+                </button>
+                
+                <div class="form-group">
+                    <button type="button" class="btn-secondary" id="back-to-login">
+                        <i class="fas fa-arrow-left"></i>
+                        Voltar para Login
+                    </button>
+                </div>
+                
+                <div id="recovery-message" class="message"></div>
+            </form>
         </div>
         
         <!-- Tela do Usuário Logado -->
         <div id="user-container" class="user-info" style="display: none;">
             <img id="user-profile-pic" src="https://via.placeholder.com/100" class="profile-pic" alt="Foto do usuário">
-            <h2>Bem-vindo!</h2>
+            <h2>Bem-vindo ao DPS!</h2>
             <p id="user-name"></p>
             <p id="user-email"></p>
             <p id="user-phone"></p>
             <p id="user-provider"></p>
+            
+            <div class="dashboard-link">
+                <a href="dps.html" id="go-to-dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Ir para Dashboard
+                </a>
+            </div>
+            
+            <div class="dashboard-link">
+                <a href="profile.html" id="go-to-profile">
+                    <i class="fas fa-user"></i>
+                    Meu Perfil
+                </a>
+            </div>
+            
             <button class="logout-btn" id="logout-btn">
                 <i class="fas fa-sign-out-alt"></i>
                 Sair
@@ -529,149 +780,73 @@
     </div>
 
     <script>
-        // ========== CONFIGURAÇÕES ==========
-        const GOOGLE_CLIENT_ID = '1079087525845-mje6b82okbqadogtml06qef4rhemd27n.apps.googleusercontent.com';
-        const FACEBOOK_APP_ID = '589839547537969';
-        const FACEBOOK_APP_SECRET = 'db6f10c0c5ab05e9d6de343bc6ffec08';
+        // ========== DETECÇÃO DE AMBIENTE ==========
+        const isLocalEnvironment = window.location.protocol === 'file:';
 
         // ========== ELEMENTOS DOM ==========
         const loginTab = document.getElementById('login-tab');
         const registerTab = document.getElementById('register-tab');
         const loginForm = document.getElementById('login-form');
         const loginMessage = document.getElementById('login-message');
+        const localWarning = document.getElementById('local-warning');
         const authContainer = document.getElementById('auth-container');
         const userContainer = document.getElementById('user-container');
-        const userName = document.getElementById('user-name');
-        const userEmail = document.getElementById('user-email');
-        const userPhone = document.getElementById('user-phone');
-        const userProvider = document.getElementById('user-provider');
-        const userProfilePic = document.getElementById('user-profile-pic');
-        const logoutBtn = document.getElementById('logout-btn');
-        const customFacebookBtn = document.getElementById('custom-facebook-btn');
+        const googleBtn = document.getElementById('google-btn');
+        const facebookBtn = document.getElementById('facebook-btn');
+        const goToDashboard = document.getElementById('go-to-dashboard');
+        const goToProfile = document.getElementById('go-to-profile');
 
-        // ========== FACEBOOK SDK ==========
-        window.fbAsyncInit = function() {
-            FB.init({
-                appId: FACEBOOK_APP_ID,
-                cookie: true,
-                xfbml: true,
-                version: 'v18.0'
-            });
-            
-            FB.AppEvents.logPageView();
-            
-            // Verificar status de login ao carregar a página
-            checkFacebookLoginState();
-        };
-
-        // Carregar SDK do Facebook
-        (function(d, s, id){
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) {return;}
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/pt_BR/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-
-        // ========== FUNÇÕES FACEBOOK ==========
-        function checkFacebookLoginState() {
-            FB.getLoginStatus(function(response) {
-                console.log('Status do Facebook Login:', response);
-                statusChangeCallback(response);
-            });
-        }
-
-        function statusChangeCallback(response) {
-            console.log('Facebook Status Change:', response);
-            
-            if (response.status === 'connected') {
-                // Usuário está logado no Facebook e autorizou o app
-                const accessToken = response.authResponse.accessToken;
-                const userID = response.authResponse.userID;
-                
-                showMessage(loginMessage, 'Conectado ao Facebook! Buscando informações...', 'success');
-                getFacebookUserData(accessToken);
-                
-            } else if (response.status === 'not_authorized') {
-                // Usuário logado no Facebook mas não autorizou o app
-                console.log('Usuário não autorizou o app do Facebook');
-                showMessage(loginMessage, 'Por favor, autorize o aplicativo para continuar', 'warning');
-                
-            } else {
-                // Usuário não está logado no Facebook
-                console.log('Usuário não está logado no Facebook');
+        // ========== INICIALIZAÇÃO DO AMBIENTE ==========
+        function initializeEnvironment() {
+            if (isLocalEnvironment) {
+                localWarning.style.display = 'block';
+                console.log('🚫 Modo local detectado - Login social simulado');
             }
         }
 
-        function getFacebookUserData(accessToken) {
-            showLoading(customFacebookBtn, true);
+        // ========== LOGIN SOCIAL SIMULADO ==========
+        function simulateGoogleLogin() {
+            showLoading(googleBtn, true);
             
-            FB.api('/me', 
-                { fields: 'id,name,email,picture.width(200).height(200)' }, 
-                function(response) {
-                    showLoading(customFacebookBtn, false);
-                    console.log('Dados do usuário Facebook:', response);
-                    
-                    if (response && !response.error) {
-                        const facebookUser = {
-                            id: response.id,
-                            name: response.name,
-                            email: response.email || `${response.id}@facebook.com`,
-                            profilePic: response.picture?.data?.url || 'https://via.placeholder.com/100',
-                            verified: true,
-                            provider: 'facebook'
-                        };
-                        
-                        saveOrUpdateUser(facebookUser);
-                        loginWithUser(facebookUser);
-                        
-                    } else {
-                        console.error('Erro ao buscar dados do Facebook:', response.error);
-                        showMessage(loginMessage, 'Erro ao buscar dados do Facebook', 'error');
-                    }
-                }
-            );
-        }
-
-        function loginWithFacebook() {
-            showLoading(customFacebookBtn, true);
-            
-            FB.login(function(response) {
-                showLoading(customFacebookBtn, false);
+            setTimeout(() => {
+                showLoading(googleBtn, false);
                 
-                if (response.authResponse) {
-                    console.log('Login Facebook bem-sucedido:', response);
-                    const accessToken = response.authResponse.accessToken;
-                    getFacebookUserData(accessToken);
-                    
-                } else {
-                    console.log('Usuário cancelou o login ou não autorizou');
-                    showMessage(loginMessage, 'Login com Facebook cancelado', 'warning');
-                }
-            }, {
-                scope: 'public_profile,email',
-                return_scopes: true
-            });
+                const googleUser = {
+                    id: 'google_' + Date.now(),
+                    name: 'Usuário Google',
+                    email: 'usuario.google@example.com',
+                    profilePic: 'https://via.placeholder.com/100/4285f4/ffffff?text=G',
+                    verified: true,
+                    provider: 'google'
+                };
+                
+                saveOrUpdateUser(googleUser);
+                loginWithUser(googleUser);
+                
+                showMessage(loginMessage, 'Login com Google simulado com sucesso!', 'success');
+            }, 1500);
         }
 
-        // ========== FUNÇÕES GOOGLE ==========
-        function handleGoogleSignIn(response) {
-            console.log('Resposta do Google:', response);
+        function simulateFacebookLogin() {
+            showLoading(facebookBtn, true);
             
-            const credential = response.credential;
-            const payload = JSON.parse(atob(credential.split('.')[1]));
-            
-            const googleUser = {
-                id: payload.sub,
-                name: payload.name,
-                email: payload.email,
-                profilePic: payload.picture,
-                verified: true,
-                provider: 'google'
-            };
-            
-            saveOrUpdateUser(googleUser);
-            loginWithUser(googleUser);
+            setTimeout(() => {
+                showLoading(facebookBtn, false);
+                
+                const facebookUser = {
+                    id: 'facebook_' + Date.now(),
+                    name: 'Usuário Facebook',
+                    email: 'usuario.facebook@example.com',
+                    profilePic: 'https://via.placeholder.com/100/1877f2/ffffff?text=FB',
+                    verified: true,
+                    provider: 'facebook'
+                };
+                
+                saveOrUpdateUser(facebookUser);
+                loginWithUser(facebookUser);
+                
+                showMessage(loginMessage, 'Login com Facebook simulado com sucesso!', 'success');
+            }, 1500);
         }
 
         // ========== FUNÇÕES COMUNS ==========
@@ -680,20 +855,16 @@
             const existingUserIndex = users.findIndex(u => u.email === userData.email || u.id === userData.id);
             
             if (existingUserIndex !== -1) {
-                // Atualizar usuário existente
                 users[existingUserIndex] = { 
                     ...users[existingUserIndex], 
                     ...userData,
                     lastLogin: new Date().toISOString()
                 };
-                console.log('Usuário atualizado:', users[existingUserIndex]);
             } else {
-                // Adicionar novo usuário
                 userData.registerDate = new Date().toISOString();
                 userData.lastLogin = new Date().toISOString();
                 userData.id = userData.id || 'user_' + Date.now();
                 users.push(userData);
-                console.log('Novo usuário criado:', userData);
             }
             
             localStorage.setItem('users', JSON.stringify(users));
@@ -715,17 +886,16 @@
             localStorage.setItem('rememberedUser', JSON.stringify(sessionData));
             
             showUserInfo(user);
-            showMessage(loginMessage, `Login realizado com sucesso via ${user.provider}!`, 'success');
         }
 
         function showUserInfo(user) {
             authContainer.style.display = 'none';
             userContainer.style.display = 'block';
-            userName.textContent = `Nome: ${user.name}`;
-            userEmail.textContent = `E-mail: ${user.email}`;
-            userPhone.textContent = `Telefone: ${user.phone || 'Não informado'}`;
-            userProvider.textContent = `Login via: ${user.provider}`;
-            userProfilePic.src = user.profilePic || 'https://via.placeholder.com/100';
+            document.getElementById('user-name').textContent = `Nome: ${user.name}`;
+            document.getElementById('user-email').textContent = `E-mail: ${user.email}`;
+            document.getElementById('user-phone').textContent = `Telefone: ${user.phone || 'Não informado'}`;
+            document.getElementById('user-provider').textContent = `Login via: ${user.provider}`;
+            document.getElementById('user-profile-pic').src = user.profilePic || 'https://via.placeholder.com/100';
         }
 
         function showMessage(element, message, type) {
@@ -744,45 +914,37 @@
                 button.disabled = true;
             } else {
                 button.classList.remove('loading');
-                button.innerHTML = '<i class="fab fa-facebook-f"></i> Continuar com Facebook';
+                if (button.id === 'google-btn') {
+                    button.innerHTML = '<i class="fab fa-google"></i> Continuar com Google';
+                } else {
+                    button.innerHTML = '<i class="fab fa-facebook-f"></i> Continuar com Facebook';
+                }
                 button.disabled = false;
             }
         }
 
-        function logout() {
-            // Logout do Facebook
-            if (window.FB) {
-                FB.getLoginStatus(function(response) {
-                    if (response.status === 'connected') {
-                        FB.logout(function(logoutResponse) {
-                            console.log('Logout do Facebook realizado:', logoutResponse);
-                        });
-                    }
-                });
-            }
-            
-            // Logout do Google
-            if (window.google && google.accounts) {
-                google.accounts.id.disableAutoSelect();
-                const user = JSON.parse(localStorage.getItem('currentUser') || '{}');
-                if (user.email) {
-                    google.accounts.id.revoke(user.email, done => {
-                        console.log('Logout do Google realizado');
-                    });
-                }
-            }
-            
+        // ========== EVENT LISTENERS ==========
+        googleBtn.addEventListener('click', simulateGoogleLogin);
+        facebookBtn.addEventListener('click', simulateFacebookLogin);
+
+        document.getElementById('logout-btn').addEventListener('click', function() {
             localStorage.removeItem('currentUser');
             authContainer.style.display = 'block';
             userContainer.style.display = 'none';
-            
-            // Recarregar para resetar completamente
-            setTimeout(() => {
-                window.location.reload();
-            }, 1000);
-        }
+            window.location.reload();
+        });
 
-        // ========== LOGIN TRADICIONAL ==========
+        goToDashboard.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'dps.html';
+        });
+
+        goToProfile.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.href = 'profile.html';
+        });
+
+        // Login tradicional
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -796,54 +958,249 @@
                 user.lastLogin = new Date().toISOString();
                 localStorage.setItem('users', JSON.stringify(users));
                 loginWithUser(user);
+                showMessage(loginMessage, 'Login realizado com sucesso!', 'success');
             } else {
                 showMessage(loginMessage, 'E-mail/telefone ou senha incorretos!', 'error');
             }
         });
 
-        function checkLoggedInUser() {
-            let currentUser = localStorage.getItem('currentUser');
+        // ========== INICIALIZAÇÃO ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeEnvironment();
             
-            if (!currentUser) {
-                currentUser = localStorage.getItem('rememberedUser');
-            }
-            
+            // Verificar se há usuário logado
+            const currentUser = localStorage.getItem('currentUser') || localStorage.getItem('rememberedUser');
             if (currentUser) {
                 const user = JSON.parse(currentUser);
                 showUserInfo(user);
             }
-        }
 
-        // ========== EVENT LISTENERS ==========
-        logoutBtn.addEventListener('click', logout);
-        customFacebookBtn.addEventListener('click', loginWithFacebook);
-
-        // ========== INICIALIZAÇÃO ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            checkLoggedInUser();
-            console.log('Sistema inicializado com:');
-            console.log('- Google Client ID:', GOOGLE_CLIENT_ID);
-            console.log('- Facebook App ID:', FACEBOOK_APP_ID);
-            console.log('- Facebook App Secret:', FACEBOOK_APP_SECRET ? '***' + FACEBOOK_APP_SECRET.slice(-4) : 'Não definido');
+            // Inicializar navegação entre forms
+            initializeFormNavigation();
         });
 
-        // ========== BACKEND SIMULATION ==========
-        // Em produção, você teria um backend real para validar os tokens
-        async function validateFacebookToken(accessToken) {
-            // Esta é uma simulação - em produção, valide no backend
-            try {
-                const response = await fetch('/api/auth/facebook', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ accessToken })
+        // ========== NAVEGAÇÃO ENTRE FORMS ==========
+        function initializeFormNavigation() {
+            const registerNext1 = document.getElementById('register-next-1');
+            const registerNext2 = document.getElementById('register-next-2');
+            const registerBack1 = document.getElementById('register-back-1');
+            const registerBack2 = document.getElementById('register-back-2');
+            const registerSubmit = document.getElementById('register-submit');
+            const forgotPassword = document.getElementById('forgot-password');
+            const backToLogin = document.getElementById('back-to-login');
+            const sendRecovery = document.getElementById('send-recovery');
+            const resendCode = document.getElementById('resend-code');
+            const profilePicture = document.getElementById('profile-picture');
+            const uploadPictureBtn = document.getElementById('upload-picture-btn');
+            const profilePreview = document.getElementById('profile-preview');
+            const codeInputs = document.querySelectorAll('.code-input');
+
+            let tempUserData = {};
+            let verificationCode = '';
+
+            // Navegação entre tabs
+            loginTab.addEventListener('click', () => {
+                switchToForm(loginForm);
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+                clearMessages();
+            });
+
+            registerTab.addEventListener('click', () => {
+                switchToForm(registerForm);
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+                clearMessages();
+            });
+
+            // Navegação no registro
+            registerNext1.addEventListener('click', () => {
+                if (validateStep1()) {
+                    switchToForm(registerFormStep2);
+                }
+            });
+
+            registerNext2.addEventListener('click', () => {
+                verificationCode = generateVerificationCode();
+                alert(`Código de verificação: ${verificationCode}`);
+                switchToForm(registerFormStep3);
+                focusFirstCodeInput();
+            });
+
+            registerBack1.addEventListener('click', () => {
+                switchToForm(registerForm);
+            });
+
+            registerBack2.addEventListener('click', () => {
+                switchToForm(registerFormStep2);
+            });
+
+            // Upload de foto
+            uploadPictureBtn.addEventListener('click', () => {
+                profilePicture.click();
+            });
+
+            profilePicture.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        profilePreview.src = e.target.result;
+                        tempUserData.profilePic = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Verificação de código
+            registerSubmit.addEventListener('click', () => {
+                const enteredCode = Array.from(codeInputs).map(input => input.value).join('');
+                
+                if (enteredCode === verificationCode) {
+                    registerUser();
+                } else {
+                    showMessage(verificationMessage, 'Código de verificação incorreto!', 'error');
+                }
+            });
+
+            // Recuperação de senha
+            forgotPassword.addEventListener('click', (e) => {
+                e.preventDefault();
+                switchToForm(recoveryForm);
+                clearMessages();
+            });
+
+            backToLogin.addEventListener('click', () => {
+                switchToForm(loginForm);
+                clearMessages();
+            });
+
+            sendRecovery.addEventListener('click', () => {
+                const email = document.getElementById('recovery-email').value;
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const userExists = users.some(user => user.email === email);
+                
+                if (userExists) {
+                    const recoveryCode = generateVerificationCode();
+                    localStorage.setItem(`recovery-${email}`, recoveryCode);
+                    alert(`Código de recuperação: ${recoveryCode}`);
+                    showMessage(recoveryMessage, 'Código enviado para seu e-mail!', 'success');
+                } else {
+                    showMessage(recoveryMessage, 'E-mail não encontrado!', 'error');
+                }
+            });
+
+            resendCode.addEventListener('click', (e) => {
+                e.preventDefault();
+                verificationCode = generateVerificationCode();
+                alert(`Novo código: ${verificationCode}`);
+                showMessage(verificationMessage, 'Código reenviado!', 'success');
+                codeInputs.forEach(input => input.value = '');
+                focusFirstCodeInput();
+            });
+
+            // Navegação entre inputs de código
+            codeInputs.forEach((input, index) => {
+                input.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && index < codeInputs.length - 1) {
+                        codeInputs[index + 1].focus();
+                    }
                 });
                 
-                return await response.json();
-            } catch (error) {
-                console.error('Erro na validação do token:', error);
-                return { success: false, error: 'Erro de conexão' };
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && index > 0 && e.target.value === '') {
+                        codeInputs[index - 1].focus();
+                    }
+                });
+            });
+
+            function validateStep1() {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const phone = document.getElementById('register-phone').value;
+                const password = document.getElementById('register-password').value;
+                const confirmPassword = document.getElementById('register-confirm-password').value;
+                
+                if (password !== confirmPassword) {
+                    showMessage(registerMessage, 'As senhas não coincidem!', 'error');
+                    return false;
+                }
+                
+                if (password.length < 6) {
+                    showMessage(registerMessage, 'A senha deve ter pelo menos 6 caracteres!', 'error');
+                    return false;
+                }
+                
+                tempUserData = { name, email, phone, password };
+                return true;
+            }
+
+            function registerUser() {
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const userExists = users.some(user => user.email === tempUserData.email);
+                
+                if (userExists) {
+                    showMessage(verificationMessage, 'Este e-mail já está cadastrado!', 'error');
+                    return;
+                }
+                
+                const newUser = {
+                    id: Date.now().toString(),
+                    name: tempUserData.name,
+                    email: tempUserData.email,
+                    phone: tempUserData.phone,
+                    password: tempUserData.password,
+                    profilePic: tempUserData.profilePic || 'https://via.placeholder.com/100',
+                    verified: true,
+                    registerDate: new Date().toISOString()
+                };
+                
+                users.push(newUser);
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                showMessage(verificationMessage, 'Conta criada com sucesso!', 'success');
+                
+                setTimeout(() => {
+                    loginTab.click();
+                    clearForms();
+                    loginWithUser(newUser);
+                }, 2000);
+            }
+
+            function switchToForm(form) {
+                document.querySelectorAll('.form').forEach(f => f.classList.remove('active'));
+                form.classList.add('active');
+            }
+
+            function clearMessages() {
+                const messages = document.querySelectorAll('.message');
+                messages.forEach(msg => {
+                    msg.textContent = '';
+                    msg.className = 'message';
+                });
+            }
+
+            function clearForms() {
+                document.getElementById('register-form').reset();
+                document.getElementById('register-form-step2').reset();
+                document.getElementById('register-form-step3').reset();
+                document.getElementById('login-form').reset();
+                document.getElementById('recovery-form').reset();
+                
+                profilePreview.src = 'https://via.placeholder.com/100';
+                tempUserData = {};
+                
+                codeInputs.forEach(input => input.value = '');
+            }
+
+            function generateVerificationCode() {
+                return Math.floor(100000 + Math.random() * 900000).toString();
+            }
+
+            function focusFirstCodeInput() {
+                if (codeInputs.length > 0) {
+                    codeInputs[0].focus();
+                }
             }
         }
     </script>
